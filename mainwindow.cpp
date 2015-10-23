@@ -38,12 +38,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QHBoxLayout * top = new QHBoxLayout();
 
     //Director
-    multimap<string, Grant_rowObject>* database = BuildGrants("Grants_changed.csv");
-    multimap<string, Grant_rowObject>::iterator i = database->begin();
+    multimap<string, Grant_rowObject> * database = new multimap<string, Grant_rowObject>();
+   Grant_rowObject * a = new Grant_rowObject("A", "Domain", 2011, 2012, "Grants", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  1);
+   Grant_rowObject * b = new Grant_rowObject("B", "Domain", 2011, 2012, "Clinical Trials", "Received", false, true, "Role", "Title", "apInvestigator", "acpInvestigator",  2);
+   Grant_rowObject * c = new Grant_rowObject("C", "Domain", 2012, 2013, "Grants", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  3);
+   Grant_rowObject * d = new Grant_rowObject("D", "Domain", 2012, 2013, "Clinical Trials", "Received", false, true, "Role", "Title", "apInvestigator", "acpInvestigator",  4);
+   Grant_rowObject * e = new Grant_rowObject("E", "Domain", 2013, 2014, "Grants", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  5);
+
+   database->insert(pair<string, Grant_rowObject>(a->name, *a));
+   database->insert(pair<string, Grant_rowObject>(b->name, *b));
+   database->insert(pair<string, Grant_rowObject>(c->name, *c));
+   database->insert(pair<string, Grant_rowObject>(d->name, *d));
+   database->insert(pair<string, Grant_rowObject>(e->name, *e));
+    //multimap<string, Grant_rowObject>* database = BuildGrants("Grants_changed");
+    //multimap<string, Grant_rowObject>::iterator i = database->begin();
 
     ListBuilder * lb = new ListBuilder(2005, 2016, database);
     lb->scanMap();
-    lb->printList(lb->peerreviewed_grants);
+    //lb->printList(lb->peerreviewed_grants);
     ListClass * grants = new ListClass("Grants", lb->grants.param1, lb->grants.param2, true);
     grants->addChild(&lb->peerreviewed_grants);
     grants->addChild(&lb->industrygrant_grants);
@@ -52,9 +64,10 @@ MainWindow::MainWindow(QWidget *parent) :
     clinfund->addChild(&lb->peerreviewed_cf);
     clinfund->addChild(&lb->industrygrant_cf);
 
-    lb->printList(lb->grants);
+    lb->printList(lb->industrygrant_cf);
     //Column Names
     list<string> * test = new list<string>();
+    test->push_back("");
     test->push_back("");
     test->push_back("");
     test->push_back("Total #");

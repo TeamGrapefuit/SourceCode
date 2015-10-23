@@ -1,8 +1,9 @@
-
 #include "ListBuilder.h"
 #include <iterator>
 #include <list>
+#include <functional>
 
+using namespace std;
 ListBuilder::ListBuilder(int startyear,int endyear,multimap<string,Grant_rowObject> *somedata){
     
 //    toplevel = new list<ListClass *>;
@@ -146,31 +147,41 @@ void ListBuilder::addMember(Member amember){
     this->clinicalfunding.param2 = this->clinicalfunding.param2 + amember.cf_pr_amount + amember.cf_is_amount;
 }
 void ListBuilder::scanMap(){
-	// create a map to keep track of visited row objects
-    map<unsigned long, string> visited;
-    hash<string> str_hash;
+    
+//    multimap<string, Grant_rowObject>::iterator i = data->begin();
+//    while (i != data->end()){
+//        Member mem = this->tally(i->second.name);
+//        this->addMember(mem);
+//        ++ i;
+//    }
+   // create a map to keep track of visited row objects
+    map<string, bool> visited;
+
+    //std::hash<std::string> str_hash;
     
     unsigned long mapsize;
     mapsize = data->size();
     
-    std::multimap<string, Grant_rowObject>::iterator current;
-    current = data->begin();
-    for (int i=0;i<mapsize;i++){
+    std::multimap<string, Grant_rowObject>::iterator cur = data->begin();
+    while (cur != data->end()){
         Member c_mem;
-        unsigned long key = str_hash(current->second.name);
-        if (i==0) {
-            c_mem = this->tally(current->second.name);
+        //unsigned long key = str_hash(current->second.name);
+        if ( cur == data->begin()) {
+            c_mem = this->tally(cur->second.name);
             this->addMember(c_mem);
-            visited.emplace(key,current->second.name);
+            visited.insert(pair<string, bool>(cur->second.name, true));
         }
         else
         {
-            if (visited.find(key)==visited.end()){
-                c_mem = this->tally(current->second.name);
+            map<string, bool>::iterator j = visited.find(cur->second.name);
+
+            if (j == visited.end() || j->first != cur->second.name){
+                c_mem = this->tally(cur->second.name);
                 this->addMember(c_mem);
-                visited.emplace(key,current->second.name);
+                visited.insert(pair<string, bool>(cur->second.name, true));
             }
         }
+        ++ cur;
     }
 
 }
@@ -210,13 +221,13 @@ Member ListBuilder::tally(string name){
     // hold clinical industry sponsor total
     double cf_isamount = 0.00;
     // holds completed peer entry grants
-    ListClass peerentry_g = ListClass((*iter).second.name,0,0.00, false);;
+    ListClass peerentry_g = ListClass(name,0,0.00, false);;
     // hold completed industry sponsored entry grants
-    ListClass isentry_g = ListClass((*iter).second.name,0,0.00, false);
+    ListClass isentry_g = ListClass(name,0,0.00, false);
     // holds completed peer entry clinical funding
-    ListClass peerentry_cf = ListClass((*iter).second.name,0,0.00, false);;
+    ListClass peerentry_cf = ListClass(name,0,0.00, false);;
     // hold completed industry sponsored entry clinical funding
-    ListClass isentry_cf = ListClass((*iter).second.name,0,0.00, false);
+    ListClass isentry_cf = ListClass(name,0,0.00, false);
     // for each item in the table with member name
     for (iter = data->equal_range(name).first; iter!=data->equal_range(name).second;iter++){
         

@@ -44,7 +44,7 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-	ifstream fileStream(fileName, ios::in | ios::binary);
+    ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
     if(fileStream.is_open())
     {
         cout << "good"<<endl;
@@ -204,7 +204,7 @@ void BuildTeacher(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-	ifstream fileStream(fileName);
+    ifstream fileStream(fileName.c_str());
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 1;
@@ -311,7 +311,7 @@ void BuildPresentation(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-	ifstream fileStream(fileName);
+    ifstream fileStream(fileName.c_str());
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 1;
@@ -393,7 +393,7 @@ void BuildPublications(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-	ifstream fileStream(fileName);
+    ifstream fileStream(fileName.c_str());
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 1;
