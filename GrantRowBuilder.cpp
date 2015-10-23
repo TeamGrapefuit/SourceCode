@@ -27,8 +27,8 @@ Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     string cpInvestigator = fetch.getAttribute(index.cpInvestigator_loc);
     fetch.grabFirstString(cpInvestigator);//TEMPORARY -returns first co-investigator
     
-    bool peerReviewed = fetch.getIntAttribute(index.peerReviewed_loc);
-    bool indGrant = fetch.getIntAttribute(index.indGrant_loc);
+    bool peerReviewed = fetch.getBoolAttribute(index.peerReviewed_loc);
+    bool indGrant = fetch.getBoolAttribute(index.indGrant_loc);
     
     int sDate = fetch.getIntAttribute(index.sDate_loc);
     int eDate = fetch.getIntAttribute(index.eDate_loc);

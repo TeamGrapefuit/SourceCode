@@ -115,6 +115,50 @@ int AttributeRetriever::getIntAttribute(int pos)
     }
     return value;
 }
+
+ bool getBoolAttribute(int pos)
+ {
+    int encountered = 0;
+    int start = 0;
+    int end = 0;
+    bool check(true);
+    
+    for(string::size_type i = 0; i < rowAttributes.size(); ++i)
+    {
+        
+        if(rowAttributes[i] == '"')
+        {
+            check = !check;
+            
+        }
+        
+        if(rowAttributes[i] == ',' && check == true)
+        {
+            encountered++;
+        }
+        
+        if(encountered == pos && rowAttributes[i] == ',' && check == true)
+        {
+            start = i+1;
+        }
+        
+        if(encountered == (pos+1) && rowAttributes[i] == ',' && check == true)
+        {
+            end = i;
+        }
+    }
+    
+    
+    
+    int len = end - start;
+
+    string attribute (rowAttributes, start+1, len);
+
+    if (attribute == "False") return false;
+    else return true;
+ }
+
+
 //temporary method for grabbing first string
 string AttributeRetriever::grabFirstString(string attribute)
 {
