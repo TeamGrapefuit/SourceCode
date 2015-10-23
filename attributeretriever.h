@@ -45,6 +45,8 @@ class AttributeRetriever
          */
         string* populateList(string attribute, int numberOfItems);
 
+        bool getBoolAttribute(int pos);
+
 
 };
 

@@ -166,8 +166,7 @@ void ListBuilder::scanMap(){
     std::multimap<string, Grant_rowObject>::iterator cur = data->begin();
     while (cur != data->end()){
 
-        cout << cur->second.name << " " << cur->second.fundType << " " << cur->second.peerReviewed << " " << cur->second.indGrant << endl;
-        Member c_mem;
+          Member c_mem;
         //unsigned long key = str_hash(current->second.name);
         if ( cur == data->begin()) {
             c_mem = this->tally(cur->second.name);
@@ -233,10 +232,11 @@ Member ListBuilder::tally(string name){
     ListClass isentry_cf = ListClass(name,0,0.00, false);
     // for each item in the table with member name
     for (iter = data->equal_range(name).first; iter!=data->equal_range(name).second;iter++){
-        
+        cout << (*iter).second.sDate << endl;
         if ((this->year_s<=(*iter).second.sDate)&&(this->year_e>=(*iter).second.sDate)){
             // if row is a grant and if row is peer reviewed
             if (((*iter).second.peerReviewed==true) && ((*iter).second.fundType=="Grants")) {
+                cout << "Grant and Peer:" << (*iter).second.name << " " << (*iter).second.fundType << " " << (*iter).second.peerReviewed << " " << (*iter).second.indGrant << endl;
                 // update the peertotal
                 g_peertotal++;
                 // update the running totalamount
@@ -248,6 +248,7 @@ Member ListBuilder::tally(string name){
                 peerentry_g.param2 = g_peeramount;
             }
             if (((*iter).second.peerReviewed==true) && ((*iter).second.fundType=="Clinical Funding")) {
+                cout << "Clinical and Peer:" << (*iter).second.name << " " << (*iter).second.fundType << " " << (*iter).second.peerReviewed << " " << (*iter).second.indGrant << endl;
                 // update the peertotal
                 cf_peertotal++;
                 // update the peer amount
@@ -261,6 +262,7 @@ Member ListBuilder::tally(string name){
 
             // if industry grant and grants
             if (((*iter).second.indGrant==true) && ((*iter).second.fundType=="Grants")) {
+                cout << "Grant and IndSpos:" << (*iter).second.name << " " << (*iter).second.fundType << " " << (*iter).second.peerReviewed << " " << (*iter).second.indGrant << endl;
                 g_istotal++;
                 g_isamount = g_isamount + (*iter).second.totalAmount;
                 g_totalamount = g_totalamount +(*iter).second.totalAmount;
@@ -269,6 +271,7 @@ Member ListBuilder::tally(string name){
             }
             // if industry grant and clinical trials
             if (((*iter).second.indGrant==true) && ((*iter).second.fundType=="Clinical Trials")) {
+                cout << "Clinic and IndSpons:" << (*iter).second.name << " " << (*iter).second.fundType << " " << (*iter).second.peerReviewed << " " << (*iter).second.indGrant << endl;
                 cf_istotal++;
                 cf_isamount = cf_isamount + (*iter).second.totalAmount;
                 cf_totalamount = cf_totalamount +(*iter).second.totalAmount;

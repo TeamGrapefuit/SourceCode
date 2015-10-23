@@ -50,10 +50,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //   database->insert(pair<string, Grant_rowObject>(c->name, *c));
 //   database->insert(pair<string, Grant_rowObject>(d->name, *d));
 //   database->insert(pair<string, Grant_rowObject>(e->name, *e));
-    multimap<string, Grant_rowObject>* database = BuildGrants("Grants_changed");
+    multimap<string, Grant_rowObject>* database = BuildGrants("Grants_changed.csv");
     multimap<string, Grant_rowObject>::iterator i = database->begin();
 
-    ListBuilder * lb = new ListBuilder(2005, 2016, database);
+    ListBuilder * lb = new ListBuilder(0, 2016, database);
     lb->scanMap();
     //lb->printList(lb->peerreviewed_grants);
     ListClass * grants = new ListClass("Grants", lb->grants.param1, lb->grants.param2, true);

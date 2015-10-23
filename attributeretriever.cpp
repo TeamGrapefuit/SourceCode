@@ -116,7 +116,7 @@ int AttributeRetriever::getIntAttribute(int pos)
     return value;
 }
 
- bool getBoolAttribute(int pos)
+ bool AttributeRetriever::getBoolAttribute(int pos)
  {
     int encountered = 0;
     int start = 0;
