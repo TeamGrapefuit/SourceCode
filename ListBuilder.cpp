@@ -2,6 +2,7 @@
 #include <iterator>
 #include <list>
 #include <functional>
+#include <iostream>
 
 using namespace std;
 ListBuilder::ListBuilder(int startyear,int endyear,multimap<string,Grant_rowObject> *somedata){
@@ -164,6 +165,8 @@ void ListBuilder::scanMap(){
     
     std::multimap<string, Grant_rowObject>::iterator cur = data->begin();
     while (cur != data->end()){
+
+        cout << cur->second.name << " " << cur->second.fundType << " " << cur->second.peerReviewed << " " << cur->second.indGrant << endl;
         Member c_mem;
         //unsigned long key = str_hash(current->second.name);
         if ( cur == data->begin()) {
