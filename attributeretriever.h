@@ -8,7 +8,11 @@ class AttributeRetriever
 {
     private:
         string rowAttributes;
-        string isolateIntegers(string);
+
+        /* isloateIntegers
+         * returns a string with only the integers from the string subString.
+         */
+        string isolateIntegers(string subString);
 
     public:
         /* Constructor for the AttributeRetriver
@@ -21,6 +25,11 @@ class AttributeRetriever
          * The whole string at the given position will be grabbed and returned.
          */
         string getAttribute(int pos);
+
+        /* getBoolAttribute
+         * returns the bool value at position pos.
+         */
+        bool getBoolAttribute(int pos);
 
         /* grabFirstString
          * returns the first string at position pos.
@@ -44,8 +53,6 @@ class AttributeRetriever
          * Builds an array of strings given a string containing strings separated by commas.
          */
         string* populateList(string attribute, int numberOfItems);
-
-        bool getBoolAttribute(int pos);
 
 
 };

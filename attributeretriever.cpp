@@ -38,15 +38,17 @@ string AttributeRetriever::getAttribute(int pos)
         }
     }
 
-    //Used to remove the quotations.
-    if(check == true)
-    {
 
-    }
 
 
     int len = end - start;
     string attribute (rowAttributes, start, len);
+
+    //Used to remove the quotations.
+    if(attribute[0] == '"')
+    {
+        return string (attribute, 1, attribute.size()-2);
+    }
 
     return attribute;
 }
@@ -54,20 +56,21 @@ string AttributeRetriever::getAttribute(int pos)
 string AttributeRetriever::isolateIntegers(string subString)
 {
     string result;
-    
-    for(string::size_type i = 0; i < subString.size(); ++i){
-        
+
+    for(string::size_type i = 0; i < subString.size(); ++i)
+    {
+
         if (subString[i] >= '0' && subString[i]<= '9'){
             result.append(subString, i, 1);
         }
-        if(subString [i] =='.'){
+        else if(subString [i] =='.' || subString[i] == '/')
+        {
             return result;
         }
-        
+
     }
     return result;
 }
-
 
 int AttributeRetriever::getIntAttribute(int pos)
 {
@@ -75,89 +78,95 @@ int AttributeRetriever::getIntAttribute(int pos)
     int start = 0;
     int end = 0;
     bool check(true);
-    
+
     for(string::size_type i = 0; i < rowAttributes.size(); ++i)
     {
-        
+
         if(rowAttributes[i] == '"')
         {
             check = !check;
-            
+
         }
-        
+
         if(rowAttributes[i] == ',' && check == true)
         {
             encountered++;
         }
-        
+
         if(encountered == pos && rowAttributes[i] == ',' && check == true)
         {
             start = i+1;
         }
-        
+
         if(encountered == (pos+1) && rowAttributes[i] == ',' && check == true)
         {
             end = i;
         }
     }
-    
-    
-    
+
+
+
     int len = end - start;
 
-    string attribute (rowAttributes, start+1, len);
+    string attribute (rowAttributes, start, len);
 
     int value = atoi(attribute.c_str());
+
     if(value == 0)
     {
         attribute = isolateIntegers(attribute);
         value = atoi(attribute.c_str());
     }
+
     return value;
 }
 
- bool AttributeRetriever::getBoolAttribute(int pos)
- {
+bool AttributeRetriever::getBoolAttribute(int pos)
+{
     int encountered = 0;
     int start = 0;
     int end = 0;
     bool check(true);
-    
+
     for(string::size_type i = 0; i < rowAttributes.size(); ++i)
     {
-        
+
         if(rowAttributes[i] == '"')
         {
             check = !check;
-            
         }
-        
+
         if(rowAttributes[i] == ',' && check == true)
         {
             encountered++;
         }
-        
+
         if(encountered == pos && rowAttributes[i] == ',' && check == true)
         {
             start = i+1;
         }
-        
+
         if(encountered == (pos+1) && rowAttributes[i] == ',' && check == true)
         {
             end = i;
+            break;
         }
     }
-    
-    
-    
+
+
+
+
     int len = end - start;
+    string attribute (rowAttributes, start, len);
 
-    string attribute (rowAttributes, start+1, len);
+    //Used to remove the quotations.
+    if(attribute.compare("True") == 0)
+    {
+        return true;
+    }
 
-    if (attribute == "False") return false;
-    else return true;
- }
-
+    return false;
+}
 
 //temporary method for grabbing first string
 string AttributeRetriever::grabFirstString(string attribute)
