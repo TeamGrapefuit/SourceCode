@@ -1,5 +1,7 @@
 #include "attributeretriever.h"
 #include <iostream>
+#include <cstring>
+#include <cstdlib>
 
 AttributeRetriever::AttributeRetriever(string rowData)
 {
