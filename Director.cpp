@@ -44,20 +44,15 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-    ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
-    if(fileStream.is_open())
-    {
-        cout << "good"<<endl;
-    }
-    else
-    {
-        cout<<"bad"<<endl;
-    }
-
-    if (fileStream.fail() || fileStream.bad())
-    {
-        cout << "Error fileStream" << endl;
-    }
+	ifstream fileStream(fileName, ios::in | ios::binary);
+	if (fileStream.is_open())
+	{
+		cout << "good" << endl;
+	}
+	else
+	{
+		cout << "bad" << endl;
+	}
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 0;
@@ -163,17 +158,50 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	//Builder object
 	GrantRowBuilder Builder;
 	multimap<string, Grant_rowObject>* grantsDictionary = new multimap<string, Grant_rowObject>();
-	
+	multimap<string, Grant_rowObject>::iterator check;
+	bool existAlready = false;
+
 	//get raw row and put into temp 
 	int count = 0;
 	while (getline(fileStream, temp))
 	{
+		existAlready = false;
 		//cout << temp << endl; 
 		//make new object and insert into map
 		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
-		grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
+		//find if holder has already entry
+		
+		//duplicate check
+		
+		check = grantsDictionary->find(holder.name);
+		while (check != grantsDictionary->end())
+		{
+			//check if holder already exists
+			if (check->second.name == holder.name && check->second.fundType == holder.fundType && check->second.peerReviewed == holder.peerReviewed && check->second.indGrant == holder.indGrant)
+			{
+				//if it does, add the total amount to the one that already exists
+				check->second.totalAmount = check->second.totalAmount + holder.totalAmount;
+				//confirm that this is a duplicate
+				existAlready = true;
+				count++;
+				
+			}
+
+			check++;
+		}
+
+		//if there is no duplicate, add it in to the map
+		if (existAlready == false)
+		{
+			grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
+			count++;
+			existAlready = false;
+		}
+		
+
+		//grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
 		count++;
-		//cout << temp << endl;
+
 	}
 
 	fileStream.close();
@@ -501,5 +529,12 @@ multimap<string, Pub_rowObject>* getPublications()
 //getter for max start and end date
 pair<int,int> getDatesGrants()
 {
-	return pair<int, int>(firstDateGrants, lastDateGrants);
+	if (firstDateGrants == 0 && lastDateGrants == 0)
+	{
+		cout << endl << "No Grants made" << endl; 
+	}
+	else
+	{
+		return pair<int, int>(firstDateGrants, lastDateGrants);
+	}
 }
