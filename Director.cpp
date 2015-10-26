@@ -182,7 +182,7 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	multimap<string, Grant_rowObject>::iterator it = grantsDictionary->begin();
 	for (it = grantsDictionary->begin(); it != grantsDictionary->end(); ++it)
 	{
-		if (it->second.sDate >= firstDateGrants)
+		if (it->second.sDate <= firstDateGrants)
 		{
 			firstDateGrants = it->second.sDate;
 		}

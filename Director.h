@@ -27,3 +27,4 @@ multimap<string, Grant_rowObject>* getGrants();
 
 
 
+pair<int,int> getDatesGrants();
