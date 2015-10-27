@@ -36,7 +36,13 @@ class AttributeRetriever
          * Strings are separated by commas. The string before the first comma is returned.
          */
         string grabFirstString(string attribute);
-
+		
+		/* getLongAttribute
+         * returns the first integer at position pos.
+		 * This is used to deal with numbers bigger than an integer can store.
+         */
+		long getLongAttribute(int pos);
+		
         /* getIntAttribute
          * returns the first integer at position pos.
          */

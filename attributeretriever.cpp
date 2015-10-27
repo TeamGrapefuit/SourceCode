@@ -74,6 +74,55 @@ string AttributeRetriever::isolateIntegers(string subString)
     return result;
 }
 
+long  AttributeRetriever::getLongAttribute(int pos)
+{
+	int encountered = 0;
+    int start = 0;
+    int end = 0;
+    bool check(true);
+
+    for(string::size_type i = 0; i < rowAttributes.size(); ++i)
+    {
+
+        if(rowAttributes[i] == '"')
+        {
+            check = !check;
+
+        }
+
+        if(rowAttributes[i] == ',' && check == true)
+        {
+            encountered++;
+        }
+
+        if(encountered == pos && rowAttributes[i] == ',' && check == true)
+        {
+            start = i+1;
+        }
+
+        if(encountered == (pos+1) && rowAttributes[i] == ',' && check == true)
+        {
+            end = i;
+        }
+    }
+
+
+
+    int len = end - start;
+
+    string attribute (rowAttributes, start, len);
+
+    long value = atol(attribute.c_str());
+
+    if(value == 0)
+    {
+        attribute = isolateIntegers(attribute);
+        value = atol(attribute.c_str());
+    }
+
+    return value;
+}
+
 int AttributeRetriever::getIntAttribute(int pos)
 {
     int encountered = 0;
