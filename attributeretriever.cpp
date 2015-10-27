@@ -112,12 +112,12 @@ long  AttributeRetriever::getLongAttribute(int pos)
 
     string attribute (rowAttributes, start, len);
 
-    long value = atoi(attribute.c_str());
+    long value = atol(attribute.c_str());
 
     if(value == 0)
     {
         attribute = isolateIntegers(attribute);
-        value = atoi(attribute.c_str());
+        value = atol(attribute.c_str());
     }
 
     return value;
