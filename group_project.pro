@@ -29,7 +29,10 @@ SOURCES += main.cpp\
     Pres_rowObject.cpp \
     Pub_rowObject.cpp \
     Teach_rowObject.cpp \
-    ListBuilder.cpp
+    ListBuilder.cpp \
+    barchartdialog.cpp \
+    graphclass.cpp \
+    piechartdialog.cpp
 
 HEADERS  += mainwindow.h \
     graphdialog.h \
@@ -48,7 +51,10 @@ HEADERS  += mainwindow.h \
     Teach_rowObject.h \
     TeachingRowBuilder.h \
     Pres_rowObject.h \
-    ListBuilder.h
+    ListBuilder.h \
+    barchartdialog.h \
+    graphclass.h \
+    piechartdialog.h
 
 FORMS    += mainwindow.ui \
     graphdialog.ui

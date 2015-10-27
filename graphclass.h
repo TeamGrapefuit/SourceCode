@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <list>
 #include <map>
@@ -28,4 +29,5 @@ public:
     ~GraphClass();
 
     list<list<BarValue> > * getRange();
+
 };

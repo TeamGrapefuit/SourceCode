@@ -12,6 +12,14 @@
 #include <iterator>
 #include "Director.h"
 #include "ListBuilder.h"
+#include "barchartdialog.h"
+#include "piechartdialog.h"
+
+#ifndef GRAPHCLASS_H
+#define GRAPHCLASS_H
+#include "graphclass.h"
+#endif
+
 //#include "graph.h"
 
 using namespace std;
@@ -19,9 +27,12 @@ void on_pushButton_clicked();
 void on_spinBox_valueChanged(int arg1);
 
 //The int value from date scroll box 1 and 2
-int date1, date2;
+int date1 = 2010;
+int date2 = 2015;
+GraphClass * test;
 //The string value from the name box
 string name;
+multimap<string, Grant_rowObject>* database;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     widget1->setFixedHeight(5);
 
     QHBoxLayout * top = new QHBoxLayout();
-
+    test = NULL;
     //Director
 //    multimap<string, Grant_rowObject> * database = new multimap<string, Grant_rowObject>();
 //   Grant_rowObject * a = new Grant_rowObject("A", "Domain", 2011, 2012, "Grants", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  1);
@@ -50,10 +61,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //   database->insert(pair<string, Grant_rowObject>(c->name, *c));
 //   database->insert(pair<string, Grant_rowObject>(d->name, *d));
 //   database->insert(pair<string, Grant_rowObject>(e->name, *e));
-    multimap<string, Grant_rowObject>* database = BuildGrants("Grants_changed.csv");
+    database = BuildGrants("Grants_changed.csv");
     multimap<string, Grant_rowObject>::iterator i = database->begin();
 
-    ListBuilder * lb = new ListBuilder(0, 2016, database);
+    ListBuilder * lb = new ListBuilder(2000, 2025, database);
     lb->scanMap();
     //lb->printList(lb->peerreviewed_grants);
     ListClass * grants = new ListClass("Grants", lb->grants.param1, lb->grants.param2, true);
@@ -102,20 +113,20 @@ MainWindow::~MainWindow()
 //Graph button action. Pressing graph button makes this happen
 void MainWindow::on_pushButton_clicked()
 {
-    GraphDialog *newDialog = new GraphDialog();
-
-    if(date1 < date2)
-    {
-        newDialog->show();
-        newDialog->raise();
-        newDialog->activateWindow();
-
-    }
-    else
-    {
-        cout << "Your dates are not correct" << endl;
-    }
+    GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
+    barchartdialog *chart = new barchartdialog();
+    chart->setData(test,date1,date2);
+    chart->show();
 }
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
+    piechart *chart = new piechart();
+    chart->setData(test,date1,date2);
+    chart->show();
+}
+
 //This takes value in first date box and sets it to global variable
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
