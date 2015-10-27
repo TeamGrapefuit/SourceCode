@@ -208,14 +208,17 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 
 	//after you make the map, find out the min start date and max end date
 	multimap<string, Grant_rowObject>::iterator it = grantsDictionary->begin();
+	//intializing to high amount for start dates
+	firstDateGrants = 2100;
 	for (it = grantsDictionary->begin(); it != grantsDictionary->end(); ++it)
 	{
-		if (it->second.sDate <= firstDateGrants)
+		//checking if start date is lower and not counting zeroes
+		if (it->second.sDate <= firstDateGrants && it->second.sDate != 0 )
 		{
 			firstDateGrants = it->second.sDate;
 		}
-
-		if (it->second.edate >= lastDateGrants)
+		//checking if end date is higher and not counting to high amounts
+		if (it->second.edate >= lastDateGrants && it->second.edate < 2100)
 		{
 			lastDateGrants = it->second.edate;
 		}
