@@ -1,7 +1,7 @@
 
 #include "Grant_rowObject.h"
 
-Grant_rowObject::Grant_rowObject(string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, int totalAmount){
+Grant_rowObject::Grant_rowObject(string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, long totalAmount){
 
     this->name = memberName; //Member Name
     this->domain = primaryDomain; //Primary Domain

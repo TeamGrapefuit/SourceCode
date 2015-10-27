@@ -32,7 +32,12 @@ Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     
     int sDate = fetch.getIntAttribute(index.sDate_loc);
     int eDate = fetch.getIntAttribute(index.eDate_loc);
-    int totalAmount = fetch.getIntAttribute(index.totalAmount_loc);
+    
+    
+    long totalAmount = fetch.getLongAttribute(index.totalAmount_loc);
+ 
+
+    
     
     
     Grant_rowObject currentRow (name, domain, sDate, eDate, fundType, stat, peerReviewed,indGrant, role, title, pInvestigator, cpInvestigator, totalAmount);
