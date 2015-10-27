@@ -24,10 +24,10 @@ class Grant_rowObject{
     int sDate; //Start Date
     int edate; // end date
     
-    long totalAmount; // total amount
+    long long totalAmount; // total amount
     
     int count; //number of grants (same member, same year etc.), starts as 1
 
-    Grant_rowObject(string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, long totalAmount);
+    Grant_rowObject(string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, long long totalAmount);
 
 };

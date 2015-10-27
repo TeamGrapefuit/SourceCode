@@ -41,7 +41,7 @@ class AttributeRetriever
          * returns the first integer at position pos.
 		 * This is used to deal with numbers bigger than an integer can store.
          */
-		long getLongAttribute(int pos);
+		long long getLongAttribute(int pos);
 		
         /* getIntAttribute
          * returns the first integer at position pos.

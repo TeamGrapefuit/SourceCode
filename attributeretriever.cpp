@@ -74,7 +74,7 @@ string AttributeRetriever::isolateIntegers(string subString)
     return result;
 }
 
-long  AttributeRetriever::getLongAttribute(int pos)
+long long AttributeRetriever::getLongAttribute(int pos)
 {
 	int encountered = 0;
     int start = 0;
@@ -112,7 +112,7 @@ long  AttributeRetriever::getLongAttribute(int pos)
 
     string attribute (rowAttributes, start, len);
 
-    long value = atol(attribute.c_str());
+    long long value = atol(attribute.c_str());
 
     if(value == 0)
     {
