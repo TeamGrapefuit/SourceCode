@@ -1,10 +1,3 @@
-//
-//  Teach_rowObject.cpp
-//  Row Builder
-//
-//  Created by Jason Smash on 2015-10-22.
-//  Copyright (c) 2015 Jason Smash. All rights reserved.
-//
 
 #include <stdio.h>
 #include "Teach_rowObject.h"
@@ -23,5 +16,7 @@ Teach_rowObject::Teach_rowObject(string memberName, string primaryDomain,string 
     
     hpTeach = teach_hpTeach;
     tHours = teach_tHours;
+
+    totalStudents = 0; //*************************************************This needs to be filled in
     
 };

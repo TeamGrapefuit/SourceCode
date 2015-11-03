@@ -16,7 +16,7 @@ public:
     string title; // Presentation Title
     
     int date; // Presentation Date
-
+    int numPresent; //Number of presentations
  Pres_rowObject(string memberName, string primaryDomain, int presentationDate, string presentationType, string presentationRole, string presentationTitle);
 
 };

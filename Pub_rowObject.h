@@ -16,7 +16,8 @@ public:
     string jName; //Journal Name
     
     int statDate; //Status Date
-
+    int totalPub; //Total number of publications
+    
 Pub_rowObject(string memberName, string primaryDomain, string publicationStatus, string journalType, string journalRole, string journalAuthor, string journalName, string journalTitle, int statusDate);
 
 };

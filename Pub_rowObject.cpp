@@ -21,5 +21,5 @@ Pub_rowObject::Pub_rowObject(string memberName, string primaryDomain, string pub
     jName = journalName;
     
     statDate = statusDate;
-    
+    totalPub = 1;
 };

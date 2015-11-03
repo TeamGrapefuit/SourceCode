@@ -21,6 +21,7 @@ public:
     
     float hpTeach;//hours per teaching session or week
     float tHours;//total hours
+    int totalStudents;  //Total number of students
 
 Teach_rowObject(string name, string domain,string program,string courseType,string  geoScope, int nTeach, int sDate, int eDate, float hpTeach, float tHours);
 

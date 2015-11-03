@@ -18,7 +18,8 @@ Pres_rowObject::Pres_rowObject(string memberName, string primaryDomain, int pres
     type = presentationType;
     role = presentationRole;
     title = presentationTitle;
-    
+  
     date = presentationDate;
+    numPresent = 1;
     
 };
