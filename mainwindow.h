@@ -29,6 +29,10 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_actionOpen_File_triggered();
+
+    void csvBuild();
+
 private:
     Ui::MainWindow *ui;
 
