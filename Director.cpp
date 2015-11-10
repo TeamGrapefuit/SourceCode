@@ -163,10 +163,12 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 
 	//get raw row and put into temp 
 	int count = 0;
-	while (getline(fileStream, temp))
+	while (getline(fileStream, temp, '\r'))
 	{
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		existAlready = false;
-		//cout << temp << endl; 
+
+		cout << temp << endl; 
 		//make new object and insert into map
 		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
 		//find if holder has already entry
@@ -186,10 +188,8 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 				count++;
 				
 			}
-
 			check++;
 		}
-
 		//if there is no duplicate, add it in to the map
 		if (existAlready == false)
 		{
