@@ -36,7 +36,9 @@ Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     int statDate = fetch.getIntAttribute(index.statDate_loc);
     
     
-    Pub_rowObject currentRow (name, domain, pubStatus, type, role, author, jName, title, statDate);
+    bool hasError = 0; //Set this to true if an error is found
+    
+    Pub_rowObject currentRow (hasError, name, domain, pubStatus, type, role, author, jName, title, statDate);
     
     return currentRow;
 };

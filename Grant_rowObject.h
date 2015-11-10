@@ -1,3 +1,10 @@
+//
+//  Grant_rowObject.h
+//  Row Builder
+//
+//  Created by Jason Smash on 2015-10-17.
+//  Copyright (c) 2015 Jason Smash. All rights reserved.
+//
 #include<string>
 
 using namespace std;
@@ -6,7 +13,9 @@ using namespace std;
 class Grant_rowObject{
 
     public:
-
+//flag: true = error, false = no error
+    bool errorFlag;
+    
 //Member varables for Grants
 
     string name; //Member Name
@@ -28,6 +37,6 @@ class Grant_rowObject{
     
     int count; //number of grants (same member, same year etc.), starts as 1
 
-    Grant_rowObject(string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, long long totalAmount);
+    Grant_rowObject(bool error, string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, long long totalAmount);
 
 };

@@ -21,7 +21,9 @@ Pres_rowObject PresentationRowBuilder::buildRow(string data, ColIndex index){
     
     int date = fetch.getIntAttribute(index.date_loc);
 
-    Pres_rowObject currentRow(name, domain, date, type, role, title);
+    bool hasError = 0; //This will be set to 1 if an error is found
+    
+    Pres_rowObject currentRow(hasError, name, domain, date, type, role, title);
     
     return currentRow;
     };

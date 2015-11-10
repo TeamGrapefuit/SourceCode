@@ -11,8 +11,10 @@
 
 
 
-Pres_rowObject::Pres_rowObject(string memberName, string primaryDomain, int presentationDate, string presentationType, string presentationRole, string presentationTitle){
+Pres_rowObject::Pres_rowObject(bool error, string memberName, string primaryDomain, int presentationDate, string presentationType, string presentationRole, string presentationTitle){
   
+    this->errorFlag = error;
+    
     name = memberName;
     domain = primaryDomain;
     type = presentationType;
