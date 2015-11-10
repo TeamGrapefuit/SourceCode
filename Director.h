@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map> //include for multimap
 #include <list> //include for pair
+#include <algorithm> //include for erase
 #include "rowObject.h" //row objects
 #include "Grant_rowObject.h"
 
