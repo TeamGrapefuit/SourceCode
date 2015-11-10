@@ -1,5 +1,7 @@
+
 #include "graphclass.h"
 #include <iterator>
+#include<stdlib.h>
 
 GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Grant_rowObject> * data)
 {
@@ -109,16 +111,16 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Teac
 
             list<BarValue>::iterator inner = outer->begin();
 
-            if (i->second.fundType == "PME" ){
+            if (i->second.courseType == "PME" ){
                 //No advance needed
             }
-            if (i->second.fundType == "UME" ){
+            if (i->second.courseType == "UME" ){
                 advance(inner, 1);
             }
-            if (i->second.fundType == "CME" ){
+            if (i->second.courseType == "CME" ){
                 advance(inner, 2);
             }
-            if (i->second.fundType == "Other"){
+            if (i->second.courseType == "Other"){
                 advance(inner, 3);
             }
 
@@ -130,7 +132,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Teac
     }
 }
 
-GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pres_rowObject> * data)
+GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Pres_rowObject> * data)
 {
     list<string> * barTitles = new list<string>();
     barTitles->push_back("Pres - Lectures");
@@ -159,10 +161,10 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pres
         ++ yearBarValues;
     }
 
-    multimap<string, Grant_rowObject>::iterator i = data->begin();
+    multimap<string,Pres_rowObject>::iterator i = data->begin();
     while (i != data->end()){
         if (i->first == name){
-            int pos = i->second.sDate - startYear;
+            int pos = i->second.date - startYear;
             if (pos < 0) {
                 cout << "GraphClass.cpp - Date Mismatch Error" << endl;
                 exit(EXIT_FAILURE);
@@ -172,16 +174,16 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pres
 
             list<BarValue>::iterator inner = outer->begin();
 
-            if (i->second.fundType == "Lectures"){
+            if (i->second.type == "Lectures"){
                 //No advance needed
             }
-            if (i->second.fundType == "Presented"){
+            if (i->second.type == "Presented"){
                 advance(inner, 1);
             }
-            if (i->second.fundType == "Type"){
+            if (i->second.type == "Type"){
                 advance(inner, 2);
             }
-            if (i->second.fundType == "Other"){
+            if (i->second.type == "Other"){
                 advance(inner, 3);
             }
 
@@ -193,7 +195,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pres
 
 }
 
-GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pub_rowObject> * data)
+GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Pub_rowObject> * data)
 {
     list<string> * barTitles = new list<string>();
     barTitles->push_back("Publications - Book Chapters");
@@ -242,7 +244,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pub_
     multimap<string, Pub_rowObject>::iterator i = data->begin();
     while (i != data->end()){
         if (i->first == name){
-            int pos = i->second.sDate - startYear;
+            int pos = i->second.statDate - startYear;
             if (pos < 0) {
                 cout << "GraphClass.cpp - Date Mismatch Error" << endl;
                 exit(EXIT_FAILURE);
@@ -252,67 +254,67 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pub_
 
             list<BarValue>::iterator inner = outer->begin();
 
-            if (i->second.fundType == "Book Chapters"){
+            if (i->second.type == "Book Chapters"){
                 //No advance needed
             }
-            if (i->second.fundType == "Books" ){
+            if (i->second.type == "Books" ){
                 advance(inner, 1);
             }
-            if (i->second.fundType == "Books Edited"){
+            if (i->second.type == "Books Edited"){
                 advance(inner, 2);
             }
-            if (i->second.fundType == "Case Reports"){
+            if (i->second.type == "Case Reports"){
                 advance(inner, 3);
             }
-            if (i->second.Type == "Clinical Care Guidelines"){
+            if (i->second.type == "Clinical Care Guidelines"){
                 advance(inner, 4);
             }
-            if (i->second.Type == "Commentaries"){
+            if (i->second.type == "Commentaries"){
                 advance(inner, 5);
             }
-            if (i->second.Type == "Conference Proceedings"){
+            if (i->second.type == "Conference Proceedings"){
                 advance(inner, 6);
             }
-            if (i->second.Type == "Editorials"){
+            if (i->second.type == "Editorials"){
                 advance(inner, 7);
             }
-            if (i->second.Type == "Invited Articles"){
+            if (i->second.type == "Invited Articles"){
                 advance(inner, 8);
             }
-            if (i->second.Type == "Journal Article"){
+            if (i->second.type == "Journal Article"){
                 advance(inner, 9);
             }
-            if (i->second.Type == "Letters to Editor"){
+            if (i->second.type == "Letters to Editor"){
                 advance(inner, 10);
             }
-            if (i->second.Type == "Magazine Entries"){
+            if (i->second.type == "Magazine Entries"){
                 advance(inner, 11);
             }
-            if (i->second.Type == "Manuals"){
+            if (i->second.type == "Manuals"){
                 advance(inner, 12);
             }
-            if (i->second.Type == "Monographs"){
+            if (i->second.type == "Monographs"){
                 advance(inner, 13);
             }
-            if (i->second.Type == "Multimedia"){
+            if (i->second.type == "Multimedia"){
                 advance(inner, 14);
             }
-            if (i->second.Type == "Newsletter Articles"){
+            if (i->second.type == "Newsletter Articles"){
                 advance(inner, 15);
             }
-            if (i->second.Type == "Newspaper Articles"){
+            if (i->second.type == "Newspaper Articles"){
                 advance(inner, 16);
             }
-            if (i->second.Type == "Published Abstract"){
+            if (i->second.type == "Published Abstract"){
                 advance(inner, 17);
             }
-            if (i->second.Type == "Supervised Student Publications"){
+            if (i->second.type == "Supervised Student Publications"){
                 advance(inner, 18);
             }
-            if (i->second.Type == "Websites / Videos"){
+            if (i->second.type == "Websites / Videos"){
                 advance(inner, 19);
             }
-            if (i->second.Type == "Working Papers"){
+            if (i->second.type == "Working Papers"){
                 advance(inner, 20);
             }
 
@@ -323,6 +325,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Pub_
     }
 
 }
+
 GraphClass::~GraphClass()
 {
     list<list<BarValue> >::iterator level1 = range->begin();
