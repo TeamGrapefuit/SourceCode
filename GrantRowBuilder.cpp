@@ -36,11 +36,9 @@ Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     
     long totalAmount = fetch.getLongAttribute(index.totalAmount_loc);
  
-
+    bool hasError = 0;//IF this row has an error in it, this flag should be set to true
     
-    
-    
-    Grant_rowObject currentRow (name, domain, sDate, eDate, fundType, stat, peerReviewed,indGrant, role, title, pInvestigator, cpInvestigator, totalAmount);
+    Grant_rowObject currentRow (hasError, name, domain, sDate, eDate, fundType, stat, peerReviewed,indGrant, role, title, pInvestigator, cpInvestigator, totalAmount);
     
     return currentRow;
 };

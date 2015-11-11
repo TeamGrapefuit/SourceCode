@@ -7,17 +7,20 @@
 #include <list> //include for pair
 #include <algorithm> //include for erase
 #include "rowObject.h" //row objects
-#include "Grant_rowObject.h"
+#include "GrantRowBuilder.h" //row builders
+#include "TeachingRowBuilder.h"
+#include "PresentationRowBuilder.h"
+#include "PublicationRowBuilder.h"
 
 using namespace std;
-//Builders
+//Builder Functions
 multimap<string, Grant_rowObject>* BuildGrants(std::string input);
 
-void BuildTeacher(std::string input);
+multimap<string, Teach_rowObject>* BuildTeacher(std::string input);
 
-void BuildPresentation(std::string input);
+multimap<string, Pres_rowObject>* BuildPresentation(std::string input);
 
-void BuildPublications(std::string input);
+multimap<string, Pub_rowObject>* BuildPublications(std::string input);
 
 //getters
 multimap<string, Grant_rowObject>* getGrants();

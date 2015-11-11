@@ -1,17 +1,10 @@
 //Director
 //To-do: 
 //	Error Stack
-//	Value Summer: for those of same author, same start year & same type
-//	Date Range: Keep track of start and end date and make getters to it
-
+//	Value Summer: for those of same author, same start year & same type (still need to do for teach,pres, and pub)
+//	Date Range: Keep track of start and end date and make getters to it (still need to do for teach,pres, and pub)
+//  Figure out type of file
 #include "Director.h"
-//#include "Pres_rowObject.h"
-//#include "Pub_rowObject.h"
-//#include "Teach_rowObject.h"
-#include "ColIndex.h"
-#include "GrantRowBuilder.h" //row builders
-//#include "PresentationRowBuilder.h"
-//#include "PublicationRowBuilder.h"
 
 using namespace std;
 
@@ -24,17 +17,17 @@ string firstRow;  //string to hold all the data in the first row
 //ints for Date Range, Grants
 int firstDateGrants;
 int lastDateGrants;
+int firstDateTeach;
+int lastDateTeach;
 
-//multimap for Grant Rows
+//multimaps
 multimap<string, Grant_rowObject>* grantsDictionary; 
+multimap<string, Teach_rowObject>* teachDictionary;
+multimap<string, Pres_rowObject>* presentationsDictionary;
+multimap<string, Pub_rowObject>* publicationsDictionary;
 
-//multimap for Presentation Rows
-//multimap<string, Pres_rowObject>* presentationsDictionary;
+//error stack
 
-//multimap for Grant Rows
-//multimap<string, Pub_rowObject>* publicationsDictionary;
-
-//multimap for Teaching Rows
 
 
 //build Grants
@@ -163,12 +156,15 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 
 	//get raw row and put into temp 
 	int count = 0;
+	//take only up to the Carriage return so that the line is read until you get a Carriage Return (CR)
+	//this is in case that the excel file has multiple lines in a cell
 	while (getline(fileStream, temp, '\r'))
 	{
+		//remove any new lines in temp, to make one line
 		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		existAlready = false;
 
-		cout << temp << endl; 
+		//cout << temp << endl; 
 		//make new object and insert into map
 		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
 		//find if holder has already entry
@@ -230,12 +226,21 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 
 //build Teacher
 //status: unfinished, waiting on row builder
-void BuildTeacher(string input)
+multimap<string, Teach_rowObject>* BuildTeacher(string input)
 {
 	//get the name of the file
 	fileName = input;
 	//start stream of object
     ifstream fileStream(fileName.c_str());
+	//check if filestream opening worked
+	if (fileStream.is_open())
+	{
+		cout << "good" << endl;
+	}
+	else
+	{
+		cout << "bad" << endl;
+	}
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 1;
@@ -316,28 +321,52 @@ void BuildTeacher(string input)
 
 	string temp;
 
-	multimap<string, Grant_rowObject>* Dictionary = new multimap<string, Grant_rowObject>();
+	multimap<string, Teach_rowObject>* teachDictionary = new multimap<string, Teach_rowObject>();
 
 	//Builder object
-	GrantRowBuilder Builder;
+	TeachingRowBuilder Builder;
 	
 
 	//get raw row and put into temp 
-	while (getline(fileStream, temp))
+	// go until carriage return
+	while (getline(fileStream, temp, '\r'))
 	{
+		//erase the new lines in the line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
 		//remember to change holder to right object type
-		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
-		Dictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
+		Teach_rowObject holder = Builder.buildRow(temp, colIndex);
+		teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
 	}
 
+	fileStream.close();
 
+	//after you make the map, find out the min start date and max end date
+	multimap<string, Teach_rowObject>::iterator it = teachDictionary->begin();
+	//intializing to high amount for start dates
+	firstDateGrants = 2100;
+	for (it = teachDictionary->begin(); it != teachDictionary->end(); ++it)
+	{
+		//checking if start date is lower and not counting zeroes
+		if (it->second.sDate <= firstDateGrants && it->second.sDate != 0)
+		{
+			firstDateGrants = it->second.sDate;
+		}
+		//checking if end date is higher and not counting to high amounts
+		if (it->second.edate >= lastDateGrants && it->second.edate < 2100)
+		{
+			lastDateGrants = it->second.edate;
+		}
+
+	}
+
+	return teachDictionary;
 
 }
 
 //build Presentations
 //status: unfinished, needs right objects
-void BuildPresentation(string input)
+multimap<string, Pres_rowObject>* BuildPresentation(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -404,22 +433,26 @@ void BuildPresentation(string input)
 	string temp;
 
 	//Builder object
-	//PresentationRowBuilder Builder;
-	//presentationsDictionary = new multimap<string, Pres_rowObject>();
+	PresentationRowBuilder Builder;
+	presentationsDictionary = new multimap<string, Pres_rowObject>();
 
 	//get raw row and put into temp 
-	while (getline(fileStream, temp))
+	// go until carriage return
+	while (getline(fileStream, temp, '\r'))
 	{
+		//erase the new lines in the line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
-		//Pres_rowObject holder = Builder.buildRow(temp, colIndex);
-		//presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
+		Pres_rowObject holder = Builder.buildRow(temp, colIndex);
+		presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
 	}
 
+	return presentationsDictionary;
 }
 
 //build Publications
 //status: unfinished, needs right objects
-void BuildPublications(string input)
+multimap<string, Pub_rowObject>* BuildPublications(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -497,17 +530,21 @@ void BuildPublications(string input)
 	string temp;
 
 	//Builder object
-	//PublicationRowBuilder Builder;
-	//publicationsDictionary = new multimap<string, Pub_rowObject>();
+	PublicationRowBuilder Builder;
+	publicationsDictionary = new multimap<string, Pub_rowObject>();
 	//get raw row and put into temp 
-	while (getline(fileStream, temp))
+	// go until carriage return
+	while (getline(fileStream, temp, '\r'))
 	{
+		//erase the new lines in the line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
 		//remember to change holder to right object type
-		//Pub_rowObject holder = Builder.buildRow(temp, colIndex);
-		//publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
+		Pub_rowObject holder = Builder.buildRow(temp, colIndex);
+		publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
 	}
 
+	return publicationsDictionary;
 }
 
 

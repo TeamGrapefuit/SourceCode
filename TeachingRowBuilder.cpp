@@ -28,8 +28,9 @@ Teach_rowObject TeachingRowBuilder::buildRow(string data, ColIndex index){
     float hpTeach = fetch.getIntAttribute(index.hpTeach_loc);
     float tHours = fetch.getIntAttribute(index.tHours_loc);
     
+    bool hasError = 0; //Set this to 1 if an error is found
     
-    Teach_rowObject currentRow (name, domain, program, courseType, geoScope, nTeach, sDate, eDate, hpTeach, tHours);
+    Teach_rowObject currentRow (hasError, name, domain, program, courseType, geoScope, nTeach, sDate, eDate, hpTeach, tHours);
     
     return currentRow;
 };
