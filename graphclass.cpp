@@ -12,6 +12,8 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     barTitles->push_back("Clinic - IS");
 
     range = new list<list<BarValue> >;
+    //cout << "--------------------------" << endl;
+    //cout << "Start " << startYear << " EndYear " << endYear << endl;
     for (int i = startYear; i < endYear; i ++){
         list<BarValue> temp;
         range->push_back(temp);
@@ -36,27 +38,42 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     multimap<string, Grant_rowObject>::iterator i = data->begin();
     while (i != data->end()){
         if (i->first == name){
+            //cout << "Found match!" << endl;
             int pos = i->second.sDate - startYear;
-            if (pos < 0) {
-                cout << "GraphClass.cpp - Date Mismatch Error" << endl;
-                exit(EXIT_FAILURE);
+            if (pos < 0 || i->second.sDate >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
             }
+            //cout << "Position: " << pos << endl;
             list<list<BarValue> >::iterator outer = range->begin();
+            //cout << "Position: " << pos << endl;
             advance(outer, pos);
 
             list<BarValue>::iterator inner = outer->begin();
 
             if (i->second.fundType == "Grants" && i->second.peerReviewed){
                 //No advance needed
+                //cout << "Type: Grants and Peer Review" << endl;
             }
-            if (i->second.fundType == "Grants" && i->second.indGrant){
+            else if (i->second.fundType == "Grants" && i->second.indGrant){
+                //cout << "in" << endl;
                 advance(inner, 1);
+                //cout << "out" << endl;
+                //cout << "Type: Grants and InsSpons" << endl;
             }
-            if (i->second.fundType == "Clinical Trials" && i->second.peerReviewed){
+            else if (i->second.fundType == "Clinical Trials" && i->second.peerReviewed){
+                //cout << "in2" << endl;
                 advance(inner, 2);
+                //cout << "out2" << endl;
+                //cout << "Type: Clinicla and Peer Review" << endl;
             }
-            if (i->second.fundType == "Clinical Trials" && i->second.indGrant){
+            else if (i->second.fundType == "Clinical Trials" && i->second.indGrant){
+                //cout << "in3" << endl;
                 advance(inner, 3);
+                //cout << "out3" << endl;
+
+                //cout << "Type: Clinical and InsSpons" << endl;
             }
 
             inner->yValue1 += 1;
