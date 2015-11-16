@@ -119,9 +119,10 @@ GraphClass::GraphClass(int startYear, int endYear, string name, map<string, Teac
     while (i != data->end()){
         if (i->first == name){
             int pos = i->second.sDate - startYear;
-            if (pos < 0) {
-                cout << "GraphClass.cpp - Date Mismatch Error" << endl;
-                exit(EXIT_FAILURE);
+            if (pos < 0 || i->second.sDate >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
             }
             list<list<BarValue> >::iterator outer = range->begin();
             advance(outer, pos);
@@ -182,9 +183,10 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     while (i != data->end()){
         if (i->first == name){
             int pos = i->second.date - startYear;
-            if (pos < 0) {
-                cout << "GraphClass.cpp - Date Mismatch Error" << endl;
-                exit(EXIT_FAILURE);
+            if (pos < 0 || i->second.date >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
             }
             list<list<BarValue> >::iterator outer = range->begin();
             advance(outer, pos);
@@ -262,9 +264,10 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     while (i != data->end()){
         if (i->first == name){
             int pos = i->second.statDate - startYear;
-            if (pos < 0) {
-                cout << "GraphClass.cpp - Date Mismatch Error" << endl;
-                exit(EXIT_FAILURE);
+            if (pos < 0 || i->second.statDate >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
             }
             list<list<BarValue> >::iterator outer = range->begin();
             advance(outer, pos);
