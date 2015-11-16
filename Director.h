@@ -14,21 +14,24 @@
 
 using namespace std;
 //Builder Functions
-multimap<string, Grant_rowObject>* BuildGrants(std::string input);
 
-multimap<string, Teach_rowObject>* BuildTeacher(std::string input);
+int Build(string input);
 
-multimap<string, Pres_rowObject>* BuildPresentation(std::string input);
+void BuildGrants(std::string input);
 
-multimap<string, Pub_rowObject>* BuildPublications(std::string input);
+void BuildTeacher(std::string input);
+
+void BuildPresentation(std::string input);
+
+void BuildPublications(std::string input);
 
 //getters
 multimap<string, Grant_rowObject>* getGrants();
 
-//multimap<string, Pres_rowObject>* getPresentations(); 
+multimap<string, Teach_rowObject>* getTeachings();
 
-//multimap<string, Pub_rowObject>* getPublications();
+multimap<string, Pres_rowObject>* getPresentations();
 
-
+multimap<string, Pub_rowObject>* getPublications();
 
 pair<int,int> getDatesGrants();

@@ -26,13 +26,103 @@ multimap<string, Teach_rowObject>* teachDictionary;
 multimap<string, Pres_rowObject>* presentationsDictionary;
 multimap<string, Pub_rowObject>* publicationsDictionary;
 
-//error stack
+//File Detective
+//figure out what type of file the inputted file is
+//Outputs are 0 = not recognized, 1 = Grants, 2 = Teaching, 3 = Presentations, 4 = Publications
+int Build(string input)
+{
+
+	//the output, what the marker for the solution will be
+	int type = 0;
+
+	//Open file
+	//get the name of the file
+	fileName = input;
+	//start stream of object
+	ifstream fileStream(fileName, ios::in | ios::binary);
+	//check if good
+	if (fileStream.is_open())
+	{
+		cout << "good" << endl;
+	}
+	else
+	{
+		cout << "bad" << endl;
+	}
+
+	//FIRST ROW
+
+	//get first row
+	fileStream >> ws;
+	getline(fileStream, firstRow);
+	//seperate first row
+	istringstream firstRowStream(firstRow);
+
+	//string for keeping track of column
+	string findColumn; 
+	//go through the first row and find unique column, once you find one break from loop
+	while (getline(firstRowStream, findColumn, ','))
+	{
+		//1. Grants
+		if (findColumn == "Funding Type")
+		{
+			type = 1;
+			break;
+		}
+		//2. Teaching
+		else if (findColumn == "Program")
+		{
+			type = 2;
+			break;
+		}
+
+		//3. Presentation
+		else if (findColumn == "Education Presentation")
+		{
+			type = 3;
+			break;
+		}
+		//4. Publications
+		else if (findColumn == "Publication Status")
+		{
+			type = 4;
+			break;
+		}
+	}
+
+	//build correct dictionary
+	if (type == 0)
+	{
+		cout << "File Type could not be identified" << endl;
+	}
+	//Grants
+	else if (type == 1)
+	{
+		BuildGrants(fileName);
+	}
+	//Teaching
+	else if (type == 2)
+	{
+		BuildTeacher(fileName);
+	}
+	//Presentation
+	else if (type == 3)
+	{
+		BuildPresentation(fileName);
+	}
+	//Publications
+	else if (type == 4)
+	{
+		BuildPresentation(fileName);
+	}
 
 
+	return type;
+}
 
 //build Grants
 //status: basics finished. but keep updating
-multimap<string, Grant_rowObject>* BuildGrants(string input)
+void BuildGrants(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -65,7 +155,7 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	//now put in first rows value and put into struct
 	while (getline(firstRowStream, columnName, ','))
 	{
-		//compare column name to variable, if a column appears, put in relevant 
+		//compare column name to variable, if a column appears, put in relevant index
 		//name
 		if (columnName == "Member Name")
 		{
@@ -150,7 +240,7 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	string temp; 
 	//Builder object
 	GrantRowBuilder Builder;
-	multimap<string, Grant_rowObject>* grantsDictionary = new multimap<string, Grant_rowObject>();
+	grantsDictionary = new multimap<string, Grant_rowObject>();
 	multimap<string, Grant_rowObject>::iterator check;
 	bool existAlready = false;
 
@@ -221,12 +311,16 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 
 	}
 
-	return grantsDictionary;
+	if (grantsDictionary != NULL)
+	{
+		cout << "Grants Dictionary made" << endl;
+	}
+
 }
 
 //build Teacher
 //status: unfinished, waiting on row builder
-multimap<string, Teach_rowObject>* BuildTeacher(string input)
+void BuildTeacher(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -321,7 +415,7 @@ multimap<string, Teach_rowObject>* BuildTeacher(string input)
 
 	string temp;
 
-	multimap<string, Teach_rowObject>* teachDictionary = new multimap<string, Teach_rowObject>();
+	teachDictionary = new multimap<string, Teach_rowObject>();
 
 	//Builder object
 	TeachingRowBuilder Builder;
@@ -353,20 +447,18 @@ multimap<string, Teach_rowObject>* BuildTeacher(string input)
 			firstDateGrants = it->second.sDate;
 		}
 		//checking if end date is higher and not counting to high amounts
-		if (it->second.edate >= lastDateGrants && it->second.edate < 2100)
+		if (it->second.eDate >= lastDateGrants && it->second.eDate < 2100)
 		{
-			lastDateGrants = it->second.edate;
+			lastDateGrants = it->second.eDate;
 		}
 
 	}
-
-	return teachDictionary;
 
 }
 
 //build Presentations
 //status: unfinished, needs right objects
-multimap<string, Pres_rowObject>* BuildPresentation(string input)
+void BuildPresentation(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -410,12 +502,12 @@ multimap<string, Pres_rowObject>* BuildPresentation(string input)
 			colIndex.title_loc = columnNumber;
 		}
 		//presentation type
-		else if (columnName == "Type") //there is also Short Title
+		else if (columnName == "Type") 
 		{
 			colIndex.type_loc = columnNumber;
 		}
 		//Presentation Date
-		else if (columnName == "Date") //there is also Short Title
+		else if (columnName == "Date") 
 		{
 			colIndex.date_loc = columnNumber;
 		}
@@ -447,12 +539,11 @@ multimap<string, Pres_rowObject>* BuildPresentation(string input)
 		presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
 	}
 
-	return presentationsDictionary;
 }
 
 //build Publications
 //status: unfinished, needs right objects
-multimap<string, Pub_rowObject>* BuildPublications(string input)
+void BuildPublications(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -544,34 +635,74 @@ multimap<string, Pub_rowObject>* BuildPublications(string input)
 		publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
 	}
 
-	return publicationsDictionary;
 }
 
 
-//getters for the Hash Tables
+//getters for the Dictionaries
+//has a checker that checks if the pointer is NULL, meaning the Dictionary was never made
+//if it is NULL then NULL is returned and it says that it wasn't made
 multimap<string, Grant_rowObject>* getGrants()
 {
-	return grantsDictionary;
+	if (grantsDictionary != NULL)
+	{
+		return grantsDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Grants" << endl;
+		return NULL;
+	}
+	
 }
 
-/*
+multimap<string, Teach_rowObject>* getTeachings()
+{
+	if (teachDictionary != NULL)
+	{
+		return teachDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Teachings" << endl;
+		return NULL;
+	}
+
+}
+
 multimap<string, Pres_rowObject>* getPresentations()
 {
-	return presentationsDictionary;
+	if (presentationsDictionary != NULL)
+	{
+		return presentationsDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Presentations" << endl;
+		return NULL;
+	}
+
 }
 
 multimap<string, Pub_rowObject>* getPublications()
 {
-	return publicationsDictionary;
+	if (publicationsDictionary != NULL)
+	{
+		return publicationsDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Publications" << endl;
+		return NULL;
+	}
+
 }
-*/
 
 //getter for max start and end date
 pair<int,int> getDatesGrants()
 {
 	if (firstDateGrants == 0 && lastDateGrants == 0)
 	{
-		cout << endl << "No Grants made" << endl; 
+		cout << endl << "No Grants File given in" << endl; 
 	}
 	else
 	{
