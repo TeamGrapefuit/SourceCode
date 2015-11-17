@@ -1,15 +1,15 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "plusminuslist.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QApplication>
 #include <list>
 #include <string>
 #include <QMenuBar>
-#include "graphdialog.h"
-#include <QApplication>
 #include <iostream>
 #include <iterator>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "plusminuslist.h"
+#include "graphdialog.h"
 #include "Director.h"
 #include "ListBuilder.h"
 #include "barchartdialog.h"
@@ -21,6 +21,7 @@
 #include "graphclass.h"
 #endif
 
+//Method declaration
 using namespace std;
 void on_pushButton_clicked();
 void on_spinBox_valueChanged(int arg1);
@@ -115,7 +116,11 @@ MainWindow::~MainWindow()
 }
 
 
-//Graph button action. Pressing graph button makes this happen
+/**
+ * input:
+ * output: void
+ * This creates the barchart dialog when button is pressed on main window
+ */
 void MainWindow::on_pushButton_clicked()
 {
     if(name == "temp")
@@ -132,10 +137,13 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
+/**
+ * input:
+ * output: void
+ * This creates the piechart dialog when button pressed on main window
+ */
 void MainWindow::on_pushButton_2_clicked()
 {
-    //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-
     if(name == "temp")
     {
         statusBar()->showMessage("No Name", 2000);
@@ -149,18 +157,28 @@ void MainWindow::on_pushButton_2_clicked()
     }
 }
 
-//This takes value in first date box and sets it to global variable
+/**
+  input: integer value of starting date
+  output: void
+  This takes value in starting date box and sets it to global variable date1
+**/
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
     date1 = arg1;
 }
 
-//This takes value in second date box and sets it to global variable
+/**
+  input: integer value of ending date
+  output: void
+  This takes value in ending date box and sets it to global variable date2
+**/
 void MainWindow::on_spinBox_2_valueChanged(int arg1)
 {
     date2 = arg1;
 }
-
+//input: QString from name box on screen
+//Output: Void
+//This takes the string inside the name box on the main window and assigns it to the name variable
 void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
     name = arg1.toStdString();
@@ -176,7 +194,11 @@ void MainWindow::on_actionOpen_File_triggered()
 //    MainWindow object;
 //    object.update();
 }
-
+/**
+ * input:
+ * output: void
+ * This creates the grants plus minus list using the file the user points to in his/her computer by the file>newfile button
+ */
 void MainWindow::csvBuild()
 {
 
