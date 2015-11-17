@@ -11,9 +11,12 @@
 
 Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     
+    //*** instantiate classes that will help out in this function
     AttributeRetriever fetch(data);
+    bool hasError = 0;//IF this row has an error in it, this flag should be set to true
+    ErrorChecker filter;
     
-    //retrieve each attribute - temporarily store them
+    //*** retrieve each attribute - temporarily store them
     
     string name = fetch.getAttribute(index.name_loc);
     string domain = fetch.getAttribute(index.domain_loc);
@@ -33,11 +36,25 @@ Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     int sDate = fetch.getIntAttribute(index.sDate_loc);
     int eDate = fetch.getIntAttribute(index.eDate_loc);
     
+    long long totalAmount = fetch.getLongAttribute(index.totalAmount_loc);
     
-    long totalAmount = fetch.getLongAttribute(index.totalAmount_loc);
- 
-    bool hasError = 0;//IF this row has an error in it, this flag should be set to true
     
+    //*** Error Checking
+    //strings - chack for blank fields
+    name = filter.blankCatch(name, hasError);
+    domain = filter.blankCatch(domain, hasError);
+    fundType = filter.blankCatch(fundType, hasError);
+    stat = filter.blankCatch(stat, hasError);
+    role = filter.blankCatch(role, hasError);
+    title = filter.blankCatch(title, hasError);
+    pInvestigator = filter.blankCatch(pInvestigator, hasError);
+    
+    //dates - check for zeroes
+    sDate = filter.zeroCatch(sDate, hasError);
+    eDate = filter.zeroCatch(eDate, hasError);
+    
+    
+    //*** Build Row
     Grant_rowObject currentRow (hasError, name, domain, sDate, eDate, fundType, stat, peerReviewed,indGrant, role, title, pInvestigator, cpInvestigator, totalAmount);
     
     return currentRow;

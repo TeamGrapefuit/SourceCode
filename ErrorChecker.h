@@ -18,8 +18,8 @@ using namespace std;
 class ErrorChecker {
 public:
 
-    string blankCatch(string attribute, bool &flag);
-    int blankCatch (int attribute, bool &flag);
+    string blankCatch(string attribute, bool &flag); //raises flag and returns "ERROR_BLANK_FEILD" if attribute is blank
+    int zeroCatch (int attribute, bool &flag); //raises flag and returns -666 if attribute is 0
     
     
 };

@@ -3,6 +3,7 @@
 
 using namespace std;
 #pragma once
+
 class Pub_rowObject{
 
 public:

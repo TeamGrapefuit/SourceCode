@@ -11,9 +11,12 @@
 
 Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     
+    //*** instantiate classes that will help us out in this function
     AttributeRetriever fetch(data);
+    bool hasError = 0; //Set this to true if an error is found
+    ErrorChecker filter;
     
-    //retrieve each attribute - temporarily store them
+    //*** retrieve each attribute - temporarily store them
     
     string name = fetch.getAttribute(index.name_loc);
     string domain = fetch.getAttribute(index.domain_loc);
@@ -23,20 +26,34 @@ Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     string title = fetch.getAttribute(index.title_loc);
     string jName = fetch.getAttribute(index.jName_loc);
     
-//Dealing with the potential for multiple authors or zero authors
+    //Dealing with the potential for multiple authors or zero authors
     string author = fetch.getAttribute(index.author_loc);
     int numberOfAuthors = fetch.countStrings(author);
     if (numberOfAuthors == 0){
-        author = "NO AUTHOR LISTED"; //to become error message
+        author = "NO_AUTHOR_LISTED"; //to become error message
+        hasError = true;
     }
     else{
         author = fetch.grabFirstString(author);
     }
     
     int statDate = fetch.getIntAttribute(index.statDate_loc);
+
+    //*** Error Checking
+    //strings - check for blanks
+    name = filter.blankCatch(name, hasError);
+    domain = filter.blankCatch(domain, hasError);
+    pubStatus = filter.blankCatch(pubStatus, hasError);
+    type = filter.blankCatch(type, hasError);
+    role = filter.blankCatch(role, hasError);
+    title = filter.blankCatch(title, hasError);
+    jName = filter.blankCatch(jName, hasError);
+    
+    //dates check for zeroes
+    statDate = filter.zeroCatch(statDate, hasError);
     
     
-    bool hasError = 0; //Set this to true if an error is found
+    
     
     Pub_rowObject currentRow (hasError, name, domain, pubStatus, type, role, author, jName, title, statDate);
     

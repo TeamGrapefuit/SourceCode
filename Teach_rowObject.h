@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <string>
 
+#pragma once
+
 using namespace std;
 #pragma once
 

@@ -12,7 +12,7 @@
 #include <string>
 #include "attributeretriever.h"
 #include "ColIndex.h"
-
+#include "ErrorChecker.h"
 
 class PresentationRowBuilder{
 public:
