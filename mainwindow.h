@@ -33,6 +33,14 @@ private slots:
 
     void csvBuild();
 
+    void showGrants();
+
+    void showTeach();
+
+    void showPres();
+
+    void showPub();
+
 private:
     Ui::MainWindow *ui;
 

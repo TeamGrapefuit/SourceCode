@@ -197,13 +197,11 @@ void MainWindow::on_actionOpen_File_triggered()
 //    MainWindow object;
 //    object.update();
 }
-/**
- * input:
- * output: void
- * This creates the grants plus minus list using the file the user points to in his/her computer by the file>newfile button
- */
-void MainWindow::csvBuild()
+
+void MainWindow::showGrants()
 {
+    databaseGrant = getGrants();
+    multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
 
     QWidget *widget1 = new QWidget();
 
@@ -212,44 +210,12 @@ void MainWindow::csvBuild()
     QHBoxLayout * top = new QHBoxLayout();
     test = NULL;
 
-    std::string stringFilename = filename.toUtf8().constData();
-
-    //database = BuildGrants(stringFilename);
-
-    int testBuild = Build(stringFilename);
-
-
-    if (testBuild == 0)
-    {
-        cout << "Incorrect file type" << endl;
-    }
-    else if (testBuild == 1)
-    {
-        databaseGrant = getGrants();
-        multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
-        ListBuilder * lb = new ListBuilder(2000, 2025, databaseGrant);
-    }
-//    else if (testBuild == 2)
-//    {
-//        databaseTeach = getTeachings();
-//        multimap<string, Teach_rowObject>::iterator i = databaseTeach->begin();
-//        ListBuilder * lb = new ListBuilder(2000, 2025, databaseTeach);
-//    }
-//    else if (testBuild == 3)
-//    {
-//        databasePres = getPresentations();
-//        multimap<string, Pres_rowObject>::iterator i = databasePres->begin();
-//        ListBuilder * lb = new ListBuilder(2000, 2025, databasePres);
-//    }
-//    else if (testBuild == 4)
-//    {
-//        databasePub = getPublications();
-//        multimap<string, Pub_rowObject>::iterator i = databasePub->begin();
-//        ListBuilder * lb = new ListBuilder(2000, 2025, databasePub);
-//    }
-
-    multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
-
+    /*
+     * THIS IS WHERE THE IF STATEMENTS WERE
+     *
+     *
+     *
+    */
     ListBuilder * lb = new ListBuilder(2000, 2025, databaseGrant);
     lb->scanMap();
     //lb->printList(lb->peerreviewed_grants);
@@ -281,4 +247,55 @@ void MainWindow::csvBuild()
 
 
     this->centralWidget()->setLayout(mainLayout);
+}
+
+void MainWindow::showTeach()
+{
+    cout << "Test showTeach" << endl;
+}
+
+void MainWindow::showPres()
+{
+    cout << "Test showPres" << endl;
+}
+
+void MainWindow::showPub()
+{
+    cout << "Test showPub" << endl;
+}
+
+/**
+ * input:
+ * output: void
+ * This creates the grants plus minus list using the file the user points to in his/her computer by the file>newfile button
+ */
+void MainWindow::csvBuild()
+{
+    std::string stringFilename = filename.toUtf8().constData();
+
+    //database = BuildGrants(stringFilename);
+
+    int testBuild = Build(stringFilename);
+
+
+    if (testBuild == 0)
+    {
+        cout << "Incorrect file type" << endl;
+    }
+    else if (testBuild == 1)
+    {
+        showGrants();
+    }
+    else if (testBuild == 2)
+    {
+       showTeach();
+    }
+    else if (testBuild == 3)
+    {
+        showPres();
+    }
+    else if (testBuild == 4)
+    {
+        showPub();
+    }
 }
