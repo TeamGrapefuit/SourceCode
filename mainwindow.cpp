@@ -1,15 +1,15 @@
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QApplication>
-#include <list>
-#include <string>
-#include <QMenuBar>
-#include <iostream>
-#include <iterator>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "plusminuslist.h"
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <list>
+#include <string>
+#include <QMenuBar>
 #include "graphdialog.h"
+#include <QApplication>
+#include <iostream>
+#include <iterator>
 #include "Director.h"
 #include "ListBuilder.h"
 #include "barchartdialog.h"
@@ -32,7 +32,10 @@ int date2 = 2015;
 GraphClass * test;
 //The string value from the name box
 string name = "temp";
-multimap<string, Grant_rowObject>* database;
+multimap<string, Grant_rowObject>* databaseGrant;
+multimap<string, Teach_rowObject>* databaseTeach;
+multimap<string, Pub_rowObject>* databasePub;
+multimap<string, Pres_rowObject>* databasePres;
 QString filename;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -130,7 +133,7 @@ void MainWindow::on_pushButton_clicked()
     else
     {
         //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-        GraphClass * test = new GraphClass(date1, date2, name, database);
+        GraphClass * test = new GraphClass(date1, date2, name, databaseGrant);
         barchartdialog *chart = new barchartdialog();
         chart->setData(test,date1,date2);
         chart->show();
@@ -150,7 +153,7 @@ void MainWindow::on_pushButton_2_clicked()
     }
     else
     {
-        GraphClass * test = new GraphClass(date1, date2, name, database);
+        GraphClass * test = new GraphClass(date1, date2, name, databaseGrant);
         piechart *chart = new piechart();
         chart->setData(test,date1,date2);
         chart->show();
@@ -211,10 +214,43 @@ void MainWindow::csvBuild()
 
     std::string stringFilename = filename.toUtf8().constData();
 
-    database = BuildGrants(stringFilename);
-    multimap<string, Grant_rowObject>::iterator i = database->begin();
+    //database = BuildGrants(stringFilename);
 
-    ListBuilder * lb = new ListBuilder(2000, 2025, database);
+    int testBuild = Build(stringFilename);
+
+
+    if (testBuild == 0)
+    {
+        cout << "Incorrect file type" << endl;
+    }
+    else if (testBuild == 1)
+    {
+        databaseGrant = getGrants();
+        multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
+        ListBuilder * lb = new ListBuilder(2000, 2025, databaseGrant);
+    }
+//    else if (testBuild == 2)
+//    {
+//        databaseTeach = getTeachings();
+//        multimap<string, Teach_rowObject>::iterator i = databaseTeach->begin();
+//        ListBuilder * lb = new ListBuilder(2000, 2025, databaseTeach);
+//    }
+//    else if (testBuild == 3)
+//    {
+//        databasePres = getPresentations();
+//        multimap<string, Pres_rowObject>::iterator i = databasePres->begin();
+//        ListBuilder * lb = new ListBuilder(2000, 2025, databasePres);
+//    }
+//    else if (testBuild == 4)
+//    {
+//        databasePub = getPublications();
+//        multimap<string, Pub_rowObject>::iterator i = databasePub->begin();
+//        ListBuilder * lb = new ListBuilder(2000, 2025, databasePub);
+//    }
+
+    multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
+
+    ListBuilder * lb = new ListBuilder(2000, 2025, databaseGrant);
     lb->scanMap();
     //lb->printList(lb->peerreviewed_grants);
     ListClass * grants = new ListClass("Grants", lb->grants.param1, lb->grants.param2, true);

@@ -4,9 +4,9 @@
 #include <map>
 #include <iostream>
 #include "Grant_rowObject.h"
-//#include "Pres_rowObject.h"
-//#include "Pub_rowObject.h"
-//#include "Teach_rowObject.h"
+#include "Pres_rowObject.h"
+#include "Pub_rowObject.h"
+#include "Teach_rowObject.h"
 
 using namespace std;
 
@@ -22,9 +22,9 @@ class GraphClass
 
 public:
     GraphClass(int startYear, int endYear, string name, multimap<string, Grant_rowObject> * data);
-    //GraphClass(int startYear, int endYear, string name, map<string, Pres_rowObject> * data);
-    //GraphClass(int startYear, int endYear, string name, map<string, Pub_rowObject> * data);
-    //GraphClass(int startYear, int endYear, string name, map<string, Teaching_rowObject> * data);
+    GraphClass(int startYear, int endYear, string name, multimap<string, Pres_rowObject> * data);
+    GraphClass(int startYear, int endYear, string name, multimap<string, Pub_rowObject> * data);
+    GraphClass(int startYear, int endYear, string name, multimap<string, Teach_rowObject> * data);
 
     ~GraphClass();
 

@@ -10,6 +10,7 @@
 #include <string>
 
 using namespace std;
+#pragma once
 
 class Teach_rowObject{
 public:
