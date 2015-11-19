@@ -6,20 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>299</height>
+    <width>490</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="pushButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>150</x>
       <y>0</y>
-      <width>61</width>
+      <width>71</width>
       <height>23</height>
      </rect>
     </property>
@@ -35,6 +41,12 @@
       <height>23</height>
      </size>
     </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
     <property name="text">
      <string>Bar Graph</string>
     </property>
@@ -42,7 +54,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>6</x>
+      <x>0</x>
       <y>0</y>
       <width>51</width>
       <height>21</height>
@@ -91,9 +103,12 @@
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>220</x>
       <y>0</y>
       <width>75</width>
       <height>23</height>
@@ -106,11 +121,27 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>300</x>
       <y>0</y>
       <width>91</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>FirstName</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>0</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>LastName</string>
     </property>
    </widget>
   </widget>
@@ -119,7 +150,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>388</width>
+     <width>490</width>
      <height>26</height>
     </rect>
    </property>

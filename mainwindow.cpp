@@ -31,7 +31,10 @@ int date1 = 2010;
 int date2 = 2015;
 GraphClass * test;
 //The string value from the name box
-string name = "temp";
+string nameFirst = "temp";
+string nameLast = "temp";
+string nameFull = "temp";
+
 multimap<string, Grant_rowObject>* databaseGrant;
 multimap<string, Teach_rowObject>* databaseTeach;
 multimap<string, Pub_rowObject>* databasePub;
@@ -125,15 +128,21 @@ MainWindow::~MainWindow()
  * This creates the barchart dialog when button is pressed on main window
  */
 void MainWindow::on_pushButton_clicked()
-{
-    if(name == "temp")
+{    
+    if(nameFirst == "temp")
     {
-        statusBar()->showMessage("No Name", 2000);
+        statusBar()->showMessage("No First Name", 2000);
+    }
+    else if(nameLast == "temp")
+    {
+        statusBar()->showMessage("No Last Name", 2000);
     }
     else
     {
+        nameFull = nameLast + ", " + nameFirst;
+        cout << nameFull << endl;
         //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-        GraphClass * test = new GraphClass(date1, date2, name, databaseGrant);
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
         barchartdialog *chart = new barchartdialog();
         chart->setData(test,date1,date2);
         chart->show();
@@ -147,13 +156,22 @@ void MainWindow::on_pushButton_clicked()
  */
 void MainWindow::on_pushButton_2_clicked()
 {
-    if(name == "temp")
+    if(nameFirst == "temp")
     {
-        statusBar()->showMessage("No Name", 2000);
+        statusBar()->showMessage("No First Name", 2000);
+    }
+    else if(nameLast == "temp")
+    {
+        statusBar()->showMessage("No Last Name", 2000);
+    }
+    else if (databaseGrant->size() == 0)
+    {
+        statusBar()->showMessage("No File Loaded", 2000);
     }
     else
     {
-        GraphClass * test = new GraphClass(date1, date2, name, databaseGrant);
+        nameFull = nameLast + ", " + nameFirst;
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
         piechart *chart = new piechart();
         chart->setData(test,date1,date2);
         chart->show();
@@ -182,9 +200,15 @@ void MainWindow::on_spinBox_2_valueChanged(int arg1)
 //input: QString from name box on screen
 //Output: Void
 //This takes the string inside the name box on the main window and assigns it to the name variable
+int i;
 void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
-    name = arg1.toStdString();
+    nameFirst = arg1.toStdString();
+}
+
+void MainWindow::on_lineEdit_2_textChanged(const QString &arg1)
+{
+    nameLast = arg1.toStdString();
 }
 
 void MainWindow::on_actionOpen_File_triggered()
@@ -232,7 +256,7 @@ void MainWindow::showGrants()
     list<string> * test = new list<string>();
     test->push_back("");
     test->push_back("");
-    test->push_back("");
+    test->push_back("Names");
     test->push_back("Total #");
     test->push_back("Total $");
 
