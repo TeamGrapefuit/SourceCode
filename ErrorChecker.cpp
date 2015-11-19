@@ -11,7 +11,7 @@
 string ErrorChecker::blankCatch(string attribute, bool &flag){
     
     if (attribute.empty()) {
-        attribute = "**ERROR_EMPTY_FEILD**";
+        attribute = "**ERROR_EMPTY_FIELD**";
         flag = true;
         return attribute;
     }
