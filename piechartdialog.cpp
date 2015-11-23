@@ -11,14 +11,23 @@ piechart::piechart(QWidget *parent) : QWidget(parent)
  setWindowTitle("Pie Chart");
  setFixedSize(600,600);
 
- value1Button = new QRadioButton("Total Number",this);
- value2Button = new QRadioButton("Total Amount",this);
+ yOrigin=10;
+ temp=0;
+
+ value1Button = new QRadioButton("",this);
+ value2Button = new QRadioButton("",this);
  value1Button->setGeometry(QRect(QPoint(50,400),QSize(120,60)));
  value2Button->setGeometry(QRect(QPoint(180,400),QSize(120,60)));
  buttonGroup=new QButtonGroup(this);
  buttonGroup->addButton(value1Button);
  buttonGroup->addButton(value2Button);
  connect(buttonGroup,SIGNAL(buttonClicked(int)),this,SLOT(switchValue()));
+
+ layout = new QHBoxLayout(this);
+ verticalBar = new QScrollBar(Qt::Vertical);
+ layout->addWidget(verticalBar);
+
+ connect(verticalBar,&QScrollBar::valueChanged,this,&piechart::scrollTo);
 }
 
 void piechart::setData(GraphClass *graph,int start,int end)
@@ -49,9 +58,52 @@ void piechart::setData(GraphClass *graph,int start,int end)
     this->graphTitle=title;
     this->graphColor=color;
     graphValue=graphValue1;
-    update();
+
+    if(graphTitle.at(0)=="Grant - PR"){
+        value1Button->setText("Total Number");
+        value2Button->setText("Total Amount");
+        typeNum=4;
+    }
+    else if(graphTitle.at(0)=="Teaching - PME"){
+        value1Button->setText("Total Number of Student");
+        value2Button->setText("Total Number of Teaching Hours");
+        typeNum=4;
+    }
+    else if(graphTitle.at(0)=="Pres - Lectures"){
+        value1Button->setText("Total Number");
+        value2Button->hide();
+        typeNum=4;
+    }
+    else{
+        value1Button->setText("Total Number of Publication");
+        value2Button->hide();
+        typeNum=21;
+    }
     repaint();
 }
+
+void piechart::scrollTo(){
+    int range=yCordinate;
+    if(range>600){
+        verticalBar->setPageStep(1200-yCordinate);
+    }
+    else if(range>1190){
+        verticalBar->setPageStep(10);
+    }
+
+    else{
+      verticalBar->setPageStep(600);
+    }
+
+    verticalBar->setMinimum(0);
+    verticalBar->setMaximum(601-verticalBar->pageStep());
+
+    yOrigin=yOrigin-verticalBar->value()+temp;
+    temp=verticalBar->value();
+
+    update();
+}
+
 
 void piechart::switchValue(){
     if(value1Button->isChecked()){
@@ -60,7 +112,7 @@ void piechart::switchValue(){
     else{
         graphValue=graphValue2;
     }
-    update();
+
     repaint();
 }
 
@@ -70,11 +122,11 @@ void piechart::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     QRect size(10,10,280,280);
 
-    int y = 10;
     int count = graphValue.size();
     double sum = 0,startAng = 0;
     double percent,angle,endAng;
 
+    //draw a white eclipse when there is nothing
     if(count==0){
         painter.setBrush(Qt::white);
         painter.drawPie(size,360,5760);
@@ -88,19 +140,28 @@ void piechart::paintEvent(QPaintEvent *event)
         painter.setPen(QPen(Qt::black,1));
 
         int start = startDate;
+
+        //draw the index rectangles
+
+        yCordinate = yOrigin;
         for(int i = 0;i<count;i++){
-            if(i%4==0&&i!=0){
+            if(i%typeNum==0&&i!=0){
                 start++;
             }
+            if(graphValue[i]!=0){
             painter.setBrush(graphColor[i]);
-            painter.drawRect(320,y,30,20);
-            painter.drawText(QPoint(360,y+12),QString::number(start)+"-");
-            painter.drawText(QPoint(390,y+12),QString::number(start+1));
-            painter.drawText(QPoint(430,y+12),QString::fromStdString(graphTitle[i]));
-            y+=30;
-
+            painter.drawRect(320,yCordinate,30,20);
+            painter.drawText(QPoint(360,yCordinate+12),QString::number(start)+"-");
+            painter.drawText(QPoint(390,yCordinate+12),QString::number(start+1));
+            painter.drawText(QPoint(430,yCordinate+12),QString::fromStdString(graphTitle[i]));
+            yCordinate+=30;
+            }
+            else{
+                continue;
+            }
         }
 
+        //draw the pie slices and add the number or amount on the specific slices
         for(int i = 0;i<count;i++)
         {
             if(graphValue[i]!=0)
