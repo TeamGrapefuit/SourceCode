@@ -3,15 +3,12 @@
 
 #include <QWidget>
 #include <grant_rowobject.h>
-
-#ifndef GRAPHCLASS_H
-#define GRAPHCLASS_H
-#include "graphclass.h"
-#endif
-
+#include <graphclass.h>
 #include <QPainter>
 #include <QRadioButton>
 #include <QButtonGroup>
+#include <QScrollBar>
+#include <QVBoxLayout>
 
 
 class barchartdialog : public QWidget
@@ -20,27 +17,37 @@ class barchartdialog : public QWidget
 
 private:
     int startYear,endYear;
-    QVector<int> barValue1;
-    QVector<int> barValue2;
-    QVector<int> barValue;
-    QVector<string> barTitle;
-    QVector<QColor> barColor;
+    QVector<int> barValue1;//vector that stores the number of people//
+    QVector<int> barValue2;//vector that stores the amount
+    QVector<int> barValue;//vector that stores the current value which will be showed on the dialog//
+    QVector<string> barTitle;//title//
+    QVector<QColor> barColor;//color of the bars//
 
-    QRadioButton *barButton1;
-    QRadioButton *barButton2;
-    QButtonGroup *barGroup;
+    QRadioButton *barButton1;//button that switch to total number//
+    QRadioButton *barButton2;//button that switch to total amount//
+    QButtonGroup *barGroup;//button group that contains button 1 and 2//
 
+    QScrollBar *horizontalBar;//horizontal bar//
+    QVBoxLayout *layout;
 
+    int xOrigin;
+    int xCordinate;
+    int temp;//previous scroll bar value//
+    int typeNum;//number of types
 
 public:
     explicit barchartdialog(QWidget *parent = 0);
+
     void setData(GraphClass *graph, int start, int end);
+
     void paintEvent(QPaintEvent *parent);
 
 signals:
 
 private slots:
     void switchBarValue();
+
+    void scrollTo();
 
 public slots:
 };
