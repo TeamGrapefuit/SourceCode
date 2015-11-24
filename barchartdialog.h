@@ -10,6 +10,10 @@
 #include <QScrollBar>
 #include <QVBoxLayout>
 
+#include <QPushButton>
+#include <QPrinter>
+#include <QPrintDialog>
+
 /*
  * barchartdialog is used to get data from a graphclass object
  * and paint a bar chart based on the data
@@ -31,6 +35,8 @@ private:
     QRadioButton *barButton2;//button that switch to total amount//
     QButtonGroup *barGroup;//button group that contains button 1 and 2//
 
+    QPushButton *printButton;//Button to print
+
     QScrollBar *horizontalBar;//horizontal bar//
     QVBoxLayout *layout;//layout that contains the scroll bar//
 
@@ -49,6 +55,7 @@ public:
 signals:
 
 private slots:
+    void printButtonPushed();
     void switchBarValue();
 
     void scrollTo();

@@ -1,252 +1,383 @@
-#include "barchartdialog.h"
+/*
+ This class is for grapghing. The purpose is to imput a  Excel CSV data, displays and prints metrics, summary,
+ and visualization information from this data.
+ The graph and date includes:
+ 1) Grants and clinical funding
+ 2)	Presentations
+ 3)	Publications
+ 4)	Teaching
+ Those data will be graphed by the Types of fund, Type of Presentations, Type of Publications
+ and Teaching Level respectively.
+ This class will have a summary of total value of all the objects amount and numbers of people.
+  */
+#include "graphclass.h"
+
 #include <iterator>
-#include <QPen>
-#include <qpainter.h>
-#include <qradiobutton.h>
+#include<stdlib.h>
 
-/*
- * Constructor
- * Set up the title, window size, postions of two buttons
- * and positions of layout
- */
+// Class for graphing Grants Objects
+// Contains 4 sub categories Grants Peer Reviewed, Grants Industry Sponsored,
+// Clinic Peer Reviewed, Clinic Industry Sponsored
 
-barchartdialog::barchartdialog(QWidget *parent) : QWidget(parent)
+GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Grant_rowObject> * data)
 {
-    //set the title and size of the dialog//
-    setWindowTitle("Bar Chart");
-    setFixedSize(1000,800);
-    //set up the cordinate of the origin on x-axis to be 50 and the previous scroll bar value to be 0//
-    xOrigin=50;
-    temp=0;
+    // push 4 sub categories stores in a new string lsit
+    list<string> * barTitles = new list<string>();
+    barTitles->push_back("Grant - PR");
+    barTitles->push_back("Grant - IS");
+    barTitles->push_back("Clinic - PR");
+    barTitles->push_back("Clinic - IS");
 
-    //set up the postions of two buttons and add them into a button group//
-    barButton1 = new QRadioButton("",this);
-    barButton2 = new QRadioButton("",this);
-    barButton1->setGeometry(QRect(QPoint(150,30),QSize(120,20)));
-    barButton2->setGeometry(QRect(QPoint(150,60),QSize(120,20)));
-    barGroup=new QButtonGroup(this);
-    barGroup->addButton(barButton1);
-    barGroup->addButton(barButton2);
-    connect(barGroup,SIGNAL(buttonClicked(int)),this,SLOT(switchBarValue()));
+    // set up a range(year range) for the list
+    range = new list<list<BarValue> >;
+    for (int i = startYear; i < endYear; i ++){
+        list<BarValue> temp;
+        range->push_back(temp);
+    }
 
-    //set up the default scroll bar//
-    layout = new QVBoxLayout(this);
-    horizontalBar = new QScrollBar(Qt::Horizontal);
-    layout->addStretch();
-    layout->addWidget(horizontalBar);
-    connect(horizontalBar,&QScrollBar::valueChanged,this,&barchartdialog::scrollTo);
+    list<list<BarValue> >::iterator yearBarValues = range->begin();
+    while (yearBarValues != range->end()){
+        list<string>::iterator titles = barTitles->begin();
+        while (titles != barTitles->end()){
+            BarValue val;
+            val.title = *titles;
+            val.yValue1 = 0;    //Refers to Total #
+            val.yValue2 = 0;    //Refers to Total $ amount
+            yearBarValues->push_back(val);
 
-}
-
-/*
- * SetData method is used to get the data from a graphclass object and
- * Get data from a graphclass object which contains a row object
- * Determine the type of the row object
- * Set up the buttons and creates a QVector that stores the colors which is used to display bars
- * Repaint the bar chart
- */
-void barchartdialog::setData(GraphClass *graph,int start,int end)
-{
-    this->startYear=start;
-    this->endYear=end;
-    QVector<int> value1;
-    QVector<int> value2;
-    QVector<string> title;
-    QVector<QColor> color;
-
-    //get the data from a GraphClass object//
-    list<list<BarValue> > * readyForGraph = graph->getRange();
-    list<list<BarValue> >::iterator i1 = readyForGraph->begin();
-    while (i1 != readyForGraph->end()) {
-        list<BarValue>::iterator i2 = i1->begin();
-        while (i2 != i1->end()) {
-            title.push_back(i2->title);
-            value1.push_back(i2->yValue1);
-            value2.push_back(i2->yValue2);
-            ++ i2;
+            ++ titles;
         }
-        ++ i1;
-    }
-    this->barValue1=value1;
-    this->barValue2=value2;
-    this->barTitle=title;
-    this->startYear=start;
-    this->endYear=end;
-    barValue=barValue1;
 
-    //set up the text on buttons and colors that are used to display the bars//
-    if(barTitle.at(0)=="Grant - PR"){
-        barButton1->setText("Total Number");
-        barButton2->setText("Total Amount");
-        this->barValue=value1;
-        color.push_back(QColor(Qt::red));
-        color.push_back(QColor(Qt::yellow));
-        color.push_back(QColor(Qt::green));
-        color.push_back(QColor(Qt::blue));
-        typeNum=4;
-    }
-    else if(barTitle.at(0)=="Teaching - PME"){
-        barButton1->setText("Total Number of Student");
-        barButton2->setText("Total Number of Teaching Hours");
-        color.push_back(QColor(Qt::red));
-        color.push_back(QColor(Qt::yellow));
-        color.push_back(QColor(Qt::green));
-        color.push_back(QColor(Qt::blue));
-        typeNum=4;
-    }
-    else if(barTitle.at(0)=="Pres - Lectures"){
-        barButton1->setText("Total Number");
-        barButton2->hide();
-        for(int i=0;i<21;i++){
-            color.push_back(QColor(qrand()%256,qrand()%256,qrand()%256,255));
-        }
-        typeNum=4;
-    }
-    else{
-        barButton1->setText("Total Number of Publication");
-        barButton2->hide();
-        color.push_back(QColor(Qt::red));
-        color.push_back(QColor(Qt::yellow));
-        color.push_back(QColor(Qt::green));
-        color.push_back(QColor(Qt::blue));
-        typeNum=21;
+        ++ yearBarValues;
     }
 
-    this->barColor=color;
-
-    repaint();
-}
-
-void barchartdialog::switchBarValue()
-{
-    if(barButton1->isChecked()){
-        barValue=barValue1;
-    }
-    else{
-        barValue=barValue2;
-    }
-    repaint();
-}
-
-/*
- * ScrollTo method is used to set up scroll bar when users move it
- * If the range of the scroll baris longer than 800, which is the width of the dialog,
- * set the page step to be 1600 minus the cordinate of the last bar, so
- */
-void barchartdialog::scrollTo(){
-    int range=xCordinate-xOrigin;
-
-    cout<<"123"<<endl;
-    if(range>800){
-        horizontalBar->setPageStep(1600-xCordinate);
-    }
-    else if(range>1590){
-        horizontalBar->setPageStep(10);
-    }
-    else{
-      horizontalBar->setPageStep(800);
-    }
-
-    horizontalBar->setMinimum(0);
-    horizontalBar->setMaximum(801-horizontalBar->pageStep());
-    xOrigin=xOrigin-horizontalBar->value()+temp;
-    temp=horizontalBar->value();
-
-    repaint();
-}
-/*Draw the bar graph*/
-void barchartdialog::paintEvent(QPaintEvent *parent)
-{
-    QPainter painter(this);
-    painter.setPen(QPen(Qt::black,2));
-
-    int count = barValue.size();
-    int space = 50;//space between bars//
-    int barWidth = 20;
-    int barHeight = 0;
-    int yOrigin = 600;
-    int yAxisLength = yOrigin - 100;
-    xCordinate=xOrigin;
-    double percent;
-
-    //find the maximum value along the y-axis//
-    double max = 0.00;
-
-    for(int i = 0;i<count;i++){
-        if(max<barValue[i]){
-            max = barValue[i];
-        }
-    }
-
-    int temp;
-    int n = 0;
-    temp=max;
-
-    while(temp%10!=temp){
-        temp/=10;
-        n++;
-    }
-    double yMaxScale;
-    yMaxScale=temp+1;
-    for(int i = 0;i<n;i++){
-        yMaxScale*=10;
-    }
-    int yScaleNum=(yMaxScale<10)? yMaxScale : 10;
-
-    //draw the index rectangle//
-    for(int i = 0;i<4;i++){
-        QRect indexRect(870,100+i*20,20,20);
-        painter.setBrush(barColor[i]);
-        painter.drawRect(indexRect);
-        painter.drawText(900,100+i*26,QString::fromStdString(barTitle[i]));
-    }
-
-    //draw the x-axis,the year on x-axis and the bar//
-    int i = 0;
-    int start=startYear;
-
-    while(i<count)
-    {
-        painter.drawLine(xCordinate,yOrigin,xCordinate+space,yOrigin);
-        xCordinate += space;
-
-        int sum =0;
-
-        for(int p=0;p<typeNum;p++){
-            percent = barValue[i]/yMaxScale;
-            barHeight = percent*500;
-            painter.drawLine(xCordinate,yOrigin,xCordinate+barWidth,yOrigin);
-            QRect barRect(xCordinate,yOrigin-barHeight,barWidth,barHeight);
-            painter.setBrush(barColor[i%typeNum]);
-            painter.drawRect(barRect);
-            sum+=barValue[i];
-            if(barValue[i]!=0)
-            {
-                painter.drawText(QPoint(xCordinate+5,yOrigin-barHeight-10),QString::number(barValue[i]));
+    multimap<string, Grant_rowObject>::iterator i = data->begin();
+    while (i != data->end()){
+        if (i->first == name){
+            int pos = i->second.sDate  - startYear;
+            if (pos < 0 || i->second.sDate  >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
             }
-            xCordinate+=barWidth;
-            i++;
+            list<list<BarValue> >::iterator outer = range->begin();
+            advance(outer, pos);
+
+            list<BarValue>::iterator inner = outer->begin();
+
+            // distribute the date categories by fund type
+            if (i->second.fundType == "Grants" && i->second.peerReviewed){
+                //No advance needed
+            }
+            if (i->second.fundType == "Grants" && i->second.indGrant){
+                advance(inner, 1);
+            }
+            if (i->second.fundType == "Clinical Trials" && i->second.peerReviewed){
+                advance(inner, 2);
+            }
+            if (i->second.fundType == "Clinical Trials" && i->second.indGrant){
+                advance(inner, 3);
+            }
+
+            inner->yValue1 += 1;
+            inner->yValue2 += i->second.totalAmount;
         }
-        if(sum==0){
-            xCordinate = xCordinate-space-barWidth*typeNum;
-        }
-        else{
-            painter.drawText(QPoint(xCordinate-typeNum*barWidth/4*3,yOrigin+40),QString::number(start)+"-");
-            painter.drawText(QPoint(xCordinate-typeNum*barWidth/4*3+30,yOrigin+40),QString::number(start+1));
-        }
-        start++;
+
+        ++ i;
     }
 
-    //draw y-axis and the numbers on y-axis//
-    painter.drawLine(xOrigin,yOrigin,xOrigin,100);
-    int temp1 = yMaxScale/yScaleNum;
-    for(int i = 0;i<yScaleNum;i++)
-    {
-        painter.drawText(QPoint(xOrigin-30,yOrigin-yAxisLength/yScaleNum*i),QString::number(temp1*i));
-
-    }
-    painter.drawText(QPoint(xOrigin-30,100),QString::number(yMaxScale));
 }
 
+// Class for graphing Teaching Objects
+// Contains 4 sub categories for Teaching level PME, UME, CME, Other
+GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Teach_rowObject> * data)
+{
+    // push 4 sub categories stores in a new string lsit
+    list<string> * barTitles = new list<string>();
+    barTitles->push_back("Teaching - PME");
+    barTitles->push_back("Teaching - UME");
+    barTitles->push_back("Teaching - CME");
+    barTitles->push_back("Teaching - Other");
 
+    // set up a range(year range) for the list
+    range = new list<list<BarValue> >;
+    for (int i = startYear; i < endYear; i ++){
+        list<BarValue> temp;
+        range->push_back(temp);
+    }
 
+    list<list<BarValue> >::iterator yearBarValues = range->begin();
+    while (yearBarValues != range->end()){
+        list<string>::iterator titles = barTitles->begin();
+        while (titles != barTitles->end()){
+            BarValue val;
+            val.title = *titles;
+            val.yValue1 = 0;    //Refers to Total # students
+            val.yValue2 = 0;    //Refers to Total # teching hours
+            yearBarValues->push_back(val);
+
+            ++ titles;
+        }
+
+        ++ yearBarValues;
+    }
+
+    multimap<string, Teach_rowObject>::iterator i = data->begin();
+        while (i != data->end()){
+            if (i->first == name){
+                int pos = i->second.sDate - startYear;
+                if (pos < 0 || i->second.sDate >= endYear) {
+                    //cout << "MIssed" << endl;
+                    ++ i;
+                    continue;
+            }
+            list<list<BarValue> >::iterator outer = range->begin();
+            advance(outer, pos);
+
+            list<BarValue>::iterator inner = outer->begin();
+
+            // distribute the date categories by Teaching Level (Type of the course)
+            if (i->second.courseType == "PME" ){
+                //No advance needed
+            }
+            if (i->second.courseType == "UME" ){
+                advance(inner, 1);
+            }
+            if (i->second.courseType == "CME" ){
+                advance(inner, 2);
+            }
+            if (i->second.courseType == "Other"){
+                advance(inner, 3);
+            }
+
+            inner->yValue1 += i->second.hpTeach;
+            inner->yValue2 += i->second.tHours ;
+        }
+
+        ++ i;
+    }
+}
+
+// Class for graphing Presentation Objects
+// Contains 4 sub categories for Presentation Type Lectures, Presented, Type, Other
+GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Pres_rowObject> * data)
+{
+    // push 4 sub categories stores in a new string lsit
+    list<string> * barTitles = new list<string>();
+    barTitles->push_back("Pres - Lectures");
+    barTitles->push_back("Pres - Presented");
+    barTitles->push_back("Pres - Type");
+    barTitles->push_back("Pres - Other");
+
+    // set up a range(year range) for the list
+    range = new list<list<BarValue> >;
+    for (int i = startYear; i < endYear; i ++){
+        list<BarValue> temp;
+        range->push_back(temp);
+    }
+
+    list<list<BarValue> >::iterator yearBarValues = range->begin();
+    while (yearBarValues != range->end()){
+        list<string>::iterator titles = barTitles->begin();
+        while (titles != barTitles->end()){
+            BarValue val;
+            val.title = *titles;
+            val.yValue1 = 0;    //Refers to Total #
+            val.yValue2 = 0;
+            yearBarValues->push_back(val);
+
+            ++ titles;
+        }
+
+        ++ yearBarValues;
+    }
+
+    multimap<string,Pres_rowObject>::iterator i = data->begin();
+    while (i != data->end()){
+            if (i->first == name){
+                int pos = i->second.date - startYear;
+                if (pos < 0 || i->second.date >= endYear) {
+                    //cout << "MIssed" << endl;
+                    ++ i;
+                    continue;
+            }
+            list<list<BarValue> >::iterator outer = range->begin();
+            advance(outer, pos);
+
+            list<BarValue>::iterator inner = outer->begin();
+
+            // distribute the date categories by Types of Presentations
+            if (i->second.type == "Lectures"){
+                //No advance needed
+            }
+            if (i->second.type == "Presented"){
+                advance(inner, 1);
+            }
+            if (i->second.type == "Type"){
+                advance(inner, 2);
+            }
+            if (i->second.type == "Other"){
+                advance(inner, 3);
+            }
+
+            inner->yValue1 += i->second.numPresent ;//total number of presentation
+        }
+
+        ++ i;
+    }
+
+}
+
+// Class for graphing Publication Objects
+// Contains 20 sub categories for Publication Types
+GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Pub_rowObject> * data)
+{
+    // push 20 sub categories stores in a new string lsit
+    list<string> * barTitles = new list<string>();
+    barTitles->push_back("Publications - Book Chapters");
+    barTitles->push_back("Publications - Books");
+    barTitles->push_back("Publications - Books Edited");
+    barTitles->push_back("Publications - Case Reports");
+    barTitles->push_back("Publications - Clinical Care Guidelines");
+    barTitles->push_back("Publications - Commentaries");
+    barTitles->push_back("Publications - Conference Proceedings");
+    barTitles->push_back("Publications - Editorials");
+    barTitles->push_back("Publications - Invited Articles");
+    barTitles->push_back("Publications - Journal Article");
+    barTitles->push_back("Publications - Letters to Editor");
+    barTitles->push_back("Publications - Magazine Entries");
+    barTitles->push_back("Publications - Manuals");
+    barTitles->push_back("Publications - Monographs");
+    barTitles->push_back("Publications - Multimedia");
+    barTitles->push_back("Publications - Newsletter Articles");
+    barTitles->push_back("Publications - Newspaper Articles");
+    barTitles->push_back("Publications - Published Abstract");
+    barTitles->push_back("Publications - Supervised Student Publications");
+    barTitles->push_back("Publications - Websites / Videos");
+    barTitles->push_back("Publications - Working Papers");
+
+    // set up a range(year range) for the list
+    range = new list<list<BarValue> >;
+    for (int i = startYear; i < endYear; i ++){
+        list<BarValue> temp;
+        range->push_back(temp);
+    }
+
+    list<list<BarValue> >::iterator yearBarValues = range->begin();
+    while (yearBarValues != range->end()){
+        list<string>::iterator titles = barTitles->begin();
+        while (titles != barTitles->end()){
+            BarValue val;
+            val.title = *titles;
+            val.yValue1 = 0;    //Refers to Total # Publications
+            val.yValue2 = 0;
+            yearBarValues->push_back(val);
+
+            ++ titles;
+        }
+
+        ++ yearBarValues;
+    }
+
+    multimap<string, Pub_rowObject>::iterator i = data->begin();
+    while (i != data->end()){
+        if (i->first == name){
+            int pos = i->second.statDate - startYear;
+            if (pos < 0 || i->second.statDate >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
+            }
+            list<list<BarValue> >::iterator outer = range->begin();
+            advance(outer, pos);
+
+            list<BarValue>::iterator inner = outer->begin();
+
+            // distribute the date categories by Types of Publications
+            if (i->second.type == "Book Chapters"){
+                //No advance needed
+            }
+            if (i->second.type == "Books" ){
+                advance(inner, 1);
+            }
+            if (i->second.type == "Books Edited"){
+                advance(inner, 2);
+            }
+            if (i->second.type == "Case Reports"){
+                advance(inner, 3);
+            }
+            if (i->second.type == "Clinical Care Guidelines"){
+                advance(inner, 4);
+            }
+            if (i->second.type == "Commentaries"){
+                advance(inner, 5);
+            }
+            if (i->second.type == "Conference Proceedings"){
+                advance(inner, 6);
+            }
+            if (i->second.type == "Editorials"){
+                advance(inner, 7);
+            }
+            if (i->second.type == "Invited Articles"){
+                advance(inner, 8);
+            }
+            if (i->second.type == "Journal Article"){
+                advance(inner, 9);
+            }
+            if (i->second.type == "Letters to Editor"){
+                advance(inner, 10);
+            }
+            if (i->second.type == "Magazine Entries"){
+                advance(inner, 11);
+            }
+            if (i->second.type == "Manuals"){
+                advance(inner, 12);
+            }
+            if (i->second.type == "Monographs"){
+                advance(inner, 13);
+            }
+            if (i->second.type == "Multimedia"){
+                advance(inner, 14);
+            }
+            if (i->second.type == "Newsletter Articles"){
+                advance(inner, 15);
+            }
+            if (i->second.type == "Newspaper Articles"){
+                advance(inner, 16);
+            }
+            if (i->second.type == "Published Abstract"){
+                advance(inner, 17);
+            }
+            if (i->second.type == "Supervised Student Publications"){
+                advance(inner, 18);
+            }
+            if (i->second.type == "Websites / Videos"){
+                advance(inner, 19);
+            }
+            if (i->second.type == "Working Papers"){
+                advance(inner, 20);
+            }
+
+            inner->yValue1 += i->second.totalPub;//total number of Publications
+        }
+
+        ++ i;
+    }
+
+}
+
+GraphClass::~GraphClass()
+{
+    list<list<BarValue> >::iterator level1 = range->begin();
+    while (level1 != range->end()){
+       level1->clear();
+        ++ level1;
+    }
+
+    range->clear();
+}
+
+list<list<BarValue> > * GraphClass::getRange()
+{
+    return this->range;
+}
