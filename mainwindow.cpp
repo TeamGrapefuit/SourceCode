@@ -301,6 +301,16 @@ void MainWindow::csvBuild()
 
     int testBuild = Build(stringFilename);
 
+    date1 = getDatesGrants().first;
+    date2 = getDatesGrants().second;
+
+    if (date1 == -666)
+    {
+        date1 = 1900;
+    }
+
+    cout << date1 << endl;
+    cout << date2 << endl;
 
     if (testBuild == 0)
     {
