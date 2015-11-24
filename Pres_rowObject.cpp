@@ -37,5 +37,5 @@ Pres_rowObject::Pres_rowObject(){
     title = "";
     
     date = 0;
-    numPresent = ;
+    numPresent = 0;
 }
