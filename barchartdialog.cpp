@@ -5,7 +5,8 @@
 #include <qradiobutton.h>
 
 //QWidget * test;
-
+#include <iostream>
+using namespace std;
 barchartdialog::barchartdialog(QWidget *parent) : QWidget(parent)
 {
     //set the title and size of the dialog//
@@ -88,6 +89,7 @@ void barchartdialog::setData(GraphClass *graph,int start,int end)
     this->endYear=end;
     barValue=barValue1;
 
+    cout << "Bar title : " << barTitle.at(0) << endl;
     //set up the text on buttons and colors that are used to display the bars//
     if(barTitle.at(0)=="Grant - PR"){
         barButton1->setText("Total Number");
@@ -109,17 +111,17 @@ void barchartdialog::setData(GraphClass *graph,int start,int end)
     else if(barTitle.at(0)=="Pres - Lectures"){
         barButton1->setText("Total Number");
         barButton2->hide();
-        for(int i=0;i<21;i++){
-            color.push_back(QColor(qrand()%256,qrand()%256,qrand()%256,255));
-        }
-    }
-    else{
-        barButton1->setText("Total Number of Publication");
-        barButton2->hide();
         color.push_back(QColor(Qt::red));
         color.push_back(QColor(Qt::yellow));
         color.push_back(QColor(Qt::green));
         color.push_back(QColor(Qt::blue));
+    }
+    else{
+        barButton1->setText("Total Number of Publication");
+        barButton2->hide();
+        for(int i=0;i<21;i++){
+            color.push_back(QColor(qrand()%256,qrand()%256,qrand()%256,255));
+        }
     }
 
     this->barColor=color;

@@ -667,9 +667,9 @@ void BuildPublications(string input)
 		//Type
 		else if (columnName == "Type")
 		{
-			colIndex.type_loc == columnNumber;
+            colIndex.type_loc = columnNumber;
 		}
-		//Title
+        //Title
 		else if (columnName == "Title")
 		{
 			colIndex.title_loc = columnNumber;

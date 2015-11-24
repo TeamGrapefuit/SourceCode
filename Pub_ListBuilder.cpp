@@ -9,28 +9,28 @@ Pub_ListBuilder::Pub_ListBuilder(int s_year,int e_year,multimap<string,Pub_rowOb
 	
     // create list headers for each type of publication
     
-    ListClass *publications = new ListClass("Publications", 0, -1, true);
-    ListClass *pub_abs = new ListClass("Published Abstracts", 0, -1, true);
-    ListClass *books = new ListClass("Books",0,-1,true);
-    ListClass *books_edited = new ListClass("Books Edited",0,-1,true);
-    ListClass *book_chap = new ListClass("Book Chapters",0,-1,true);
-    ListClass *case_rep = new ListClass("Case Reports",0,-1,true);
-    ListClass *clinical = new ListClass("Clinical Care guidelines",0,-1,true);
-    ListClass *journal = new ListClass("Journal Articles",0,-1,true);
-    ListClass *commentaries = new ListClass("Commentaries",0,-1,true);
-    ListClass *conf_pro = new ListClass("Conference Proceedings",0,-1,true);
-    ListClass *editorials = new ListClass("Editorials",0,-1,true);
-    ListClass *invited_art = new ListClass("Invited Articles",0,-1,true);
-    ListClass *let_ed = new ListClass("Letters to Editor",0,-1,true);
-    ListClass *mag_ent = new ListClass("Magazine Entries",0,-1,true);
-    ListClass *manuals = new ListClass("Manuals",0,-1,true);
-    ListClass *mono = new ListClass("Monographs",0,-1,true);
-    ListClass *multi = new ListClass("Multimedia",0,-1,true);
-    ListClass *newsletter = new ListClass("Mewsletter Articles",0,-1,true);
-    ListClass *news_art = new ListClass("Newspaper Articles",0,-1,true);
-    ListClass *student = new ListClass("Supervised Student Publications",0,-1,true);
-    ListClass *web = new ListClass("Websites/Videos",0,-1,true);
-    ListClass *work_papers = new ListClass("Working Papers",0,-1,true);
+    ListClass *publications = new ListClass("Publications", -1, -1, true);
+    ListClass *pub_abs = new ListClass("Published Abstracts", -1, -1, true);
+    ListClass *books = new ListClass("Books",-1,-1,true);
+    ListClass *books_edited = new ListClass("Books Edited",-1,-1,true);
+    ListClass *book_chap = new ListClass("Book Chapters",-1,-1,true);
+    ListClass *case_rep = new ListClass("Case Reports",-1,-1,true);
+    ListClass *clinical = new ListClass("Clinical Care guidelines",-1,-1,true);
+    ListClass *journal = new ListClass("Journal Articles",-1,-1,true);
+    ListClass *commentaries = new ListClass("Commentaries",-1,-1,true);
+    ListClass *conf_pro = new ListClass("Conference Proceedings",-1,-1,true);
+    ListClass *editorials = new ListClass("Editorials",-1,-1,true);
+    ListClass *invited_art = new ListClass("Invited Articles",-1,-1,true);
+    ListClass *let_ed = new ListClass("Letters to Editor",-1,-1,true);
+    ListClass *mag_ent = new ListClass("Magazine Entries",-1,-1,true);
+    ListClass *manuals = new ListClass("Manuals",-1,-1,true);
+    ListClass *mono = new ListClass("Monographs",-1,-1,true);
+    ListClass *multi = new ListClass("Multimedia",-1,-1,true);
+    ListClass *newsletter = new ListClass("Mewsletter Articles",-1,-1,true);
+    ListClass *news_art = new ListClass("Newspaper Articles",-1,-1,true);
+    ListClass *student = new ListClass("Supervised Student Publications",-1,-1,true);
+    ListClass *web = new ListClass("Websites/Videos",-1,-1,true);
+    ListClass *work_papers = new ListClass("Working Papers",-1,-1,true);
 
 	this->Pubs = *publications;
 

@@ -28,6 +28,7 @@ Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     string title = fetch.getAttribute(index.title_loc);
     string jName = fetch.getAttribute(index.jName_loc);
 
+    cout << "The column is: " << index.type_loc << endl;
     //Dealing with the potential for multiple authors or zero authors
     string author = fetch.getAttribute(index.author_loc);
     int numberOfAuthors = fetch.countStrings(author);
