@@ -56,6 +56,10 @@ Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     sDate = filter.zeroCatch(sDate, hasError);
     eDate = filter.zeroCatch(eDate, hasError);
     
+    //note, this is still in progress, will resolve the cliffhanger in the next episode
+    string acceptable_fundTypes [2] = {"Grants","Clinical Trials"};
+    fundType = filter.stringAssert(fundType, hasError, 2, acceptable_fundTypes);
+    
     
     //*** Build Row
     Grant_rowObject currentRow (hasError, name, domain, sDate, eDate, fundType, stat, peerReviewed,indGrant, role, title, pInvestigator, cpInvestigator, totalAmount);

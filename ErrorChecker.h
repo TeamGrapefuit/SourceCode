@@ -21,6 +21,7 @@ public:
     string blankCatch(string attribute, bool &flag); //raises flag and returns "ERROR_BLANK_FEILD" if attribute is blank
     int zeroCatch (int attribute, bool &flag); //raises flag and returns -666 if attribute is 0
     
+    string stringAssert(string attribute, bool &flag, int args, string* options);//for catching unexpected values in string attributed (when there are a finite number of acceptable options)
     
 };
 

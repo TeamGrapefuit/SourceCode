@@ -27,7 +27,7 @@ public:
     string domain; // Primary domain
     string program; //Program
     string courseType; //Course Type
-    string geoScope; //
+    string geoScope; //geographical scope
     
     int nTeach; // Number of teaching sessions
     int sDate;// Start Date
@@ -37,7 +37,8 @@ public:
     float tHours;//total hours
     int totalStudents;  //Total number of students
 
-Teach_rowObject(bool error, string name, string domain,string program,string courseType,string  geoScope, int nTeach, int sDate, int eDate, float hpTeach, float tHours, int tStudents);
-
+    Teach_rowObject(bool error, string name, string domain,string program,string courseType,string  geoScope, int nTeach, int sDate, int eDate, float hpTeach, float tHours, int tStudents);
+    
+    Teach_rowObject();
 };
 

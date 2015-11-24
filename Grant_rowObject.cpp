@@ -26,3 +26,25 @@ Grant_rowObject::Grant_rowObject(bool error, string memberName, string primaryDo
 
 }
 
+Grant_rowObject::Grant_rowObject(){
+    
+    this->errorFlag = 0;
+    
+    this->name = "";
+    this->domain = "";
+    this->fundType = "";
+    this->stat = "";
+    this->role = "";
+    this->title = "";
+    this->pInvestigator = "";
+    this->cpInvestigator = "";
+    
+    this->peerReviewed = 0;
+    this->indGrant = 0;
+    
+    this->sDate = 0;
+    this->edate = 0;
+    this->totalAmount = 0;
+    
+    count = 0;
+}

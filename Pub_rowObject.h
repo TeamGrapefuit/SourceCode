@@ -26,7 +26,8 @@ public:
     int totalPub; //Total number of publications
     
     Pub_rowObject(bool error, string memberName, string primaryDomain, string publicationStatus, string journalType, string journalRole, string journalAuthor, string journalName, string journalTitle, int statusDate);
-
+    
+    Pub_rowObject();
 };
 
 

@@ -30,3 +30,22 @@ int ErrorChecker::zeroCatch(int attribute, bool &flag){
         return attribute;
     }
 }
+
+string ErrorChecker::stringAssert(string attribute, bool &flag, int args, string* options){
+    //NOTE: args is the Size of the string, not the index of the last entry - don't screw this up
+    bool matchFoundFlag (0);
+    
+    for (int i (0); i<args; i++) {
+        if (attribute == options[i]) {
+            matchFoundFlag = true;
+            break;
+        }
+    }
+    
+    if (matchFoundFlag == false) {
+        attribute = "**ERROR_UNEXPECTED_ENTRY**";
+        flag = true;
+    }
+    
+    return attribute;
+}

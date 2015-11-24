@@ -24,3 +24,20 @@ Pub_rowObject::Pub_rowObject(bool error, string memberName, string primaryDomain
     statDate = statusDate;
     totalPub = 1;
 }
+
+Pub_rowObject::Pub_rowObject(){
+    
+    this->errorFlag = 0;
+    
+    name = "";
+    domain = "";
+    pubStatus = "";
+    type = "";
+    role = "";
+    title = "";
+    author = "";
+    jName = "";
+    
+    statDate = 0;
+    totalPub = 0;
+}

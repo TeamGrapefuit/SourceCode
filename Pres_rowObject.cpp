@@ -25,3 +25,17 @@ Pres_rowObject::Pres_rowObject(bool error, string memberName, string primaryDoma
     numPresent = 1;
     
 };
+
+Pres_rowObject::Pres_rowObject(){
+ 
+    this->errorFlag = 0;
+    
+    name = "";
+    domain = "";
+    type = "";
+    role = "";
+    title = "";
+    
+    date = 0;
+    numPresent = ;
+}
