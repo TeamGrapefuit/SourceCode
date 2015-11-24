@@ -8,6 +8,10 @@
 
 #include "Pres_ListBuilder.h"
 
+#include <iostream>
+
+using namespace std;
+
 Pres_ListBuilder::Pres_ListBuilder(int s_year ,int e_year, multimap<string,Pres_rowObject>*somedata){
     
     this->year_s = s_year;
@@ -131,7 +135,7 @@ void Pres_ListBuilder::addMember(presmember pmember){
 
 void Pres_ListBuilder::scanMap(){
 
-    
+
     map<string, bool> visited;                       // create a map to keep track of visited row objects
 
     std::multimap<string, Pres_rowObject>::iterator cur = data->begin(); // get row iterator
@@ -140,6 +144,7 @@ void Pres_ListBuilder::scanMap(){
         map<string, bool>::iterator j = visited.find(cur->second.name); // check if visited
         if (j == visited.end()){                     // if not visited
             presmember prow;                         // get members info
+            cout << cur->second.name << endl;
             prow = this->tally(cur->second.name);    // add member to list
             this->addMember(prow);
             visited.emplace(prow.name,true);

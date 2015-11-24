@@ -4,6 +4,8 @@
 #include <qpainter.h>
 #include <qradiobutton.h>
 
+//QWidget * test;
+
 barchartdialog::barchartdialog(QWidget *parent) : QWidget(parent)
 {
     //set the title and size of the dialog//
@@ -12,6 +14,11 @@ barchartdialog::barchartdialog(QWidget *parent) : QWidget(parent)
 
     xOrigin=50;
     temp=0;
+
+    //Print Button
+    printButton = new QPushButton("Print", this);
+    printButton->setGeometry(QRect(QPoint(20, 700),QSize(120,20)));
+    connect(printButton, SIGNAL(pressed()),this,SLOT(printButtonPushed()));
 
     //set up the default buttons//
     barButton1 = new QRadioButton("",this);
@@ -31,6 +38,24 @@ barchartdialog::barchartdialog(QWidget *parent) : QWidget(parent)
     connect(horizontalBar,&QScrollBar::valueChanged,this,&barchartdialog::scrollTo);
 
 }
+
+void barchartdialog::printButtonPushed()
+{
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    QPixmap pixmap = QPixmap::grabWidget(this, 0, 0, -1, -1);
+    QPainter painter;
+    painter.begin(&printer);
+    painter.drawImage(0, 0, pixmap.toImage());
+    painter.end();
+}
+
 /*Use the graphclass object, which contains the data*/
 void barchartdialog::setData(GraphClass *graph,int start,int end)
 {
@@ -114,7 +139,9 @@ void barchartdialog::switchBarValue()
 }
 
 /*This method is used to set up the page step of the scroll bar*/
-void barchartdialog::scrollTo(){
+void barchartdialog::scrollTo()
+{
+    printf("Scroll Test");
     int range=xCordinate-xOrigin;
     if(range>800){
         horizontalBar->setPageStep(1600-xCordinate);

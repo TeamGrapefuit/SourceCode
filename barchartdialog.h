@@ -10,6 +10,10 @@
 #include <QScrollBar>
 #include <QVBoxLayout>
 
+#include <QPushButton>
+#include <QPrinter>
+#include <QPrintDialog>
+
 
 class barchartdialog : public QWidget
 {
@@ -22,6 +26,8 @@ private:
     QVector<int> barValue;//vector that stores the current value which will be showed on the dialog//
     QVector<string> barTitle;//title//
     QVector<QColor> barColor;//color of the bars//
+
+    QPushButton *printButton;//Button to print
 
     QRadioButton *barButton1;//button that switch to total number//
     QRadioButton *barButton2;//button that switch to total amount//
@@ -46,6 +52,8 @@ signals:
 
 private slots:
     void switchBarValue();
+
+    void printButtonPushed();
 
     void scrollTo();
 

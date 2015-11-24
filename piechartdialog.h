@@ -10,6 +10,10 @@
 #include <QHBoxLayout>
 #include <QScrollBar>
 
+#include <QPushButton>
+#include <QPrinter>
+#include <QPrintDialog>
+
 using namespace std;
 
 class piechart : public QWidget
@@ -22,6 +26,8 @@ private:
     QVector<string> graphTitle;
     QVector<QColor> graphColor;
     QVector<int> graphValue;
+
+    QPushButton *printButton;//Button to print
 
     int startDate, endDate;
 
@@ -53,6 +59,8 @@ signals:
 
 private slots:
     void switchValue();
+
+    void printButtonPushed();
 
 public slots:
 };

@@ -14,6 +14,11 @@ piechart::piechart(QWidget *parent) : QWidget(parent)
  yOrigin=10;
  temp=0;
 
+ //Print Button
+ printButton = new QPushButton("Print", this);
+ printButton->setGeometry(QRect(QPoint(20,550),QSize(120,20)));
+ connect(printButton, SIGNAL(pressed()),this,SLOT(printButtonPushed()));
+
  value1Button = new QRadioButton("",this);
  value2Button = new QRadioButton("",this);
  value1Button->setGeometry(QRect(QPoint(50,400),QSize(120,60)));
@@ -28,6 +33,23 @@ piechart::piechart(QWidget *parent) : QWidget(parent)
  layout->addWidget(verticalBar);
 
  connect(verticalBar,&QScrollBar::valueChanged,this,&piechart::scrollTo);
+}
+
+void piechart::printButtonPushed()
+{
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    QPixmap pixmap = QPixmap::grabWidget(this, 0, 0, -1, -1);
+    QPainter painter;
+    painter.begin(&printer);
+    painter.drawImage(0, 0, pixmap.toImage());
+    painter.end();
 }
 
 void piechart::setData(GraphClass *graph,int start,int end)
@@ -83,6 +105,7 @@ void piechart::setData(GraphClass *graph,int start,int end)
 }
 
 void piechart::scrollTo(){
+    printf("Test Pie Scroll");
     int range=yCordinate;
     if(range>600){
         verticalBar->setPageStep(1200-yCordinate);

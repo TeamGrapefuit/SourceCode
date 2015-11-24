@@ -12,6 +12,9 @@
 #include <iterator>
 #include "Director.h"
 #include "ListBuilder.h"
+#include "Pub_ListBuilder.h"
+#include "Pres_ListBuilder.h"
+#include "Teach_ListBuilder.h"
 #include "barchartdialog.h"
 #include "piechartdialog.h"
 #include "QFileDialog"
@@ -275,12 +278,108 @@ void MainWindow::showGrants()
 
 void MainWindow::showTeach()
 {
-    cout << "Test showTeach" << endl;
+    //cout << "Test showTeach" << endl;
+//    databaseGrant = getGrants();
+//    multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
+
+//    QWidget *widget1 = new QWidget();
+
+//    widget1->setFixedHeight(5);
+
+//    QHBoxLayout * top = new QHBoxLayout();
+//    test = NULL;
+
+//    /*
+//     * THIS IS WHERE THE IF STATEMENTS WERE
+//     *
+//     *
+//     *
+//    */
+//    Teach_ListBuilder * lb = new Teach_ListBuilder(2000, 2025, databaseTeach);
+//    lb->scanMap();
+//    //lb->printList(lb->peerreviewed_grants);
+//    ListClass * teachs = new ListClass("Teaching", lb->teachs.param1, lb->teachs.param2, true);
+//    teachs->addChild(&lb->cme);
+
+//    ListClass * clinfund = new ListClass("Clinical Funding", lb->clinicalfunding.param1, lb->clinicalfunding.param2, true);
+//    clinfund->addChild(&lb->peerreviewed_cf);
+//    clinfund->addChild(&lb->industrygrant_cf);
+
+//    //lb->printList(lb->industrygrant_cf);
+//    //Column Names
+//    list<string> * test = new list<string>();
+//    test->push_back("");
+//    test->push_back("");
+//    test->push_back("Names");
+//    test->push_back("Total #");
+//    test->push_back("Total $");
+
+//    PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
+//    plusminus->AddFirstLevelFilter(grants);
+//    plusminus->AddFirstLevelFilter(clinfund);
+//    top->addWidget(plusminus->getTree());
+
+//    QVBoxLayout * mainLayout = new QVBoxLayout(this);
+//    mainLayout->addSpacing(20);
+//    mainLayout->addLayout(top);
+
+
+//    this->centralWidget()->setLayout(mainLayout);
+
 }
 
 void MainWindow::showPres()
 {
-    cout << "Test showPres" << endl;
+    //cout << "Test showPres" << endl;
+
+    databasePres = getPresentations();
+    multimap<string, Pres_rowObject>::iterator i = databasePres->begin();
+    while (i != databasePres->end()){
+        cout << i->second.name << endl;
+        ++ i;
+    }
+    QWidget *widget1 = new QWidget();
+
+    widget1->setFixedHeight(5);
+
+    QHBoxLayout * top = new QHBoxLayout();
+    test = NULL;
+
+    /*
+     * THIS IS WHERE THE IF STATEMENTS WERE
+     *
+     *
+     *
+    */
+    Pres_ListBuilder  lb = Pres_ListBuilder(2000, 2025, databasePres);
+    lb.scanMap();
+
+    //lb->printList(lb->peerreviewed_grants);
+//    ListClass * i_l = new ListClass("Invited Lectures", lb->i_l->param1, lb->i_l->param2, true);
+//    i_l->addChild(lb->i_l);
+//    ListClass * a_p = new ListClass("Abtracts Presented", lb->a_p->param1, lb->a_p->param2, true);
+   // ListClass * c_p = new ListClass("Conference Presentations", lb->)
+
+    //Column Names
+    list<string> * test = new list<string>();
+    test->push_back("");
+    test->push_back("");
+    test->push_back("Faculty Name");
+    test->push_back("# of Presentations");
+
+    lb.printList(*lb.a_p);
+
+    PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
+    plusminus->AddFirstLevelFilter(lb.i_l);
+    plusminus->AddFirstLevelFilter(lb.a_p);
+    top->addWidget(plusminus->getTree());
+
+    QVBoxLayout * mainLayout = new QVBoxLayout(this);
+    mainLayout->addSpacing(20);
+    mainLayout->addLayout(top);
+
+
+    this->centralWidget()->setLayout(mainLayout);
 }
 
 void MainWindow::showPub()
@@ -301,16 +400,16 @@ void MainWindow::csvBuild()
 
     int testBuild = Build(stringFilename);
 
-    date1 = getDatesGrants().first;
-    date2 = getDatesGrants().second;
+//    date1 = getDatesGrants().first;
+//    date2 = getDatesGrants().second;
 
-    if (date1 == -666)
-    {
-        date1 = 1900;
-    }
+//    if (date1 == -666)
+//    {
+//        date1 = 1900;
+//    }
 
-    cout << date1 << endl;
-    cout << date2 << endl;
+//    cout << date1 << endl;
+//    cout << date2 << endl;
 
     if (testBuild == 0)
     {
