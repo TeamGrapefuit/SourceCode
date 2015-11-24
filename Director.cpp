@@ -83,7 +83,7 @@ int Build(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-	ifstream fileStream(fileName, ios::in | ios::binary);
+	ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
 	//check if good
 	if (fileStream.is_open())
 	{
@@ -171,7 +171,7 @@ void BuildGrants(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-	ifstream fileStream(fileName, ios::in | ios::binary);
+	ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
 	if (fileStream.is_open())
 	{
 		cout << "good" << endl;
@@ -335,7 +335,7 @@ void BuildGrants(string input)
 		}
 		else
 		{
-			addGrantsError(count, holder);
+			//addGrantsError(count, holder);
 		}
 
 		//grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
@@ -659,10 +659,15 @@ void BuildPublications(string input)
 		{
 			colIndex.domain_loc = columnNumber;
 		}
-		//research role
+		//Journal role
 		else if (columnName == "Role")
 		{
 			colIndex.role_loc = columnNumber;
+		}
+		//Type
+		else if (columnName == "Type")
+		{
+			colIndex.type_loc == columnNumber;
 		}
 		//Title
 		else if (columnName == "Title")
