@@ -9,6 +9,7 @@
 #include "PresentationRowBuilder.h"
 
 Pres_rowObject PresentationRowBuilder::buildRow(string data, ColIndex index){
+    
     // *** Instantiate classes that will help out in this function
     AttributeRetriever fetch(data);
     bool hasError = 0; //This will be set to 1 if an error is found

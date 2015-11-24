@@ -49,6 +49,9 @@ Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     title = filter.blankCatch(title, hasError);
     pInvestigator = filter.blankCatch(pInvestigator, hasError);
     
+    //PEER REVIEWED - if feild is left blank, we assume it has not been peer reviewed
+    //INDUSTRY GRANT - if feild is left blank, we assume it was not an industry grant
+    
     //dates - check for zeroes
     sDate = filter.zeroCatch(sDate, hasError);
     eDate = filter.zeroCatch(eDate, hasError);
