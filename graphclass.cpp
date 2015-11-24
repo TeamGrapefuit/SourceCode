@@ -37,10 +37,11 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     multimap<string, Grant_rowObject>::iterator i = data->begin();
     while (i != data->end()){
         if (i->first == name){
-            int pos = i->second.sDate - startYear;
-            if (pos < 0) {
-                cout << "GraphClass.cpp - Date Mismatch Error" << endl;
-                exit(EXIT_FAILURE);
+            int pos = i->second.sDate  - startYear;
+            if (pos < 0 || i->second.sDate  >= endYear) {
+                //cout << "MIssed" << endl;
+                ++ i;
+                continue;
             }
             list<list<BarValue> >::iterator outer = range->begin();
             advance(outer, pos);
