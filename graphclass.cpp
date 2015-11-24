@@ -1,4 +1,15 @@
-
+/*
+ This class is for grapghing. The purpose is to imput a  Excel CSV data, displays and prints metrics, summary,
+ and visualization information from this data.
+ The graph and date includes:
+ 1) Grants and clinical funding
+ 2)	Presentations
+ 3)	Publications
+ 4)	Teaching
+ Those data will be graphed by the Types of fund, Type of Presentations, Type of Publications
+ and Teaching Level respectively.
+ This class will have a summary of total value of all the objects amount and numbers of people.
+  */
 #include "graphclass.h"
 
 #include <iterator>
