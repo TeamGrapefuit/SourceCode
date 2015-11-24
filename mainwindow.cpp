@@ -44,6 +44,8 @@ multimap<string, Pub_rowObject>* databasePub;
 multimap<string, Pres_rowObject>* databasePres;
 QString filename;
 
+int databaseTest = 0;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -140,12 +142,42 @@ void MainWindow::on_pushButton_clicked()
     {
         statusBar()->showMessage("No Last Name", 2000);
     }
-    else
+    else if(databaseTest == 1)
     {
         nameFull = nameLast + ", " + nameFirst;
         cout << nameFull << endl;
         //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
         GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
+        barchartdialog *chart = new barchartdialog();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
+    else if(databaseTest == 2)
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        cout << nameFull << endl;
+        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseTeach);
+        barchartdialog *chart = new barchartdialog();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
+    else if(databaseTest == 3)
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        cout << nameFull << endl;
+        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePres);
+        barchartdialog *chart = new barchartdialog();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
+    else if(databaseTest == 4)
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        cout << nameFull << endl;
+        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePub);
         barchartdialog *chart = new barchartdialog();
         chart->setData(test,date1,date2);
         chart->show();
@@ -159,6 +191,8 @@ void MainWindow::on_pushButton_clicked()
  */
 void MainWindow::on_pushButton_2_clicked()
 {
+    cout << databaseTest << endl;
+
     if(nameFirst == "temp")
     {
         statusBar()->showMessage("No First Name", 2000);
@@ -167,14 +201,35 @@ void MainWindow::on_pushButton_2_clicked()
     {
         statusBar()->showMessage("No Last Name", 2000);
     }
-    else if (databaseGrant->size() == 0)
-    {
-        statusBar()->showMessage("No File Loaded", 2000);
-    }
-    else
+    else if(databaseTest == 1)
     {
         nameFull = nameLast + ", " + nameFirst;
         GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
+        piechart *chart = new piechart();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
+    else if(databaseTest == 2)
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseTeach);
+        piechart *chart = new piechart();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
+    else if(databaseTest == 3)
+    {
+        cout << "pietest" << endl;
+        nameFull = nameLast + ", " + nameFirst;
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePres);
+        piechart *chart = new piechart();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
+    else if(databaseTest == 4)
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePub);
         piechart *chart = new piechart();
         chart->setData(test,date1,date2);
         chart->show();
@@ -278,53 +333,54 @@ void MainWindow::showGrants()
 
 void MainWindow::showTeach()
 {
-    //cout << "Test showTeach" << endl;
-//    databaseGrant = getGrants();
-//    multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
+    databaseTeach = getTeachings();
+    multimap<string, Teach_rowObject>::iterator i = databaseTeach->begin();
+//    while (i != databasePres->end()){
+//        cout << i->second.name << endl;
+//        ++ i;
+//    }
+    QWidget *widget1 = new QWidget();
 
-//    QWidget *widget1 = new QWidget();
+    widget1->setFixedHeight(5);
 
-//    widget1->setFixedHeight(5);
+    QHBoxLayout * top = new QHBoxLayout();
+    test = NULL;
 
-//    QHBoxLayout * top = new QHBoxLayout();
-//    test = NULL;
+    /*
+     * THIS IS WHERE THE IF STATEMENTS WERE
+     *
+     *
+     *
+    */
+    Teach_ListBuilder  lb = Teach_ListBuilder(2000, 2025, databaseTeach);
+    lb.scanMap();
 
-//    /*
-//     * THIS IS WHERE THE IF STATEMENTS WERE
-//     *
-//     *
-//     *
-//    */
-//    Teach_ListBuilder * lb = new Teach_ListBuilder(2000, 2025, databaseTeach);
-//    lb->scanMap();
-//    //lb->printList(lb->peerreviewed_grants);
-//    ListClass * teachs = new ListClass("Teaching", lb->teachs.param1, lb->teachs.param2, true);
-//    teachs->addChild(&lb->cme);
+    //lb->printList(lb->peerreviewed_grants);
+//    ListClass * i_l = new ListClass("Invited Lectures", lb->i_l->param1, lb->i_l->param2, true);
+//    i_l->addChild(lb->i_l);
+//    ListClass * a_p = new ListClass("Abtracts Presented", lb->a_p->param1, lb->a_p->param2, true);
+   // ListClass * c_p = new ListClass("Conference Presentations", lb->)
 
-//    ListClass * clinfund = new ListClass("Clinical Funding", lb->clinicalfunding.param1, lb->clinicalfunding.param2, true);
-//    clinfund->addChild(&lb->peerreviewed_cf);
-//    clinfund->addChild(&lb->industrygrant_cf);
+    //Column Names
+    list<string> * test = new list<string>();
+    test->push_back("");
+    test->push_back("Academic Year");
+    test->push_back("Faculty");
+    test->push_back("Hours");
+    test->push_back("Students");
 
-//    //lb->printList(lb->industrygrant_cf);
-//    //Column Names
-//    list<string> * test = new list<string>();
-//    test->push_back("");
-//    test->push_back("");
-//    test->push_back("Names");
-//    test->push_back("Total #");
-//    test->push_back("Total $");
+    //lb.printList(*lb.cme);
 
-//    PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
-//    plusminus->AddFirstLevelFilter(grants);
-//    plusminus->AddFirstLevelFilter(clinfund);
-//    top->addWidget(plusminus->getTree());
+    PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
+    plusminus->AddFirstLevelFilter(&lb.cme);
+    top->addWidget(plusminus->getTree());
 
-//    QVBoxLayout * mainLayout = new QVBoxLayout(this);
-//    mainLayout->addSpacing(20);
-//    mainLayout->addLayout(top);
+    QVBoxLayout * mainLayout = new QVBoxLayout(this);
+    mainLayout->addSpacing(20);
+    mainLayout->addLayout(top);
 
 
-//    this->centralWidget()->setLayout(mainLayout);
+    this->centralWidget()->setLayout(mainLayout);
 
 }
 
@@ -363,7 +419,6 @@ void MainWindow::showPres()
     //Column Names
     list<string> * test = new list<string>();
     test->push_back("");
-    test->push_back("");
     test->push_back("Faculty Name");
     test->push_back("# of Presentations");
 
@@ -372,6 +427,7 @@ void MainWindow::showPres()
     PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
     plusminus->AddFirstLevelFilter(lb.i_l);
     plusminus->AddFirstLevelFilter(lb.a_p);
+    plusminus->AddFirstLevelFilter(lb.c_p);
     top->addWidget(plusminus->getTree());
 
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
@@ -384,7 +440,56 @@ void MainWindow::showPres()
 
 void MainWindow::showPub()
 {
-    cout << "Test showPub" << endl;
+    //cout << "Test showPub" << endl;
+
+    //cout << "Test showPres" << endl;
+
+    databasePub = getPublications();
+    multimap<string, Pub_rowObject>::iterator i = databasePub->begin();
+//    while (i != databasePres->end()){
+//        cout << i->second.name << endl;
+//        ++ i;
+//    }
+    QWidget *widget1 = new QWidget();
+
+    widget1->setFixedHeight(5);
+
+    QHBoxLayout * top = new QHBoxLayout();
+    test = NULL;
+
+    /*
+     * THIS IS WHERE THE IF STATEMENTS WERE
+     *
+     *
+     *
+    */
+    Pub_ListBuilder  lb = Pub_ListBuilder(2000, 2025, databasePub);
+    lb.scanMap();
+
+    //lb->printList(lb->peerreviewed_grants);
+//    ListClass * i_l = new ListClass("Invited Lectures", lb->i_l->param1, lb->i_l->param2, true);
+//    i_l->addChild(lb->i_l);
+//    ListClass * a_p = new ListClass("Abtracts Presented", lb->a_p->param1, lb->a_p->param2, true);
+   // ListClass * c_p = new ListClass("Conference Presentations", lb->)
+
+    //Column Names
+    list<string> * test = new list<string>();
+    test->push_back("");
+    test->push_back("Faculty Name");
+    test->push_back("# of Presentations");
+
+//    lb.printList(*lb.Pubs);
+
+    PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
+    plusminus->AddFirstLevelFilter(&lb.Pubs);
+    top->addWidget(plusminus->getTree());
+
+    QVBoxLayout * mainLayout = new QVBoxLayout(this);
+    mainLayout->addSpacing(20);
+    mainLayout->addLayout(top);
+
+
+    this->centralWidget()->setLayout(mainLayout);
 }
 
 /**
@@ -414,21 +519,26 @@ void MainWindow::csvBuild()
     if (testBuild == 0)
     {
         cout << "Incorrect file type" << endl;
+        databaseTest = 0;
     }
     else if (testBuild == 1)
     {
         showGrants();
+        databaseTest = 1;
     }
     else if (testBuild == 2)
     {
        showTeach();
+       databaseTest = 2;
     }
     else if (testBuild == 3)
     {
         showPres();
+        databaseTest = 3;
     }
     else if (testBuild == 4)
     {
         showPub();
+        databaseTest = 4;
     }
 }

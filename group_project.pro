@@ -6,7 +6,11 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4):
+{
+    QT += widgets
+    QT += printsupport
+}
 
 TARGET = test
 TEMPLATE = app
@@ -32,7 +36,11 @@ SOURCES += main.cpp\
     ListBuilder.cpp \
     barchartdialog.cpp \
     graphclass.cpp \
-    piechartdialog.cpp
+    piechartdialog.cpp \
+    ErrorChecker.cpp \
+    Pres_ListBuilder.cpp \
+    Pub_ListBuilder.cpp \
+    Teach_ListBuilder.cpp
 
 HEADERS  += mainwindow.h \
     graphdialog.h \
@@ -54,7 +62,11 @@ HEADERS  += mainwindow.h \
     ListBuilder.h \
     barchartdialog.h \
     graphclass.h \
-    piechartdialog.h
+    piechartdialog.h \
+    ErrorChecker.h \
+    Pres_ListBuilder.h \
+    Pub_ListBuilder.h \
+    Teach_ListBuilder.h
 
 FORMS    += mainwindow.ui \
     graphdialog.ui

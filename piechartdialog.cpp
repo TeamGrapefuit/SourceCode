@@ -33,6 +33,7 @@ piechart::piechart(QWidget *parent) : QWidget(parent)
  layout->addWidget(verticalBar);
 
  connect(verticalBar,&QScrollBar::valueChanged,this,&piechart::scrollTo);
+ printf("Pie Test");
 }
 
 void piechart::printButtonPushed()
@@ -61,6 +62,7 @@ void piechart::setData(GraphClass *graph,int start,int end)
     list<list<BarValue> > * readyForGraph = graph->getRange();
     list<list<BarValue> >::iterator i1 = readyForGraph->begin();
 
+    //printf("Pie Test");
     while (i1 != readyForGraph->end()) {
         list<BarValue>::iterator i2 = i1->begin();
         while (i2 != i1->end()) {

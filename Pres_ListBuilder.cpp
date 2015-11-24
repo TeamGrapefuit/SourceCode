@@ -18,15 +18,15 @@ Pres_ListBuilder::Pres_ListBuilder(int s_year ,int e_year, multimap<string,Pres_
     this->year_e = e_year;
     this->data = somedata;
     
-    this->a_p = new ListClass("Abstract Presented",0,0,true);
-    this->c_p = new ListClass("Conference Presentation",0,0,true);
-    this->i_l = new ListClass("Invited Lectures",0,0,true);
-    this->p_p = new ListClass("Poster Presentation",0,0,true);
-    this->s_p = new ListClass("Student Presentation",0,0,true);
-    this->s_y = new ListClass("Symposia",0,0,true);
-    this->v_p = new ListClass("Visiting Professorship",0,0,true);
-    this->w_s = new ListClass("Workshop",0,0,true);
-    this->o_t = new ListClass("Other",0,0,true);
+    this->a_p = new ListClass("Abstract Presented",0,-1,true);
+    this->c_p = new ListClass("Conference Presentation",0,-1,true);
+    this->i_l = new ListClass("Invited Lectures",0,-1,true);
+    this->p_p = new ListClass("Poster Presentation",0,-1,true);
+    this->s_p = new ListClass("Student Presentation",0,-1,true);
+    this->s_y = new ListClass("Symposia",0,-1,true);
+    this->v_p = new ListClass("Visiting Professorship",0,-1,true);
+    this->w_s = new ListClass("Workshop",0,-1,true);
+    this->o_t = new ListClass("Other",0,-1,true);
 
 }
 presmember Pres_ListBuilder::tally(string aname){
@@ -87,49 +87,49 @@ presmember Pres_ListBuilder::tally(string aname){
 }
 void Pres_ListBuilder::addMember(presmember pmember){
         if (pmember.Abstract_Presented > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Abstract_Presented,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Abstract_Presented,-1,false);
             this->a_p->addChild(ap);
-            this->a_p->param2 = this->a_p->param2 + pmember.Abstract_Presented;
+            this->a_p->param1 = this->a_p->param1 + pmember.Abstract_Presented;
         }
         if (pmember.Invited_Lectures > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Invited_Lectures,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Invited_Lectures,-1,false);
             this->i_l->addChild(ap);
-            this->i_l->param2 = this->i_l->param2 + pmember.Invited_Lectures;
+            this->i_l->param1 = this->i_l->param1 + pmember.Invited_Lectures;
         }
         if (pmember.Conference_Presentation > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Conference_Presentation,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Conference_Presentation,-1,false);
             this->c_p->addChild(ap);
-            this->c_p->param2 = this->c_p->param2 + pmember.Conference_Presentation;
+            this->c_p->param1 = this->c_p->param1 + pmember.Conference_Presentation;
         }
         if (pmember.Poster_Presentation > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Poster_Presentation,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Poster_Presentation,-1,false);
             this->p_p->addChild(ap);
-            this->p_p->param2 = this->p_p->param2 + pmember.Poster_Presentation;
+            this->p_p->param1 = this->p_p->param1 + pmember.Poster_Presentation;
         }
         if (pmember.Student_Presentation > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Student_Presentation,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Student_Presentation,-1,false);
             this->s_p->addChild(ap);
-            this->s_p->param2 = this->s_p->param2 + pmember.Student_Presentation;
+            this->s_p->param1 = this->s_p->param1 + pmember.Student_Presentation;
         }
         if (pmember.Symposia > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Symposia,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Symposia,-1,false);
             this->s_y->addChild(ap);
-            this->s_y->param2 = this->s_y->param2 + pmember.Symposia;
+            this->s_y->param1 = this->s_y->param1 + pmember.Symposia;
         }
         if (pmember.visiting_prof > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.visiting_prof,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.visiting_prof,-1,false);
             this->v_p->addChild(ap);
-            this->v_p->param2 = this->v_p->param2 + pmember.visiting_prof;
+            this->v_p->param1 = this->v_p->param1 + pmember.visiting_prof;
         }
         if (pmember.Workshop > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.Workshop,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.Workshop,-1,false);
             this->w_s->addChild(ap);
-            this->w_s->param2 = this->w_s->param2 + pmember.Workshop;
+            this->w_s->param1 = this->w_s->param1 + pmember.Workshop;
         }
         if (pmember.other > 0){
-            ListClass *ap = new ListClass(pmember.name.c_str(),0,pmember.other,false);
+            ListClass *ap = new ListClass(pmember.name.c_str(),pmember.other,-1,false);
             this->o_t->addChild(ap);
-            this->o_t->param2 = this->o_t->param2 + pmember.other;
+            this->o_t->param1 = this->o_t->param1 + pmember.other;
         }
 }
 
