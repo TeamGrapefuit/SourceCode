@@ -157,7 +157,7 @@ int Build(string input)
 	//Publications
 	else if (type == 4)
 	{
-		BuildPresentation(fileName);
+		BuildPublications(fileName);
 	}
 
 
@@ -623,10 +623,17 @@ void BuildPublications(string input)
 	fileName = input;
 	//start stream of object
     ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
+	if (fileStream.is_open())
+	{
+		cout << "good" << endl;
+	}
+	else
+	{
+		cout << "bad" << endl;
+	}
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 0;
-
 
 
 	//FIRST ROW FOR COLUMNS
