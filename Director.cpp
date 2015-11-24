@@ -26,6 +26,50 @@ multimap<string, Teach_rowObject>* teachDictionary;
 multimap<string, Pres_rowObject>* presentationsDictionary;
 multimap<string, Pub_rowObject>* publicationsDictionary;
 
+//ERROR section
+
+//Error Arrays, place where we keep the arrays and counter to keep track of current place in 
+pair<int,Grant_rowObject> grantsErrors[200];
+int grantsErrorCounter = 0;
+pair<int,Teach_rowObject> teachErrors[200];
+int teachErrorCounter = 0;
+pair<int, Pres_rowObject> presErrors[200];
+int presErrorCounter = 0;
+pair<int, Pub_rowObject> pubErrors[200];
+int pubErrorCounter = 0;
+
+//error method adders
+void addGrantsError(int row, Grant_rowObject errorRow)
+{
+	if(grantsErrorCounter >= 199)
+	{
+		cout << "Too many errors" << endl;
+	}
+	else
+	{	
+		grantsErrors[grantsErrorCounter] = pair<int, Grant_rowObject>(row,errorRow);
+		grantsErrorCounter++;
+	}
+}
+
+void addTeachError(int row, Teach_rowObject errorRow)
+{
+	teachErrors[teachErrorCounter] = pair<int, Teach_rowObject>(row, errorRow);
+	teachErrorCounter++;
+}
+
+void addPresError(int row, Pres_rowObject errorRow)
+{
+	presErrors[presErrorCounter] = pair<int, Pres_rowObject>(row, errorRow);
+	presErrorCounter++;
+}
+
+void addPubError(int row, Pub_rowObject errorRow)
+{
+	pubErrors[pubErrorCounter] = pair<int, Pub_rowObject>(row, errorRow);
+	pubErrorCounter++;
+}
+
 //File Detective
 //figure out what type of file the inputted file is
 //Outputs are 0 = not recognized, 1 = Grants, 2 = Teaching, 3 = Presentations, 4 = Publications
@@ -156,6 +200,8 @@ void BuildGrants(string input)
 	while (getline(firstRowStream, columnName, ','))
 	{
 		//compare column name to variable, if a column appears, put in relevant index
+		//erase "\n\r" from the string, this only applies if the column is at the very end of the line, but it messes upt it reading it
+		columnName.erase(columnName.find_last_not_of("\n\r") + 1);
 		//name
 		if (columnName == "Member Name")
 		{
@@ -257,33 +303,40 @@ void BuildGrants(string input)
 		//cout << temp << endl; 
 		//make new object and insert into map
 		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
-		//find if holder has already entry
-		
-		//duplicate check
-		
-		check = grantsDictionary->find(holder.name);
-		while (check != grantsDictionary->end())
+
+		//Error Check
+		if (holder.errorFlag == false)
 		{
-			//check if holder already exists
-			if (check->second.name == holder.name && check->second.fundType == holder.fundType && check->second.peerReviewed == holder.peerReviewed && check->second.indGrant == holder.indGrant)
+			//find if holder has already entry
+			//duplicate check
+
+			check = grantsDictionary->find(holder.name);
+			while (check != grantsDictionary->end())
 			{
-				//if it does, add the total amount to the one that already exists
-				check->second.totalAmount = check->second.totalAmount + holder.totalAmount;
-				//confirm that this is a duplicate
-				existAlready = true;
-				count++;
-				
+				//check if holder already exists
+				if (check->second.name == holder.name && check->second.fundType == holder.fundType && check->second.peerReviewed == holder.peerReviewed && check->second.indGrant == holder.indGrant)
+				{
+					//if it does, add the total amount to the one that already exists
+					check->second.totalAmount = check->second.totalAmount + holder.totalAmount;
+					//confirm that this is a duplicate
+					existAlready = true;
+					count++;
+
+				}
+				check++;
 			}
-			check++;
+			//if there is no duplicate, add it in to the map
+			if (existAlready == false)
+			{
+				grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
+				count++;
+				existAlready = false;
+			}
 		}
-		//if there is no duplicate, add it in to the map
-		if (existAlready == false)
+		else
 		{
-			grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
-			count++;
-			existAlready = false;
+			addGrantsError(count, holder);
 		}
-		
 
 		//grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
 		count++;
@@ -325,7 +378,7 @@ void BuildTeacher(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-    ifstream fileStream(fileName.c_str());
+    ifstream fileStream(fileName.c_str(),ios::in | ios::binary);
 	//check if filestream opening worked
 	if (fileStream.is_open())
 	{
@@ -337,7 +390,7 @@ void BuildTeacher(string input)
 	}
 	//start keeping track of column
 	ColIndex colIndex;
-	columnNumber = 1;
+	columnNumber = 0;
 
 
 
@@ -351,6 +404,8 @@ void BuildTeacher(string input)
 	//now put in first rows value and put into struct
 	while (getline(firstRowStream, columnName, ','))
 	{
+		//erase "\n\r" from the string, this only applies if the column is at the very end of the line, but it messes upt it reading it
+		columnName.erase(columnName.find_last_not_of("\n\r") + 1);
 		//compare column name to variable, if a column appears, put in relevant 
 		//name
 		if (columnName == "Member Name")
@@ -378,7 +433,7 @@ void BuildTeacher(string input)
 			colIndex.program_loc = columnNumber;
 		}
 		//Course Type
-		else if (columnName == "Type of Course")
+		else if (columnName == "Type of Course / Activity")
 		{
 			colIndex.courseType_loc = columnNumber;
 		}
@@ -402,13 +457,15 @@ void BuildTeacher(string input)
 		{
 			colIndex.tHours_loc = columnNumber;
 		}
+		else if (columnName == "Number Of Trainees")
+		{
+			colIndex.tStudents_loc = columnNumber;
+		}
 
 
-		//take note of column number, starts at 1
+		//take note of column number, starts at 0
 		columnNumber++;
 	}
-
-
 
 	//SEND RAW ROW AND STRUCT collndex TO rowObject TO MAKE ROW THAT WILL BE PUT IN DICTIONARY
 	//use member name as dictionary
@@ -438,18 +495,18 @@ void BuildTeacher(string input)
 	//after you make the map, find out the min start date and max end date
 	multimap<string, Teach_rowObject>::iterator it = teachDictionary->begin();
 	//intializing to high amount for start dates
-	firstDateGrants = 2100;
+	firstDateTeach = 2100;
 	for (it = teachDictionary->begin(); it != teachDictionary->end(); ++it)
 	{
 		//checking if start date is lower and not counting zeroes
-		if (it->second.sDate <= firstDateGrants && it->second.sDate != 0)
+		if (it->second.sDate <= firstDateTeach && it->second.sDate != 0)
 		{
-			firstDateGrants = it->second.sDate;
+			firstDateTeach = it->second.sDate;
 		}
 		//checking if end date is higher and not counting to high amounts
-		if (it->second.eDate >= lastDateGrants && it->second.eDate < 2100)
+		if (it->second.eDate >= lastDateTeach && it->second.eDate < 2100)
 		{
-			lastDateGrants = it->second.eDate;
+			lastDateTeach = it->second.eDate;
 		}
 
 	}
@@ -463,10 +520,10 @@ void BuildPresentation(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-    ifstream fileStream(fileName.c_str());
+    ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
 	//start keeping track of column
 	ColIndex colIndex;
-	columnNumber = 1;
+	columnNumber = 0;
 
 
 
@@ -481,6 +538,8 @@ void BuildPresentation(string input)
 	while (getline(firstRowStream, columnName, ','))
 	{
 		//compare column name to variable, if a column appears, put in relevant 
+		//erase "\n\r" from the string, this only applies if the column is at the very end of the line, but it messes upt it reading it
+		columnName.erase(columnName.find_last_not_of("\n\r") + 1);
 		//name
 		if (columnName == "Member Name")
 		{
@@ -548,10 +607,10 @@ void BuildPublications(string input)
 	//get the name of the file
 	fileName = input;
 	//start stream of object
-    ifstream fileStream(fileName.c_str());
+    ifstream fileStream(fileName.c_str(), ios::in | ios::binary);
 	//start keeping track of column
 	ColIndex colIndex;
-	columnNumber = 1;
+	columnNumber = 0;
 
 
 
@@ -566,6 +625,8 @@ void BuildPublications(string input)
 	while (getline(firstRowStream, columnName, ','))
 	{
 		//compare column name to variable, if a column appears, put in relevant 
+		//erase "\n\r" from the string, this only applies if the column is at the very end of the line, but it messes upt it reading it
+		columnName.erase(columnName.find_last_not_of("\n\r") + 1);
 		//name
 		if (columnName == "Member Name")
 		{
@@ -708,4 +769,21 @@ pair<int,int> getDatesGrants()
 	{
 		return pair<int, int>(firstDateGrants, lastDateGrants);
 	}
+}
+
+pair<int, int> getDatesTeach()
+{
+	if (firstDateTeach == 0 && lastDateTeach == 0)
+	{
+		cout << endl << "No Grants File given in" << endl;
+	}
+	else
+	{
+		return pair<int, int>(firstDateTeach, lastDateTeach);
+	}
+}
+
+pair<int,Grant_rowObject>* getGrantsErrors()
+{
+	return grantsErrors;
 }

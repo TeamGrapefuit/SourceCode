@@ -6,6 +6,7 @@
 #include <map> //include for multimap
 #include <list> //include for pair
 #include <algorithm> //include for erase
+#include "ColIndex.h" //include for the column index
 #include "rowObject.h" //row objects
 #include "GrantRowBuilder.h" //row builders
 #include "TeachingRowBuilder.h"
@@ -33,5 +34,7 @@ multimap<string, Teach_rowObject>* getTeachings();
 multimap<string, Pres_rowObject>* getPresentations();
 
 multimap<string, Pub_rowObject>* getPublications();
+
+pair<int, Grant_rowObject>* getGrantsErrors();
 
 pair<int,int> getDatesGrants();
