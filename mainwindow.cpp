@@ -43,7 +43,6 @@ multimap<string, Teach_rowObject>* databaseTeach;
 multimap<string, Pub_rowObject>* databasePub;
 multimap<string, Pres_rowObject>* databasePres;
 QString filename;
-
 int databaseTest = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -373,6 +372,9 @@ void MainWindow::showTeach()
 
     PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
     plusminus->AddFirstLevelFilter(&lb.cme);
+    plusminus->AddFirstLevelFilter(&lb.pme);
+    plusminus->AddFirstLevelFilter(&lb.ume);
+    plusminus->AddFirstLevelFilter(&lb.other);
     top->addWidget(plusminus->getTree());
 
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
@@ -445,8 +447,8 @@ void MainWindow::showPub()
     //cout << "Test showPres" << endl;
 
     databasePub = getPublications();
-    multimap<string, Pub_rowObject>::iterator i = databasePub->begin();
-//    while (i != databasePres->end()){
+//    multimap<string, Pub_rowObject>::iterator i = databasePub->begin();
+//    while (i != databasePub->end()){
 //        cout << i->second.name << endl;
 //        ++ i;
 //    }
@@ -463,6 +465,7 @@ void MainWindow::showPub()
      *
      *
     */
+    cout << databasePub->size() << endl;
     Pub_ListBuilder  lb = Pub_ListBuilder(2000, 2025, databasePub);
     lb.scanMap();
 
@@ -475,15 +478,16 @@ void MainWindow::showPub()
     //Column Names
     list<string> * test = new list<string>();
     test->push_back("");
+    test->push_back("");
     test->push_back("Faculty Name");
-    test->push_back("# of Presentations");
+    test->push_back("Total");
 
 //    lb.printList(*lb.Pubs);
 
     PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
     plusminus->AddFirstLevelFilter(&lb.Pubs);
     top->addWidget(plusminus->getTree());
-
+    lb.printList(lb.Pubs);
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
     mainLayout->addSpacing(20);
     mainLayout->addLayout(top);
