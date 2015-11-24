@@ -10,10 +10,10 @@
 #include <QScrollBar>
 #include <QVBoxLayout>
 
-#include <QPushButton>
-#include <QPrinter>
-#include <QPrintDialog>
-
+/*
+ * barchartdialog is used to get data from a graphclass object
+ * and paint a bar chart based on the data
+ */
 
 class barchartdialog : public QWidget
 {
@@ -21,23 +21,21 @@ class barchartdialog : public QWidget
 
 private:
     int startYear,endYear;
-    QVector<int> barValue1;//vector that stores the number of people//
-    QVector<int> barValue2;//vector that stores the amount
-    QVector<int> barValue;//vector that stores the current value which will be showed on the dialog//
+    QVector<int> barValue1;//qvector that stores the number of people//
+    QVector<int> barValue2;//qvector that stores the amount
+    QVector<int> barValue;//qvector that stores the value which will be showed on the dialog//
     QVector<string> barTitle;//title//
     QVector<QColor> barColor;//color of the bars//
-
-    QPushButton *printButton;//Button to print
 
     QRadioButton *barButton1;//button that switch to total number//
     QRadioButton *barButton2;//button that switch to total amount//
     QButtonGroup *barGroup;//button group that contains button 1 and 2//
 
     QScrollBar *horizontalBar;//horizontal bar//
-    QVBoxLayout *layout;
+    QVBoxLayout *layout;//layout that contains the scroll bar//
 
-    int xOrigin;
-    int xCordinate;
+    int xOrigin;//the cordinate of the origin//
+    int xCordinate;//used to store the cordinate when each bar is painted//
     int temp;//previous scroll bar value//
     int typeNum;//number of types
 
@@ -52,8 +50,6 @@ signals:
 
 private slots:
     void switchBarValue();
-
-    void printButtonPushed();
 
     void scrollTo();
 
