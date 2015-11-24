@@ -4,14 +4,20 @@
 #include <iterator>
 #include<stdlib.h>
 
+// Class for graphing Grants Objects
+// Contains 4 sub categories Grants Peer Reviewed, Grants Industry Sponsored,
+// Clinic Peer Reviewed, Clinic Industry Sponsored
+
 GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Grant_rowObject> * data)
 {
+    // push 4 sub categories stores in a new string lsit
     list<string> * barTitles = new list<string>();
     barTitles->push_back("Grant - PR");
     barTitles->push_back("Grant - IS");
     barTitles->push_back("Clinic - PR");
     barTitles->push_back("Clinic - IS");
 
+    // set up a range(year range) for the list
     range = new list<list<BarValue> >;
     for (int i = startYear; i < endYear; i ++){
         list<BarValue> temp;
@@ -48,6 +54,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
 
             list<BarValue>::iterator inner = outer->begin();
 
+            // distribute the date categories by fund type
             if (i->second.fundType == "Grants" && i->second.peerReviewed){
                 //No advance needed
             }
@@ -70,14 +77,18 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
 
 }
 
+// Class for graphing Teaching Objects
+// Contains 4 sub categories for Teaching level PME, UME, CME, Other
 GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Teach_rowObject> * data)
 {
+    // push 4 sub categories stores in a new string lsit
     list<string> * barTitles = new list<string>();
     barTitles->push_back("Teaching - PME");
     barTitles->push_back("Teaching - UME");
     barTitles->push_back("Teaching - CME");
     barTitles->push_back("Teaching - Other");
 
+    // set up a range(year range) for the list
     range = new list<list<BarValue> >;
     for (int i = startYear; i < endYear; i ++){
         list<BarValue> temp;
@@ -114,6 +125,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
 
             list<BarValue>::iterator inner = outer->begin();
 
+            // distribute the date categories by Teaching Level (Type of the course)
             if (i->second.courseType == "PME" ){
                 //No advance needed
             }
@@ -135,14 +147,18 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     }
 }
 
+// Class for graphing Presentation Objects
+// Contains 4 sub categories for Presentation Type Lectures, Presented, Type, Other
 GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Pres_rowObject> * data)
 {
+    // push 4 sub categories stores in a new string lsit
     list<string> * barTitles = new list<string>();
     barTitles->push_back("Pres - Lectures");
     barTitles->push_back("Pres - Presented");
     barTitles->push_back("Pres - Type");
     barTitles->push_back("Pres - Other");
 
+    // set up a range(year range) for the list
     range = new list<list<BarValue> >;
     for (int i = startYear; i < endYear; i ++){
         list<BarValue> temp;
@@ -179,6 +195,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
 
             list<BarValue>::iterator inner = outer->begin();
 
+            // distribute the date categories by Types of Presentations
             if (i->second.type == "Lectures"){
                 //No advance needed
             }
@@ -200,8 +217,11 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
 
 }
 
+// Class for graphing Publication Objects
+// Contains 20 sub categories for Publication Types
 GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string, Pub_rowObject> * data)
 {
+    // push 20 sub categories stores in a new string lsit
     list<string> * barTitles = new list<string>();
     barTitles->push_back("Publications - Book Chapters");
     barTitles->push_back("Publications - Books");
@@ -225,6 +245,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
     barTitles->push_back("Publications - Websites / Videos");
     barTitles->push_back("Publications - Working Papers");
 
+    // set up a range(year range) for the list
     range = new list<list<BarValue> >;
     for (int i = startYear; i < endYear; i ++){
         list<BarValue> temp;
@@ -261,6 +282,7 @@ GraphClass::GraphClass(int startYear, int endYear, string name, multimap<string,
 
             list<BarValue>::iterator inner = outer->begin();
 
+            // distribute the date categories by Types of Publications
             if (i->second.type == "Book Chapters"){
                 //No advance needed
             }
