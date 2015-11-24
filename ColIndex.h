@@ -80,7 +80,7 @@ struct ColIndex {
     int nTeach_loc; // Number of teaching sessions
     int hpTeach_loc;//hours per teaching session or week
     int tHours_loc;//total hours
-    
+    int tStudents_loc; // Number of trainees
     
     
     

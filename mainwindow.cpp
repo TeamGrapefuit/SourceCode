@@ -21,8 +21,7 @@
 #include "graphclass.h"
 #endif
 
-//#include "graph.h"
-
+//Method declaration
 using namespace std;
 void on_pushButton_clicked();
 void on_spinBox_valueChanged(int arg1);
@@ -32,8 +31,14 @@ int date1 = 2010;
 int date2 = 2015;
 GraphClass * test;
 //The string value from the name box
-string name;
-multimap<string, Grant_rowObject>* database;
+string nameFirst = "temp";
+string nameLast = "temp";
+string nameFull = "temp";
+
+multimap<string, Grant_rowObject>* databaseGrant;
+multimap<string, Teach_rowObject>* databaseTeach;
+multimap<string, Pub_rowObject>* databasePub;
+multimap<string, Pres_rowObject>* databasePres;
 QString filename;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -117,40 +122,93 @@ MainWindow::~MainWindow()
 }
 
 
-//Graph button action. Pressing graph button makes this happen
+/**
+ * input:
+ * output: void
+ * This creates the barchart dialog when button is pressed on main window
+ */
 void MainWindow::on_pushButton_clicked()
-{
-    //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-    GraphClass * test = new GraphClass(date1, date2, name, database);
-    barchartdialog *chart = new barchartdialog();
-    chart->setData(test,date1,date2);
-    chart->show();
+{    
+    if(nameFirst == "temp")
+    {
+        statusBar()->showMessage("No First Name", 2000);
+    }
+    else if(nameLast == "temp")
+    {
+        statusBar()->showMessage("No Last Name", 2000);
+    }
+    else
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        cout << nameFull << endl;
+        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
+        barchartdialog *chart = new barchartdialog();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
 }
 
+/**
+ * input:
+ * output: void
+ * This creates the piechart dialog when button pressed on main window
+ */
 void MainWindow::on_pushButton_2_clicked()
 {
-    //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-    GraphClass * test = new GraphClass(date1, date2, name, database);
-    piechart *chart = new piechart();
-    chart->setData(test,date1,date2);
-    chart->show();
+    if(nameFirst == "temp")
+    {
+        statusBar()->showMessage("No First Name", 2000);
+    }
+    else if(nameLast == "temp")
+    {
+        statusBar()->showMessage("No Last Name", 2000);
+    }
+    else if (databaseGrant->size() == 0)
+    {
+        statusBar()->showMessage("No File Loaded", 2000);
+    }
+    else
+    {
+        nameFull = nameLast + ", " + nameFirst;
+        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
+        piechart *chart = new piechart();
+        chart->setData(test,date1,date2);
+        chart->show();
+    }
 }
 
-//This takes value in first date box and sets it to global variable
+/**
+  input: integer value of starting date
+  output: void
+  This takes value in starting date box and sets it to global variable date1
+**/
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
     date1 = arg1;
 }
 
-//This takes value in second date box and sets it to global variable
+/**
+  input: integer value of ending date
+  output: void
+  This takes value in ending date box and sets it to global variable date2
+**/
 void MainWindow::on_spinBox_2_valueChanged(int arg1)
 {
     date2 = arg1;
 }
-
+//input: QString from name box on screen
+//Output: Void
+//This takes the string inside the name box on the main window and assigns it to the name variable
+int i;
 void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
-    name = arg1.toStdString();
+    nameFirst = arg1.toStdString();
+}
+
+void MainWindow::on_lineEdit_2_textChanged(const QString &arg1)
+{
+    nameLast = arg1.toStdString();
 }
 
 void MainWindow::on_actionOpen_File_triggered()
@@ -164,34 +222,25 @@ void MainWindow::on_actionOpen_File_triggered()
 //    object.update();
 }
 
-void MainWindow::csvBuild()
+void MainWindow::showGrants()
 {
+    databaseGrant = getGrants();
+    multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
+
     QWidget *widget1 = new QWidget();
 
     widget1->setFixedHeight(5);
 
     QHBoxLayout * top = new QHBoxLayout();
     test = NULL;
-    //Director
-//    multimap<string, Grant_rowObject> * database = new multimap<string, Grant_rowObject>();
-//   Grant_rowObject * a = new Grant_rowObject("A", "Domain", 2011, 2012, "Grants", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  1);
-//   Grant_rowObject * b = new Grant_rowObject("B", "Domain", 2011, 2012, "Clinical Trials", "Received", false, true, "Role", "Title", "apInvestigator", "acpInvestigator",  2);
-//   Grant_rowObject * c = new Grant_rowObject("C", "Domain", 2012, 2013, "Grants", "Received", false, true, "Role", "Title", "apInvestigator", "acpInvestigator",  3);
-//   Grant_rowObject * d = new Grant_rowObject("D", "Domain", 2012, 2013, "Clinical Trials", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  4);
-//   Grant_rowObject * e = new Grant_rowObject("E", "Domain", 2013, 2014, "Grants", "Received", true, false, "Role", "Title", "apInvestigator", "acpInvestigator",  5);
 
-//   database->insert(pair<string, Grant_rowObject>(a->name, *a));
-//   database->insert(pair<string, Grant_rowObject>(b->name, *b));
-//   database->insert(pair<string, Grant_rowObject>(c->name, *c));
-//   database->insert(pair<string, Grant_rowObject>(d->name, *d));
-//   database->insert(pair<string, Grant_rowObject>(e->name, *e));
-    //database = BuildGrants("Grants_changed.csv");
-    std::string stringFilename = filename.toUtf8().constData();
-
-    database = BuildGrants(stringFilename);
-    multimap<string, Grant_rowObject>::iterator i = database->begin();
-
-    ListBuilder * lb = new ListBuilder(2000, 2025, database);
+    /*
+     * THIS IS WHERE THE IF STATEMENTS WERE
+     *
+     *
+     *
+    */
+    ListBuilder * lb = new ListBuilder(2000, 2025, databaseGrant);
     lb->scanMap();
     //lb->printList(lb->peerreviewed_grants);
     ListClass * grants = new ListClass("Grants", lb->grants.param1, lb->grants.param2, true);
@@ -207,18 +256,9 @@ void MainWindow::csvBuild()
     list<string> * test = new list<string>();
     test->push_back("");
     test->push_back("");
-    test->push_back("");
+    test->push_back("Names");
     test->push_back("Total #");
     test->push_back("Total $");
-
-//    ListClass * c1r1 = new ListClass("C1 R1", 5, -1, true);
-//    ListClass * c1r2 = new ListClass("C1 R2", 5, -1, true);
-//    ListClass * c2r1 = new ListClass("C2 R1", 2, -1, false);
-//    ListClass * c2r2 = new ListClass("C2 R2", 2, -1, false);
-
-//    c1r1->addChild(c2r1);
-//    c1r1->addChild(c2r2);
-//    c1r2->addChild(c2r1);
 
     PlusMinusList * plusminus = new PlusMinusList(test->size(), test);
     plusminus->AddFirstLevelFilter(grants);
@@ -231,4 +271,65 @@ void MainWindow::csvBuild()
 
 
     this->centralWidget()->setLayout(mainLayout);
+}
+
+void MainWindow::showTeach()
+{
+    cout << "Test showTeach" << endl;
+}
+
+void MainWindow::showPres()
+{
+    cout << "Test showPres" << endl;
+}
+
+void MainWindow::showPub()
+{
+    cout << "Test showPub" << endl;
+}
+
+/**
+ * input:
+ * output: void
+ * This creates the grants plus minus list using the file the user points to in his/her computer by the file>newfile button
+ */
+void MainWindow::csvBuild()
+{
+    std::string stringFilename = filename.toUtf8().constData();
+
+    //database = BuildGrants(stringFilename);
+
+    int testBuild = Build(stringFilename);
+
+    date1 = getDatesGrants().first;
+    date2 = getDatesGrants().second;
+
+    if (date1 == -666)
+    {
+        date1 = 1900;
+    }
+
+    cout << date1 << endl;
+    cout << date2 << endl;
+
+    if (testBuild == 0)
+    {
+        cout << "Incorrect file type" << endl;
+    }
+    else if (testBuild == 1)
+    {
+        showGrants();
+    }
+    else if (testBuild == 2)
+    {
+       showTeach();
+    }
+    else if (testBuild == 3)
+    {
+        showPres();
+    }
+    else if (testBuild == 4)
+    {
+        showPub();
+    }
 }

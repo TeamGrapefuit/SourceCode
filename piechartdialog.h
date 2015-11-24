@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QScrollBar>
 
 using namespace std;
 
@@ -23,9 +25,17 @@ private:
 
     int startDate, endDate;
 
+    int yOrigin;
+    int yCordinate;
+    int temp;
+    int typeNum;
+
     QRadioButton *value1Button;
     QRadioButton *value2Button;
     QButtonGroup *buttonGroup;
+
+    QScrollBar *verticalBar;
+    QHBoxLayout *layout;
 
 
 
@@ -34,6 +44,8 @@ public:
     explicit piechart(QWidget *parent = 0);
     void setData(GraphClass *graph, int start, int end);
     void paintEvent(QPaintEvent * event);
+
+    void scrollTo();
 
 
 

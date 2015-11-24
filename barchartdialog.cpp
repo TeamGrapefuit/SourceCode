@@ -6,19 +6,32 @@
 
 barchartdialog::barchartdialog(QWidget *parent) : QWidget(parent)
 {
+    //set the title and size of the dialog//
     setWindowTitle("Bar Chart");
     setFixedSize(1000,800);
 
-    barButton1 = new QRadioButton("Total Number",this);
-    barButton2 = new QRadioButton("Total Amount",this);
+    xOrigin=50;
+    temp=0;
+
+    //set up the default buttons//
+    barButton1 = new QRadioButton("",this);
+    barButton2 = new QRadioButton("",this);
     barButton1->setGeometry(QRect(QPoint(150,30),QSize(120,20)));
     barButton2->setGeometry(QRect(QPoint(150,60),QSize(120,20)));
     barGroup=new QButtonGroup(this);
     barGroup->addButton(barButton1);
     barGroup->addButton(barButton2);
     connect(barGroup,SIGNAL(buttonClicked(int)),this,SLOT(switchBarValue()));
-}
 
+    //set up scroll bar//
+    layout = new QVBoxLayout(this);
+    horizontalBar = new QScrollBar(Qt::Horizontal);
+    layout->addStretch();
+    layout->addWidget(horizontalBar);
+    connect(horizontalBar,&QScrollBar::valueChanged,this,&barchartdialog::scrollTo);
+
+}
+/*Use the graphclass object, which contains the data*/
 void barchartdialog::setData(GraphClass *graph,int start,int end)
 {
     this->startYear=start;
@@ -28,37 +41,65 @@ void barchartdialog::setData(GraphClass *graph,int start,int end)
     QVector<string> title;
     QVector<QColor> color;
 
-    //set the bar's color//
-    color.push_back(QColor(Qt::red));
-    color.push_back(QColor(Qt::yellow));
-    color.push_back(QColor(Qt::green));
-    color.push_back(QColor(Qt::blue));
-
     //get the data from a GraphClass object//
     list<list<BarValue> > * readyForGraph = graph->getRange();
     list<list<BarValue> >::iterator i1 = readyForGraph->begin();
 
-        while (i1 != readyForGraph->end()) {
-            list<BarValue>::iterator i2 = i1->begin();
-            while (i2 != i1->end()) {
-                title.push_back(i2->title);
-                value1.push_back(i2->yValue1);
-                value2.push_back(i2->yValue2);
-                ++ i2;
-            }
-            ++ i1;
+    while (i1 != readyForGraph->end()) {
+        list<BarValue>::iterator i2 = i1->begin();
+        while (i2 != i1->end()) {
+            title.push_back(i2->title);
+            value1.push_back(i2->yValue1);
+            value2.push_back(i2->yValue2);
+            ++ i2;
         }
+        ++ i1;
+    }
 
-        this->barValue1=value1;
-        this->barValue2=value2;
-        this->barTitle=title;
-        this->barColor=color;
-        this->startYear=start;
-        this->endYear=end;
-        barValue=barValue2;
+    this->barValue1=value1;
+    this->barValue2=value2;
+    this->barTitle=title;
+    this->startYear=start;
+    this->endYear=end;
+    barValue=barValue1;
 
-        update();
-        repaint();
+    //set up the text on buttons and colors that are used to display the bars//
+    if(barTitle.at(0)=="Grant - PR"){
+        barButton1->setText("Total Number");
+        barButton2->setText("Total Amount");
+        this->barValue=value1;
+        color.push_back(QColor(Qt::red));
+        color.push_back(QColor(Qt::yellow));
+        color.push_back(QColor(Qt::green));
+        color.push_back(QColor(Qt::blue));
+    }
+    else if(barTitle.at(0)=="Teaching - PME"){
+        barButton1->setText("Total Number of Student");
+        barButton2->setText("Total Number of Teaching Hours");
+        color.push_back(QColor(Qt::red));
+        color.push_back(QColor(Qt::yellow));
+        color.push_back(QColor(Qt::green));
+        color.push_back(QColor(Qt::blue));
+    }
+    else if(barTitle.at(0)=="Pres - Lectures"){
+        barButton1->setText("Total Number");
+        barButton2->hide();
+        for(int i=0;i<21;i++){
+            color.push_back(QColor(qrand()%256,qrand()%256,qrand()%256,255));
+        }
+    }
+    else{
+        barButton1->setText("Total Number of Publication");
+        barButton2->hide();
+        color.push_back(QColor(Qt::red));
+        color.push_back(QColor(Qt::yellow));
+        color.push_back(QColor(Qt::green));
+        color.push_back(QColor(Qt::blue));
+    }
+
+    this->barColor=color;
+
+    repaint();
 }
 
 void barchartdialog::switchBarValue()
@@ -72,23 +113,47 @@ void barchartdialog::switchBarValue()
     repaint();
 }
 
+/*This method is used to set up the page step of the scroll bar*/
+void barchartdialog::scrollTo(){
+    int range=xCordinate-xOrigin;
+    if(range>800){
+        horizontalBar->setPageStep(1600-xCordinate);
+    }
+    else if(range>1590){
+        horizontalBar->setPageStep(10);
+    }
+
+    else{
+      horizontalBar->setPageStep(800);
+    }
+
+    horizontalBar->setMinimum(0);
+    horizontalBar->setMaximum(801-horizontalBar->pageStep());
+
+    xOrigin=xOrigin-horizontalBar->value()+temp;
+    temp=horizontalBar->value();
+
+    update();
+}
+/*Draw the bar graph*/
 void barchartdialog::paintEvent(QPaintEvent *parent)
 {
     QPainter painter(this);
     painter.setPen(QPen(Qt::black,2));
 
     int count = barValue.size();
+
+
     int space = 50;//space between bars//
     int barWidth = 20;
     int barHeight = 0;
-    int xOrigin = 50;
     int yOrigin = 600;
     int yAxisLength = yOrigin - 100;
-    int xCordinate=xOrigin;
+    xCordinate=xOrigin;
     double percent;
 
 
-    //find the maximum
+    //find the maximum value along the y-axis//
     double max = 0.00;
 
     for(int i = 0;i<count;i++){
@@ -125,9 +190,16 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
     int i = 0;
     int start=startYear;
 
+    if(barValue1.size()%21==0){
+        typeNum=21;
+    }
+    else{
+        typeNum=4;
+    }
+
     while(i<count)
     {
-        if(i%4==0){
+        if(i%typeNum==0){
             painter.drawLine(xCordinate,yOrigin,xCordinate+space,yOrigin);
             painter.drawText(QPoint(xCordinate+space+15,yOrigin+40),QString::number(start)+"-");
             painter.drawText(QPoint(xCordinate+space+45,yOrigin+40),QString::number(start+1));
@@ -139,7 +211,7 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
         barHeight = percent*500;
         painter.drawLine(xCordinate,yOrigin,xCordinate+barWidth,yOrigin);//draw x-axis//
         QRect barRect(xCordinate,yOrigin-barHeight,barWidth,barHeight);
-        painter.setBrush(barColor[i%4]);
+        painter.setBrush(barColor[i%typeNum]);
         painter.drawRect(barRect);
 
         if(barValue[i]!=0)
@@ -151,6 +223,7 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
 
         i++;
     }
+
 
     //draw y-axis//
     painter.drawLine(xOrigin,yOrigin,xOrigin,100);//draw y-axis//

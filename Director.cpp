@@ -1,17 +1,10 @@
 //Director
 //To-do: 
 //	Error Stack
-//	Value Summer: for those of same author, same start year & same type
-//	Date Range: Keep track of start and end date and make getters to it
-
+//	Value Summer: for those of same author, same start year & same type (still need to do for teach,pres, and pub)
+//	Date Range: Keep track of start and end date and make getters to it (still need to do for teach,pres, and pub)
+//  Figure out type of file
 #include "Director.h"
-//#include "Pres_rowObject.h"
-//#include "Pub_rowObject.h"
-//#include "Teach_rowObject.h"
-#include "ColIndex.h"
-#include "GrantRowBuilder.h" //row builders
-//#include "PresentationRowBuilder.h"
-//#include "PublicationRowBuilder.h"
 
 using namespace std;
 
@@ -24,22 +17,112 @@ string firstRow;  //string to hold all the data in the first row
 //ints for Date Range, Grants
 int firstDateGrants;
 int lastDateGrants;
+int firstDateTeach;
+int lastDateTeach;
 
-//multimap for Grant Rows
+//multimaps
 multimap<string, Grant_rowObject>* grantsDictionary; 
+multimap<string, Teach_rowObject>* teachDictionary;
+multimap<string, Pres_rowObject>* presentationsDictionary;
+multimap<string, Pub_rowObject>* publicationsDictionary;
 
-//multimap for Presentation Rows
-//multimap<string, Pres_rowObject>* presentationsDictionary;
+//File Detective
+//figure out what type of file the inputted file is
+//Outputs are 0 = not recognized, 1 = Grants, 2 = Teaching, 3 = Presentations, 4 = Publications
+int Build(string input)
+{
 
-//multimap for Grant Rows
-//multimap<string, Pub_rowObject>* publicationsDictionary;
+	//the output, what the marker for the solution will be
+	int type = 0;
 
-//multimap for Teaching Rows
+	//Open file
+	//get the name of the file
+	fileName = input;
+	//start stream of object
+	ifstream fileStream(fileName, ios::in | ios::binary);
+	//check if good
+	if (fileStream.is_open())
+	{
+		cout << "good" << endl;
+	}
+	else
+	{
+		cout << "bad" << endl;
+	}
 
+	//FIRST ROW
+
+	//get first row
+	fileStream >> ws;
+	getline(fileStream, firstRow);
+	//seperate first row
+	istringstream firstRowStream(firstRow);
+
+	//string for keeping track of column
+	string findColumn; 
+	//go through the first row and find unique column, once you find one break from loop
+	while (getline(firstRowStream, findColumn, ','))
+	{
+		//1. Grants
+		if (findColumn == "Funding Type")
+		{
+			type = 1;
+			break;
+		}
+		//2. Teaching
+		else if (findColumn == "Program")
+		{
+			type = 2;
+			break;
+		}
+
+		//3. Presentation
+		else if (findColumn == "Education Presentation")
+		{
+			type = 3;
+			break;
+		}
+		//4. Publications
+		else if (findColumn == "Publication Status")
+		{
+			type = 4;
+			break;
+		}
+	}
+
+	//build correct dictionary
+	if (type == 0)
+	{
+		cout << "File Type could not be identified" << endl;
+	}
+	//Grants
+	else if (type == 1)
+	{
+		BuildGrants(fileName);
+	}
+	//Teaching
+	else if (type == 2)
+	{
+		BuildTeacher(fileName);
+	}
+	//Presentation
+	else if (type == 3)
+	{
+		BuildPresentation(fileName);
+	}
+	//Publications
+	else if (type == 4)
+	{
+		BuildPresentation(fileName);
+	}
+
+
+	return type;
+}
 
 //build Grants
 //status: basics finished. but keep updating
-multimap<string, Grant_rowObject>* BuildGrants(string input)
+void BuildGrants(string input)
 {
 	//get the name of the file
 	fileName = input;
@@ -72,7 +155,7 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	//now put in first rows value and put into struct
 	while (getline(firstRowStream, columnName, ','))
 	{
-		//compare column name to variable, if a column appears, put in relevant 
+		//compare column name to variable, if a column appears, put in relevant index
 		//name
 		if (columnName == "Member Name")
 		{
@@ -157,15 +240,20 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 	string temp; 
 	//Builder object
 	GrantRowBuilder Builder;
-	multimap<string, Grant_rowObject>* grantsDictionary = new multimap<string, Grant_rowObject>();
+	grantsDictionary = new multimap<string, Grant_rowObject>();
 	multimap<string, Grant_rowObject>::iterator check;
 	bool existAlready = false;
 
 	//get raw row and put into temp 
 	int count = 0;
-	while (getline(fileStream, temp))
+	//take only up to the Carriage return so that the line is read until you get a Carriage Return (CR)
+	//this is in case that the excel file has multiple lines in a cell
+	while (getline(fileStream, temp, '\r'))
 	{
+		//remove any new lines in temp, to make one line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		existAlready = false;
+
 		//cout << temp << endl; 
 		//make new object and insert into map
 		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
@@ -186,10 +274,8 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 				count++;
 				
 			}
-
 			check++;
 		}
-
 		//if there is no duplicate, add it in to the map
 		if (existAlready == false)
 		{
@@ -225,7 +311,11 @@ multimap<string, Grant_rowObject>* BuildGrants(string input)
 
 	}
 
-	return grantsDictionary;
+	if (grantsDictionary != NULL)
+	{
+		cout << "Grants Dictionary made" << endl;
+	}
+
 }
 
 //build Teacher
@@ -236,6 +326,15 @@ void BuildTeacher(string input)
 	fileName = input;
 	//start stream of object
     ifstream fileStream(fileName.c_str());
+	//check if filestream opening worked
+	if (fileStream.is_open())
+	{
+		cout << "good" << endl;
+	}
+	else
+	{
+		cout << "bad" << endl;
+	}
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 1;
@@ -316,22 +415,44 @@ void BuildTeacher(string input)
 
 	string temp;
 
-	multimap<string, Grant_rowObject>* Dictionary = new multimap<string, Grant_rowObject>();
+	teachDictionary = new multimap<string, Teach_rowObject>();
 
 	//Builder object
-	GrantRowBuilder Builder;
+	TeachingRowBuilder Builder;
 	
 
 	//get raw row and put into temp 
-	while (getline(fileStream, temp))
+	// go until carriage return
+	while (getline(fileStream, temp, '\r'))
 	{
+		//erase the new lines in the line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
 		//remember to change holder to right object type
-		Grant_rowObject holder = Builder.buildRow(temp, colIndex);
-		Dictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
+		Teach_rowObject holder = Builder.buildRow(temp, colIndex);
+		teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
 	}
 
+	fileStream.close();
 
+	//after you make the map, find out the min start date and max end date
+	multimap<string, Teach_rowObject>::iterator it = teachDictionary->begin();
+	//intializing to high amount for start dates
+	firstDateGrants = 2100;
+	for (it = teachDictionary->begin(); it != teachDictionary->end(); ++it)
+	{
+		//checking if start date is lower and not counting zeroes
+		if (it->second.sDate <= firstDateGrants && it->second.sDate != 0)
+		{
+			firstDateGrants = it->second.sDate;
+		}
+		//checking if end date is higher and not counting to high amounts
+		if (it->second.eDate >= lastDateGrants && it->second.eDate < 2100)
+		{
+			lastDateGrants = it->second.eDate;
+		}
+
+	}
 
 }
 
@@ -381,12 +502,12 @@ void BuildPresentation(string input)
 			colIndex.title_loc = columnNumber;
 		}
 		//presentation type
-		else if (columnName == "Type") //there is also Short Title
+		else if (columnName == "Type") 
 		{
 			colIndex.type_loc = columnNumber;
 		}
 		//Presentation Date
-		else if (columnName == "Date") //there is also Short Title
+		else if (columnName == "Date") 
 		{
 			colIndex.date_loc = columnNumber;
 		}
@@ -404,15 +525,18 @@ void BuildPresentation(string input)
 	string temp;
 
 	//Builder object
-	//PresentationRowBuilder Builder;
-	//presentationsDictionary = new multimap<string, Pres_rowObject>();
+	PresentationRowBuilder Builder;
+	presentationsDictionary = new multimap<string, Pres_rowObject>();
 
 	//get raw row and put into temp 
-	while (getline(fileStream, temp))
+	// go until carriage return
+	while (getline(fileStream, temp, '\r'))
 	{
+		//erase the new lines in the line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
-		//Pres_rowObject holder = Builder.buildRow(temp, colIndex);
-		//presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
+		Pres_rowObject holder = Builder.buildRow(temp, colIndex);
+		presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
 	}
 
 }
@@ -497,44 +621,88 @@ void BuildPublications(string input)
 	string temp;
 
 	//Builder object
-	//PublicationRowBuilder Builder;
-	//publicationsDictionary = new multimap<string, Pub_rowObject>();
+	PublicationRowBuilder Builder;
+	publicationsDictionary = new multimap<string, Pub_rowObject>();
 	//get raw row and put into temp 
-	while (getline(fileStream, temp))
+	// go until carriage return
+	while (getline(fileStream, temp, '\r'))
 	{
+		//erase the new lines in the line
+		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
 		//remember to change holder to right object type
-		//Pub_rowObject holder = Builder.buildRow(temp, colIndex);
-		//publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
+		Pub_rowObject holder = Builder.buildRow(temp, colIndex);
+		publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
 	}
 
 }
 
 
-//getters for the Hash Tables
+//getters for the Dictionaries
+//has a checker that checks if the pointer is NULL, meaning the Dictionary was never made
+//if it is NULL then NULL is returned and it says that it wasn't made
 multimap<string, Grant_rowObject>* getGrants()
 {
-	return grantsDictionary;
+	if (grantsDictionary != NULL)
+	{
+		return grantsDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Grants" << endl;
+		return NULL;
+	}
+	
 }
 
-/*
+multimap<string, Teach_rowObject>* getTeachings()
+{
+	if (teachDictionary != NULL)
+	{
+		return teachDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Teachings" << endl;
+		return NULL;
+	}
+
+}
+
 multimap<string, Pres_rowObject>* getPresentations()
 {
-	return presentationsDictionary;
+	if (presentationsDictionary != NULL)
+	{
+		return presentationsDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Presentations" << endl;
+		return NULL;
+	}
+
 }
 
 multimap<string, Pub_rowObject>* getPublications()
 {
-	return publicationsDictionary;
+	if (publicationsDictionary != NULL)
+	{
+		return publicationsDictionary;
+	}
+	else
+	{
+		cout << "Can't Find Publications" << endl;
+		return NULL;
+	}
+
 }
-*/
 
 //getter for max start and end date
 pair<int,int> getDatesGrants()
 {
 	if (firstDateGrants == 0 && lastDateGrants == 0)
 	{
-		cout << endl << "No Grants made" << endl; 
+		cout << endl << "No Grants File given in" << endl; 
 	}
 	else
 	{

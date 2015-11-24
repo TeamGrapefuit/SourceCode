@@ -6,10 +6,11 @@
 //  Copyright (c) 2015 Jason Smash. All rights reserved.
 //
 
-#include <stdio.h>
 #include "Pub_rowObject.h"
 
-Pub_rowObject::Pub_rowObject(string memberName, string primaryDomain, string publicationStatus, string journalType, string journalRole, string journalAuthor, string journalName, string journalTitle, int statusDate){
+Pub_rowObject::Pub_rowObject(bool error, string memberName, string primaryDomain, string publicationStatus, string journalType, string journalRole, string journalAuthor, string journalName, string journalTitle, int statusDate){
+    
+    this->errorFlag = error;
     
     name = memberName;
     domain = primaryDomain;
@@ -22,4 +23,4 @@ Pub_rowObject::Pub_rowObject(string memberName, string primaryDomain, string pub
     
     statDate = statusDate;
     totalPub = 1;
-};
+}

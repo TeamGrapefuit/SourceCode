@@ -27,11 +27,21 @@ private slots:
 
     void on_lineEdit_textChanged(const QString &arg1);
 
+    void on_lineEdit_2_textChanged(const QString &arg1);
+
     void on_pushButton_2_clicked();
 
     void on_actionOpen_File_triggered();
 
     void csvBuild();
+
+    void showGrants();
+
+    void showTeach();
+
+    void showPres();
+
+    void showPub();
 
 private:
     Ui::MainWindow *ui;

@@ -7,47 +7,6 @@
 using namespace std;
 ListBuilder::ListBuilder(int startyear,int endyear,multimap<string,Grant_rowObject> *somedata){
     
-//    toplevel = new list<ListClass *>;
-//    
-//    ListClass * grants = new ListClass("Grants", 0, 0, true);
-//    ListClass * clinFund = new ListClass("Clinical Funding", 0, 0, true);
-//    
-//    ListClass * gPr = new ListClass("Peer Reviewed", 0, 0, false);
-//    ListClass * gIs = new ListClass("Industry Sponsored", 0, 0, false);
-//    ListClass * cPr = new ListClass("Peer Reviewed", 0, 0, false);
-//    ListClass * cIs = new ListClass("Industry Sponsored", 0, 0, false);
-//    
-//    grants->addChild(gPr);
-//    grants->addChild(gIs);
-//    clinFund->addChild(cPr);
-//    clinFund->addChild(cIs);
-//    
-//    multimap<string, Grant_rowObject> * elimDup = new multimap<string, Grant_rowObject>;
-//    multimap<string, Grant_rowObject>::iterator i = somedata->begin();
-//    
-//    while (i != somedata->end()){
-//        
-//        if (elimDup->find(i->first) != elimDup->end()){
-//            elimDup->emplace(i->first, i->second);
-//        } else {
-//            multimap<string, Grant_rowObject>::iterator temp = elimDup->find(i->first);
-//            Grant_rowObject row = temp->second;
-//            
-//            if (row.fundType == i->second.fundType && (row.peerReviewed == i->second.peerReviewed || row.indGrant == i->second.indGrant)){
-//                row.count += 1;
-//                row.totalAmount += i->second.totalAmount;
-//                elimDup->erase(temp);
-//                elimDup->emplace(row.name, row);
-//            }
-//        }
-//        ++ somedata;
-//    }
-//    
-//    multimap<string, Grant_rowObject>::iterator j = elimDup->begin();
-//    while (j != )
-    
-    
-    
 	year_s = startyear;
 	year_e = endyear;
 	data = somedata;
@@ -247,7 +206,7 @@ Member ListBuilder::tally(string name){
                 peerentry_g.param1 = g_peertotal;
                 peerentry_g.param2 = g_peeramount;
             }
-            if (((*iter).second.peerReviewed==true) && ((*iter).second.fundType=="Clinical Funding")) {
+            if (((*iter).second.peerReviewed==true) && ((*iter).second.fundType=="Clinical Trials")) {
                 //cout << "Clinical and Peer:" << (*iter).second.name << " " << (*iter).second.fundType << " " << (*iter).second.peerReviewed << " " << (*iter).second.indGrant << endl;
                 // update the peertotal
                 cf_peertotal++;

@@ -1,10 +1,17 @@
-#include <stdio.h>
 #include <string>
 
+
 using namespace std;
+#pragma once
 
 class Pub_rowObject{
+
 public:
+    
+    
+    //flag: true = error, false = no error
+    bool errorFlag;
+    
 //Column Types for Publication (duplicates not included)
     string name; //memberName
     string domain; //primary Domain
@@ -18,7 +25,7 @@ public:
     int statDate; //Status Date
     int totalPub; //Total number of publications
     
-Pub_rowObject(string memberName, string primaryDomain, string publicationStatus, string journalType, string journalRole, string journalAuthor, string journalName, string journalTitle, int statusDate);
+    Pub_rowObject(bool error, string memberName, string primaryDomain, string publicationStatus, string journalType, string journalRole, string journalAuthor, string journalName, string journalTitle, int statusDate);
 
 };
 

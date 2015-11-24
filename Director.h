@@ -5,12 +5,19 @@
 #include <sstream>
 #include <map> //include for multimap
 #include <list> //include for pair
+#include <algorithm> //include for erase
 #include "rowObject.h" //row objects
-#include "Grant_rowObject.h"
+#include "GrantRowBuilder.h" //row builders
+#include "TeachingRowBuilder.h"
+#include "PresentationRowBuilder.h"
+#include "PublicationRowBuilder.h"
 
 using namespace std;
-//Builders
-multimap<string, Grant_rowObject>* BuildGrants(std::string input);
+//Builder Functions
+
+int Build(string input);
+
+void BuildGrants(std::string input);
 
 void BuildTeacher(std::string input);
 
@@ -21,10 +28,10 @@ void BuildPublications(std::string input);
 //getters
 multimap<string, Grant_rowObject>* getGrants();
 
-//multimap<string, Pres_rowObject>* getPresentations(); 
+multimap<string, Teach_rowObject>* getTeachings();
 
-//multimap<string, Pub_rowObject>* getPublications();
+multimap<string, Pres_rowObject>* getPresentations();
 
-
+multimap<string, Pub_rowObject>* getPublications();
 
 pair<int,int> getDatesGrants();

@@ -1,13 +1,26 @@
 
+//
+//  Pres_rowObject.h
+//  Row Builder
+//
+//  Created by Jason Smash on 2015-10-17.
+//  Copyright (c) 2015 Jason Smash. All rights reserved.
+//
 #include <stdio.h>
 #include <string>
 
+#pragma once
 
 using namespace std;
+#pragma once
 
 class Pres_rowObject{
 public:
-//Member variables for presentation rowObjects
+    
+    //flag: true = error, false = no error
+    bool errorFlag;
+    
+    //Member variables for presentation rowObjects
 
     string name;//memberName
     string domain; //Primary Domain
@@ -17,6 +30,7 @@ public:
     
     int date; // Presentation Date
     int numPresent; //Number of presentations
- Pres_rowObject(string memberName, string primaryDomain, int presentationDate, string presentationType, string presentationRole, string presentationTitle);
+
+    Pres_rowObject(bool error, string memberName, string primaryDomain, int presentationDate, string presentationType, string presentationRole, string presentationTitle);
 
 };
