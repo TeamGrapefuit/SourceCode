@@ -7,26 +7,24 @@ using namespace std;
 
 Pub_ListBuilder::Pub_ListBuilder(int s_year,int e_year,multimap<string,Pub_rowObject>*somedata){
 	
+    // create list headers for each type of publication
+    
 	ListClass *publications = new ListClass("Publications", 0, 0, true);
-
 	ListClass *pub_abs = new ListClass("Published Abstracts", 0, 0, true);
 	ListClass *books = new ListClass("Books",0,0,true);
 	ListClass *books_edited = new ListClass("Books Edited",0,0,true);
 	ListClass *book_chap = new ListClass("Book Chapters",0,0,true);
 	ListClass *case_rep = new ListClass("Case Reports",0,0,true);
-
 	ListClass *clinical = new ListClass("Clinical Care guidelines",0,0,true);
 	ListClass *journal = new ListClass("Journal Articles",0,0,true);
 	ListClass *commentaries = new ListClass("Commentaries",0,0,true);
 	ListClass *conf_pro = new ListClass("Conference Proceedings",0,0,true);
 	ListClass *editorials = new ListClass("Editorials",0,0,true);
-
 	ListClass *invited_art = new ListClass("Invited Articles",0,0,true);
 	ListClass *let_ed = new ListClass("Letters to Editor",0,0,true);
 	ListClass *mag_ent = new ListClass("Magazine Entries",0,0,true);		
 	ListClass *manuals = new ListClass("Manuals",0,0,true);
 	ListClass *mono = new ListClass("Monographs",0,0,true);
-
 	ListClass *multi = new ListClass("Multimedia",0,0,true);
 	ListClass *newsletter = new ListClass("Mewsletter Articles",0,0,true);
 	ListClass *news_art = new ListClass("Newspaper Articles",0,0,true);
@@ -34,55 +32,55 @@ Pub_ListBuilder::Pub_ListBuilder(int s_year,int e_year,multimap<string,Pub_rowOb
 	ListClass *web = new ListClass("Websites/Videos",0,0,true);
 	ListClass *work_papers = new ListClass("Working Papers",0,0,true);
 
-	Pubs = *publications;
+	this->Pubs = *publications;
 
- 	Book_Chapters = *book_chap;
-	Books = *books;
-	Book_Edited = *books_edited;
-	Case_Reports = *case_rep;
-	Clinical_Care_Guidelines = *clinical;
-	Commentaries = *commentaries;
-	Conference_Proceedings = *conf_pro;
-	Editorials = *editorials;
-	Invited_Articles = *invited_art;
-	Journal_Article = *journal;
-	Letters_to_Editor = *let_ed;
-	Magazine_Entries = *mag_ent;
-	Manuals = *manuals;
-	Monographs= *mono;
-	Multimedia = *multi;
-	Newsletter_Articles = *newsletter;
-	Newspaper_Articles = *news_art;
-	Published_Abstract = *pub_abs;
-	Supervised_Student_Publications = *student;
-	Websites_Videos = *web;
-	Working_Papers = *work_papers;
+ 	this->Book_Chapters = *book_chap;
+	this->Books = *books;
+	this->Book_Edited = *books_edited;
+	this->Case_Reports = *case_rep;
+	this->Clinical_Care_Guidelines = *clinical;
+	this->Commentaries = *commentaries;
+	this->Conference_Proceedings = *conf_pro;
+	this->Editorials = *editorials;
+	this->Invited_Articles = *invited_art;
+	this->Journal_Article = *journal;
+	this->Letters_to_Editor = *let_ed;
+	this->Magazine_Entries = *mag_ent;
+	this->Manuals = *manuals;
+	this->Monographs= *mono;
+	this->Multimedia = *multi;
+	this->Newsletter_Articles = *newsletter;
+	this->Newspaper_Articles = *news_art;
+	this->Published_Abstract = *pub_abs;
+	this->Supervised_Student_Publications = *student;
+	this->Websites_Videos = *web;
+	this->Working_Papers = *work_papers;
 
-	year_s = s_year;
-	year_e = e_year;
-	data = somedata;
+	this->year_s = s_year;
+	this->year_e = e_year;
+	this->data = somedata;
 
-	Pubs.addChild(&Book_Chapters);
-	Pubs.addChild(&Books);
-	Pubs.addChild(&Book_Edited);
-	Pubs.addChild(&Case_Reports);
-	Pubs.addChild(&Clinical_Care_Guidelines);
-	Pubs.addChild(&Commentaries);
-	Pubs.addChild(&Conference_Proceedings);
-	Pubs.addChild(&Editorials);
-	Pubs.addChild(&Invited_Articles);
-	Pubs.addChild(&Journal_Article);
-	Pubs.addChild(&Letters_to_Editor);
-	Pubs.addChild(&Magazine_Entries);
-	Pubs.addChild(&Manuals);
-	Pubs.addChild(&Monographs);
-	Pubs.addChild(&Multimedia);
-	Pubs.addChild(&Newsletter_Articles);
-	Pubs.addChild(&Newspaper_Articles);
-	Pubs.addChild(&Published_Abstract);
-	Pubs.addChild(&Supervised_Student_Publications);
-	Pubs.addChild(&Websites_Videos);
-	Pubs.addChild(&Working_Papers);
+	this->Pubs.addChild(&Book_Chapters);
+	this->Pubs.addChild(&Books);
+	this->Pubs.addChild(&Book_Edited);
+	this->Pubs.addChild(&Case_Reports);
+	this->Pubs.addChild(&Clinical_Care_Guidelines);
+	this->Pubs.addChild(&Commentaries);
+	this->Pubs.addChild(&Conference_Proceedings);
+	this->Pubs.addChild(&Editorials);
+	this->Pubs.addChild(&Invited_Articles);
+	this->Pubs.addChild(&Journal_Article);
+	this->Pubs.addChild(&Letters_to_Editor);
+	this->Pubs.addChild(&Magazine_Entries);
+	this->Pubs.addChild(&Manuals);
+    this->Pubs.addChild(&Monographs);
+	this->Pubs.addChild(&Multimedia);
+	this->Pubs.addChild(&Newsletter_Articles);
+	this->Pubs.addChild(&Newspaper_Articles);
+	this->Pubs.addChild(&Published_Abstract);
+	this->Pubs.addChild(&Supervised_Student_Publications);
+	this->Pubs.addChild(&Websites_Videos);
+	this->Pubs.addChild(&Working_Papers);
 
 
 }
@@ -93,36 +91,58 @@ pubmember Pub_ListBuilder::tally(string name){
     std::multimap<string,Pub_rowObject>::iterator iter;
     iter = data->begin();
 
-    //int pt = 0;
     pubmember current;
+    // initialize struct
     current.name = name;
+    current.book_chapters = 0;
+    current.book_edit = 0;
+    current.books = 0;
+    current.case_rep = 0;
+    current.clinical = 0;
+    current.comments = 0;
+    current.confer = 0;
+    current.editorials = 0;
+    current.inv_art = 0;
+    current.journals = 0;
+    current.letter_to_ed = 0;
+    current.mag = 0;
+    current.man = 0;
+    current.mono = 0;
+    current.newsletter = 0;
+    current.newspaper = 0;
+    current.pub_ab= 0;
+    current.student_pub = 0;
+    current.websites = 0;
+    current.working_papers = 0;
+    current.multi = 0;
+    
     for (iter = data->equal_range(name).first; iter!=data->equal_range(name).second;iter++){
         cout << (*iter).second.statDate << endl;
         if ((this->year_s<=(*iter).second.statDate)&&(this->year_e>=(*iter).second.statDate)){
 		 if ((*iter).second.type=="Book Chapters"){
 			current.book_chapters++;
-		}
+		 }
 		 if ((*iter).second.type=="Books"){
 			current.books++;                                        
-                }
+         }
 		 if ((*iter).second.type=="Book Edited"){
 			current.book_edit++;                                        
-                }
+         }
 		 if ((*iter).second.type=="Case Reports"){
 			current.case_rep++;                                        
-                }
+         }
 		 if ((*iter).second.type=="Clinical Care Guidelines"){
 			current.clinical++;
-		}                                        
-                 if ((*iter).second.type=="Commentaries"){                                        
-                	current.comments++;
-		}
+         }
+         if ((*iter).second.type=="Commentaries"){
+            current.comments++;
+         }
 		 if ((*iter).second.type=="Conference Proceedings"){
-			current.confer++;                                        
-                }
+            current.confer++;
+         }
 		 if ((*iter).second.type=="Editorials"){                                        
-                	current.editorials++;
-		}
+            current.editorials++;
+         }
 		 if ((*iter).second.type=="Invited Articles"){
 			current.inv_art++;                                        
                 }	
@@ -154,13 +174,13 @@ pubmember Pub_ListBuilder::tally(string name){
 			current.pub_ab++;                                        
                 }
 		 if ((*iter).second.type=="Supervised Student Publications"){
-                        current.student_pub++;
+            current.student_pub++;
                 }
 		 if ((*iter).second.type=="Websites / Videos"){
-                        current.websites++;
+                current.websites++;
                 }
 		 if ((*iter).second.type=="Working Papers"){ 
-                        current.working_papers++; 
+                current.working_papers++;
                 }
 	} 
     }
@@ -176,30 +196,21 @@ void Pub_ListBuilder::scanMap(){
 
      std::multimap<string, Pub_rowObject>::iterator cur = data->begin();
      while (cur != data->end()){
-	pubmember c_mem;
-	if ( cur == data->begin()) {
-            c_mem = this->tally(cur->second.name);
-            this->addMember(c_mem);
-            visited.insert(pair<string, bool>(cur->second.name, true));
-        }
-	else
-        {
-            map<string, bool>::iterator j = visited.find(cur->second.name);
-
-            if (j == visited.end() || j->first != cur->second.name){
-                c_mem = this->tally(cur->second.name);
-                this->addMember(c_mem);
-                visited.insert(pair<string, bool>(cur->second.name, true));
-            }
-        }
-	++ cur;
+         map<string, bool>::iterator j = visited.find(cur->second.name);
+         if (j == visited.end()){
+             pubmember mem;
+             mem = this->tally(cur->second.name);
+             this->addMember(mem);
+             visited.insert(pair<string, bool>(cur->second.name, true));
+         }
+         ++ cur;
      }
 }
 
 void Pub_ListBuilder::addMember(pubmember amember){
-	
+    printf("amember name:%s\n",amember.name.c_str());
 	if (amember.books > 0){
-	    ListClass *books = new ListClass(amember.name,0,amember.books,false);
+	    ListClass *books = new ListClass(amember.name.c_str(),0,amember.books,false);
 	    this->Books.addChild(books);
 	    this->Books.param2 = this->Books.param2 + amember.books;
 	    this->Pubs.param2 = this->Pubs.param2 + amember.books;    
@@ -327,13 +338,17 @@ void Pub_ListBuilder::addMember(pubmember amember){
 
 }
 void Pub_ListBuilder::printList(ListClass alist){
-    list<ListClass *> * temp = alist.getChildren();
-    list<ListClass *>::iterator i = temp->begin();
-    while (i != temp->end()){
-        printf("Name: %s\n", (*i)->getName().c_str());
-        printf("Param1: %d\n", (*i)->getParam1());
-        printf("Param2: %0.2d\n", (*i)->getParam2());
-        ++ i;
+    
+    printf("%s      ", alist.getName().c_str()); // print the list
+    printf("%d\n", alist.getParam2());
+    
+    list<ListClass *> * temp = alist.getChildren(); // print its children
+    if (temp!=NULL){
+        list<ListClass *>::iterator i = temp->begin();
+        while (i != temp->end()){
+           printList(*(*i));
+           i++;
+        }
     }
 }
 

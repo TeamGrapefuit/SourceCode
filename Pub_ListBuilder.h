@@ -39,9 +39,7 @@ class Pub_ListBuilder {
 public:
     Pub_ListBuilder(int startyear,int endyear,multimap<string,Pub_rowObject> *data);
 	void scanMap();
-	pubmember tally(string);
-	void addMember(pubmember);
-	void printList(ListClass);
+    void printList(ListClass);
 	
 	ListClass Pubs;
 
@@ -71,5 +69,8 @@ private:
         int year_s;
         int year_e;
         multimap<string,Pub_rowObject>* data;
+        pubmember tally(string);
+        void addMember(pubmember);
+
 };
 	
