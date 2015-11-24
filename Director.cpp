@@ -487,7 +487,15 @@ void BuildTeacher(string input)
 		//make new object and insert into map
 		//remember to change holder to right object type
 		Teach_rowObject holder = Builder.buildRow(temp, colIndex);
-		teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
+		//Error Check
+		if (holder.errorFlag == false)
+		{
+			teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
+		}
+		else
+		{
+
+		}
 	}
 
 	fileStream.close();
@@ -595,7 +603,14 @@ void BuildPresentation(string input)
 		temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 		//make new object and insert into map
 		Pres_rowObject holder = Builder.buildRow(temp, colIndex);
-		presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
+		if (holder.errorFlag == false)
+		{
+			presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
+		}
+		else
+		{
+
+		}
 	}
 
 }
@@ -693,7 +708,14 @@ void BuildPublications(string input)
 		//make new object and insert into map
 		//remember to change holder to right object type
 		Pub_rowObject holder = Builder.buildRow(temp, colIndex);
-		publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
+		if (holder.errorFlag == false)
+		{
+			publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
+		}
+		else
+		{
+
+		}
 	}
 
 }
