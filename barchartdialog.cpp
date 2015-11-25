@@ -145,24 +145,24 @@ void barchartdialog::scrollTo()
 {
     printf("Scroll Test");
     int range=xCordinate-xOrigin;
-    if(range>800){
-        horizontalBar->setPageStep(1600-xCordinate);
-    }
-    else if(range>1590){
-        horizontalBar->setPageStep(10);
-    }
+        if(range>800){
+            horizontalBar->setPageStep(1600-xCordinate);
+        }
+        else if(range>1590){
+            horizontalBar->setPageStep(10);
+        }
 
-    else{
-      horizontalBar->setPageStep(800);
-    }
+        else{
+          horizontalBar->setPageStep(800);
+        }
 
-    horizontalBar->setMinimum(0);
-    horizontalBar->setMaximum(801-horizontalBar->pageStep());
+        horizontalBar->setMinimum(0);
+        horizontalBar->setMaximum(801-horizontalBar->pageStep());
 
-    xOrigin=xOrigin-horizontalBar->value()+temp;
-    temp=horizontalBar->value();
+        xOrigin=xOrigin-horizontalBar->value()+temp;
+        temp=horizontalBar->value();
 
-    update();
+        repaint();
 }
 /*Draw the bar graph*/
 void barchartdialog::paintEvent(QPaintEvent *parent)

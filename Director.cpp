@@ -488,14 +488,14 @@ void BuildTeacher(string input)
 		//remember to change holder to right object type
 		Teach_rowObject holder = Builder.buildRow(temp, colIndex);
 		//Error Check
-		if (holder.errorFlag == false)
-		{
+//		if (holder.errorFlag == false)
+//		{
 			teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
-		}
-		else
-		{
+//		}
+//		else
+//		{
 
-		}
+//		}
 	}
 
 	fileStream.close();

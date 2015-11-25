@@ -28,7 +28,7 @@
 using namespace std;
 
 //The int value from date scroll box 1 and 2
-int date1 = 2010, date2 = 2015, databaseTest = 0;
+int date1 = 2013, date2 = 2015, databaseTest = 0;
 GraphClass * test;
 //The string value from the name box
 string nameFirst = "temp", nameLast = "temp", nameFull = "temp";
@@ -265,6 +265,12 @@ void MainWindow::showTeach()
 {
     databaseTeach = getTeachings();
     multimap<string, Teach_rowObject>::iterator i = databaseTeach->begin();
+
+    while (i!=databaseTeach->end())
+    {
+        cout << i->second.name << endl;
+        ++i;
+    }
 
     QWidget *widget1 = new QWidget();
 
