@@ -1,9 +1,13 @@
 //Director
 //To-do: 
-//	Error Stack
-//	Value Summer: for those of same author, same start year & same type (still need to do for teach,pres, and pub)
-//	Date Range: Keep track of start and end date and make getters to it (still need to do for teach,pres, and pub)
-//  Figure out type of file
+//	Error Queue: done
+//	Value Summer: for duplicates (still need to do for teach,pres, and pub)
+//	Date Range: Keep track of start and end date and make getters to it.. done
+//  Figure out type of file: done
+//  Make Comments for all functions
+//  Make Destructor for all multimaps
+//  Make Safety nets for methods
+//  start doing inspection for the other files
 #include "Director.h"
 
 using namespace std;
@@ -28,45 +32,45 @@ multimap<string, Pub_rowObject>* publicationsDictionary;
 
 //ERROR section
 
-//Error Arrays, place where we keep the arrays and counter to keep track of current place in 
-pair<int,Grant_rowObject> grantsErrors[200];
+//Error Arrays, place where we keep the arrays and counter to keep track of current place in file
+queue<pair<int, Grant_rowObject> > grantsErrorsQueue;
 int grantsErrorCounter = 0;
-pair<int,Teach_rowObject> teachErrors[200];
+queue<pair<int, Teach_rowObject>> teachErrorsQueue;
 int teachErrorCounter = 0;
-pair<int, Pres_rowObject> presErrors[200];
+queue<pair<int, Pres_rowObject>> presErrorsQueue;
 int presErrorCounter = 0;
-pair<int, Pub_rowObject> pubErrors[200];
+queue<pair<int, Pub_rowObject>> pubErrorsQueue;
 int pubErrorCounter = 0;
 
 //error method adders
 void addGrantsError(int row, Grant_rowObject errorRow)
 {
-	if(grantsErrorCounter >= 199)
+	if(grantsErrorCounter >= 50)
 	{
 		cout << "Too many errors" << endl;
 	}
 	else
 	{	
-		grantsErrors[grantsErrorCounter] = pair<int, Grant_rowObject>(row,errorRow);
+		grantsErrorsQueue.push (pair<int, Grant_rowObject>(row,errorRow));
 		grantsErrorCounter++;
 	}
 }
 
 void addTeachError(int row, Teach_rowObject errorRow)
 {
-	teachErrors[teachErrorCounter] = pair<int, Teach_rowObject>(row, errorRow);
+	teachErrorsQueue.push (pair<int, Teach_rowObject>(row, errorRow));
 	teachErrorCounter++;
 }
 
 void addPresError(int row, Pres_rowObject errorRow)
 {
-	presErrors[presErrorCounter] = pair<int, Pres_rowObject>(row, errorRow);
+	presErrorsQueue.push(pair<int, Pres_rowObject>(row, errorRow));
 	presErrorCounter++;
 }
 
 void addPubError(int row, Pub_rowObject errorRow)
 {
-	pubErrors[pubErrorCounter] = pair<int, Pub_rowObject>(row, errorRow);
+	pubErrorsQueue.push(pair<int, Pub_rowObject>(row, errorRow));
 	pubErrorCounter++;
 }
 
@@ -291,7 +295,7 @@ void BuildGrants(string input)
 	bool existAlready = false;
 
 	//get raw row and put into temp 
-	int count = 0;
+	int count = 2;
 	//take only up to the Carriage return so that the line is read until you get a Carriage Return (CR)
 	//this is in case that the excel file has multiple lines in a cell
 	while (getline(fileStream, temp, '\r'))
@@ -333,13 +337,14 @@ void BuildGrants(string input)
 				existAlready = false;
 			}
 		}
-		else
+		else if (holder.errorFlag == true)
 		{
-			//addGrantsError(count, holder);
+			addGrantsError(count, holder);
+			count++;
 		}
 
 		//grantsDictionary->insert(pair<string, Grant_rowObject>(holder.name, holder));
-		count++;
+		//count++;
 
 	}
 
@@ -476,7 +481,7 @@ void BuildTeacher(string input)
 
 	//Builder object
 	TeachingRowBuilder Builder;
-	
+	int count = 0;
 
 	//get raw row and put into temp 
 	// go until carriage return
@@ -488,14 +493,16 @@ void BuildTeacher(string input)
 		//remember to change holder to right object type
 		Teach_rowObject holder = Builder.buildRow(temp, colIndex);
 		//Error Check
-//		if (holder.errorFlag == false)
-//		{
+		//if (holder.errorFlag == false)
+		//{
 			teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
-//		}
-//		else
-//		{
-
-//		}
+			count++;
+		//}
+		//else if(holder.errorFlag == true)
+		//{
+			//addTeachError(count, holder);
+			//count++;
+		//}
 	}
 
 	fileStream.close();
@@ -594,7 +601,7 @@ void BuildPresentation(string input)
 	//Builder object
 	PresentationRowBuilder Builder;
 	presentationsDictionary = new multimap<string, Pres_rowObject>();
-
+	int count = 0;
 	//get raw row and put into temp 
 	// go until carriage return
 	while (getline(fileStream, temp, '\r'))
@@ -606,10 +613,12 @@ void BuildPresentation(string input)
 		if (holder.errorFlag == false)
 		{
 			presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
+			count++;
 		}
-		else
+		else if (holder.errorFlag == true)
 		{
-
+			addPresError(count, holder);
+			count++;
 		}
 	}
 
@@ -667,9 +676,9 @@ void BuildPublications(string input)
 		//Type
 		else if (columnName == "Type")
 		{
-            colIndex.type_loc = columnNumber;
+			colIndex.type_loc = columnNumber;
 		}
-        //Title
+		//Title
 		else if (columnName == "Title")
 		{
 			colIndex.title_loc = columnNumber;
@@ -695,19 +704,15 @@ void BuildPublications(string input)
 			colIndex.statDate_loc = columnNumber;
 		}
 
-
-
 		//take note of column number, starts at 1
 		columnNumber++;
 	}
-
-
 
 	//SEND RAW ROW AND STRUCT collndex TO rowObject TO MAKE ROW THAT WILL BE PUT IN DICTIONARY
 	//use member name as dictionary
 
 	string temp;
-
+	int count = 0;
 	//Builder object
 	PublicationRowBuilder Builder;
 	publicationsDictionary = new multimap<string, Pub_rowObject>();
@@ -723,10 +728,12 @@ void BuildPublications(string input)
 		if (holder.errorFlag == false)
 		{
 			publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
+			count++;
 		}
-		else
+		else if (holder.errorFlag == true)
 		{
-
+			addPubError(count, holder);
+			count++;
 		}
 	}
 
@@ -817,7 +824,22 @@ pair<int, int> getDatesTeach()
 	}
 }
 
-pair<int,Grant_rowObject>* getGrantsErrors()
+queue <pair<int,Grant_rowObject>> getGrantsErrors()
 {
-	return grantsErrors;
+	return grantsErrorsQueue;
+}
+
+queue <pair<int, Teach_rowObject>> getTeachErrors()
+{
+	return teachErrorsQueue;
+}
+
+queue <pair<int, Pres_rowObject>> getPresErrors()
+{
+	return presErrorsQueue;
+}
+
+queue <pair<int, Pub_rowObject>> getPubErrors()
+{
+	return pubErrorsQueue;
 }
