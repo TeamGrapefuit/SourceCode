@@ -55,17 +55,17 @@ tmember Teach_ListBuilder::tally(string aname,int year){
         
         if (year==(*iter).second.sDate){
             
-            if (((strcmp((*iter).second.program.c_str(),"Postgraduate Medical Education"))==0)&&(year==(*iter).second.sDate)){
+            if ((iter->second.program == "Postgraduate Medical Education")&&(year==(*iter).second.sDate)){
                 crow.PME_hrs = crow.PME_hrs+(*iter).second.tHours;
                 crow.PME_sd = crow.PME_sd+(*iter).second.totalStudents;
                 
             }
-            else if (((*iter).second.program=="Continuing Medical Education")&&(year==(*iter).second.sDate)){
+            else if ((iter->second.program =="Continuing Medical Education")&&(year==(*iter).second.sDate)){
                 crow.CME_hrs = crow.CME_hrs+(*iter).second.tHours;
                 crow.CME_sd = crow.CME_sd+(*iter).second.totalStudents;
                 
             }
-            else if (((*iter).second.program=="Undergraduate Medical Education")&&(year==(*iter).second.sDate)){
+            else if ((iter->second.program =="Undergraduate Medical Education")&&(year==(*iter).second.sDate)){
                 crow.UME_hrs = crow.UME_hrs+(*iter).second.tHours;
                 crow.UME_sd = crow.UME_sd+(*iter).second.totalStudents;
                 
@@ -95,7 +95,7 @@ void Teach_ListBuilder::addMember(tmember tmember){
                        int found=0;
                        while (j != temp_j->end()){
                            string mn = (*j)->getName();
-                           if (strcmp(tmember.name.c_str(),mn.c_str())==0){         // if we find the name
+                           if (tmember.name == mn){         // if we find the name
                                found = 1;
                                 (*j)->param1 = (*j)->getParam1() + tmember.PME_hrs; // update year hrs
                                 (*j)->param2 = (*j)->getParam2() + tmember.PME_sd;  // update year students
@@ -135,7 +135,7 @@ void Teach_ListBuilder::addMember(tmember tmember){
                         int found=0;
                         while (j != temp_j->end()){
                             string mn = (*j)->getName();
-                            if (strcmp(tmember.name.c_str(),mn.c_str())==0){ // if we find the name
+                            if (tmember.name == mn){ // if we find the name
                                 found = 1;
                                 (*j)->param1 = (*j)->getParam1() + tmember.CME_hrs; // update year hrs
                                 (*j)->param2 = (*j)->getParam2() + tmember.CME_sd; // update year students
@@ -175,7 +175,7 @@ void Teach_ListBuilder::addMember(tmember tmember){
                         int found=0;
                         while (j != temp_j->end()){
                             string mn = (*j)->getName();
-                            if (strcmp(tmember.name.c_str(),mn.c_str())==0){ // if we find the name
+                            if (tmember.name == mn){ // if we find the name
                                 found = 1;
                                 (*j)->param1 = (*j)->getParam1() + tmember.UME_hrs; // update year hrs
                                 (*j)->param2 = (*j)->getParam2() + tmember.UME_sd; // update year students
@@ -215,7 +215,7 @@ void Teach_ListBuilder::addMember(tmember tmember){
                         int found=0;
                         while (j != temp_j->end()){
                             string mn = (*j)->getName();
-                            if (strcmp(tmember.name.c_str(),mn.c_str())==0){ // if we find the name
+                            if (tmember.name == mn){ // if we find the name
                                 found = 1;
                                 (*j)->param1 = (*j)->getParam1() + tmember.OTH_hrs; // update year hrs
                                 (*j)->param2 = (*j)->getParam2() + tmember.OTH_sd; // update year students

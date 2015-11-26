@@ -51,31 +51,31 @@ presmember Pres_ListBuilder::tally(string aname){
         
         if ((this->year_s<=(*iter).second.date)&&(this->year_e>=(*iter).second.date)){
             
-            if (strcmp((*iter).second.type.c_str(),"Abstract Presented")==0){
+            if (iter->second.type == "Abstract Presented"){
                 prow.Abstract_Presented++;
             }
-            else if (strcmp((*iter).second.type.c_str(),"Conference Presentation")==0){
+            else if (iter->second.type == "Conference Presentation"){
                 prow.Conference_Presentation++;
                 
             }
-            else if (strcmp((*iter).second.type.c_str(),"Invited Lectures")==0){
+            else if (iter->second.type =="Invited Lectures"){
                 prow.Invited_Lectures++;
             }
             
-            else if (strcmp((*iter).second.type.c_str(),"Poster Presentation")==0){
+            else if (iter->second.type =="Poster Presentation"){
                 prow.Poster_Presentation++;
             }
-            else if (strcmp((*iter).second.type.c_str(),"Student Presentation")==0){
+            else if (iter->second.type =="Student Presentation"){
                 prow.Student_Presentation++;
             }
-            else if (strcmp((*iter).second.type.c_str(),"Symposia")==0){
+            else if (iter->second.type =="Symposia"){
                 prow.Symposia++;
             }
             
-            else if (strcmp((*iter).second.type.c_str(),"Visiting Professorship")==0){
+            else if (iter->second.type =="Visiting Professorship"){
                 prow.visiting_prof++;
             }
-            else if (strcmp((*iter).second.type.c_str(),"Workshop")==0){
+            else if (iter->second.type =="Workshop"){
                 prow.Workshop++;
             }
             else {
@@ -147,7 +147,7 @@ void Pres_ListBuilder::scanMap(){
             cout << cur->second.name << endl;
             prow = this->tally(cur->second.name);    // add member to list
             this->addMember(prow);
-            visited.emplace(prow.name,true);
+            visited.insert(pair<string, bool> (prow.name,true));
         }
     
     cur++;
