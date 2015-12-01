@@ -8,6 +8,10 @@
 
 #include "ErrorChecker.h"
 
+
+//cateches empty string feilds
+//input: string to be tested, error flag
+//outout: the final string for the rowObject
 string ErrorChecker::blankCatch(string attribute, bool &flag){
     
     if (attribute.empty()) {
@@ -20,6 +24,10 @@ string ErrorChecker::blankCatch(string attribute, bool &flag){
     }
 }
 
+
+//cateches empty int feilds
+//input: int to be tested, error flag
+//outout: the final int (either the original or -666) for the rowObject
 int ErrorChecker::zeroCatch(int attribute, bool &flag){
     
     if (attribute==0) {
@@ -31,6 +39,9 @@ int ErrorChecker::zeroCatch(int attribute, bool &flag){
     }
 }
 
+//cateches non-conforming
+//input: string to be tested, error flag, # of acceptable optins, list of acceptable options
+//outout: the final string for the rowObject
 string ErrorChecker::stringAssert(string attribute, bool &flag, int args, string* options){
     //NOTE: args is the Size of the string, not the index of the last entry - don't screw this up
     bool matchFoundFlag (0);

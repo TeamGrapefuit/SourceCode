@@ -8,6 +8,8 @@
 
 #include "TeachingRowBuilder.h"
 
+//fetch each attribute, error checking, build rowobject
+//input: string of row from csv, colindex for data type
 Teach_rowObject TeachingRowBuilder::buildRow(string data, ColIndex index){
    
     //*** instantiate classes that will help out in this function

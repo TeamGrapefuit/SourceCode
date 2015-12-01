@@ -3,17 +3,20 @@
 //  
 //
 //  Created by Jason Smash on 2015-10-22.
-//
-//
+//  Copyright (c) 2015 Team Grapefruit. All rights reserved.
+//  This Class contains the implementation of the PRESENTATION row object (an easy-acess container structure for holing the data from an individual row on the CSV.
+
 
 #include <stdio.h>
 #include "Pres_rowObject.h"
 
 
-
+//constructor
+//input: all parameters
+//output: Nope
 Pres_rowObject::Pres_rowObject(bool error, string memberName, string primaryDomain, int presentationDate, string presentationType, string presentationRole, string presentationTitle){
   
-    this->errorFlag = error;
+    errorFlag = error;
     
     name = memberName;
     domain = primaryDomain;
@@ -26,9 +29,12 @@ Pres_rowObject::Pres_rowObject(bool error, string memberName, string primaryDoma
     
 };
 
+//default constructor
+//input: nope
+//output: nope
 Pres_rowObject::Pres_rowObject(){
  
-    this->errorFlag = 0;
+    errorFlag = 0;
     
     name = "";
     domain = "";

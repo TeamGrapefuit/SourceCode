@@ -8,13 +8,16 @@
 
 #include "PresentationRowBuilder.h"
 
+//build presentation row
+//input: string of row from csv, column index map
+//ooutput: fully build row object
 Pres_rowObject PresentationRowBuilder::buildRow(string data, ColIndex index){
     
     // *** Instantiate classes that will help out in this function
     AttributeRetriever fetch(data);
     bool hasError = 0; //This will be set to 1 if an error is found
     ErrorChecker filter;
-    bool enableErrorChecking (1);
+    bool enableErrorChecking (1); //for debugging
     
     //*** retrieve each attribute - temporarily store them
     string name = fetch.getAttribute(index.name_loc);

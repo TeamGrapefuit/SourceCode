@@ -1,6 +1,13 @@
+//
+//  Created by Jason Smash on 2015-10-22.
+//  Copyright (c) 2015 Team Grapefruit. All rights reserved.
+//
 
 #include "Grant_rowObject.h"
 
+//constructor
+//input: all parameters
+//output: nope
 Grant_rowObject::Grant_rowObject(bool error, string memberName, string primaryDomain, int startDate, int endDate, string fundType, string stat, bool peerReviewed, bool indGrant, string researchRole, string researchTitle, string principalInvestigator, string coInvestigator, long long totalAmount){
 
     
@@ -26,6 +33,9 @@ Grant_rowObject::Grant_rowObject(bool error, string memberName, string primaryDo
 
 }
 
+//default constructor
+//input:nope
+//output:nope
 Grant_rowObject::Grant_rowObject(){
     
     this->errorFlag = 0;

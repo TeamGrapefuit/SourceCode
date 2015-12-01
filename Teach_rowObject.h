@@ -4,7 +4,8 @@
 //
 //  Created by Jason Smash on 2015-10-17.
 //  Copyright (c) 2015 Jason Smash. All rights reserved.
-//
+////  This Class contains the implementation of the TEACHING row object (an easy-acess container structure for holing the data from an individual row on the CSV.
+//  This data is held in public member variables for ease of programming (fewer getters/setters required)
 
 #include <stdio.h>
 #include <string>
@@ -12,7 +13,6 @@
 #pragma once
 
 using namespace std;
-#pragma once
 
 class Teach_rowObject{
 public:
@@ -21,7 +21,7 @@ public:
     //flag: true = error, false = no error
     bool errorFlag;
     
-//Column Types for Teaching
+    //Column Types for Teaching
     
     string name; //Member Name
     string domain; // Primary domain
@@ -37,8 +37,11 @@ public:
     float tHours;//total hours
     int totalStudents;  //Total number of students
 
+    //constructor - creates a fullly operational rowObject
     Teach_rowObject(bool error, string name, string domain,string program,string courseType,string  geoScope, int nTeach, int sDate, int eDate, float hpTeach, float tHours, int tStudents);
-    
+
+    //default constructor - required by director
     Teach_rowObject();
+
 };
 

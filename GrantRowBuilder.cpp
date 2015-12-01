@@ -8,7 +8,9 @@
 
 #include "GrantRowBuilder.h"
 
-
+//fetch each object, error checking, build row
+//input: raw string of row from CSV, column index for data type
+//output: complete row object
 Grant_rowObject GrantRowBuilder::buildRow(string data, ColIndex index){
     
     //*** instantiate classes that will help out in this function

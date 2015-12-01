@@ -1,7 +1,14 @@
+//
+//  Created by Jason Smash on 2015-10-22.
+//  Copyright (c) 2015 Team Grapefruit. All rights reserved.
+//
 
 #include <stdio.h>
 #include "Teach_rowObject.h"
 
+//constructor
+//input: all parameters
+//output: nope
 Teach_rowObject::Teach_rowObject(bool error, string memberName, string primaryDomain,string teachProgram,string teachCourseType,string  teachGeoScope, int teach_nTeach, int teach_sDate, int teach_eDate, float teach_hpTeach, float teach_tHours, int tStudents){
     
     this->errorFlag = error;
@@ -20,9 +27,12 @@ Teach_rowObject::Teach_rowObject(bool error, string memberName, string primaryDo
     tHours = teach_tHours;
 
     totalStudents = tStudents;
-    
+
 };
 
+//default constructor
+//input:nope
+//output:nope
 Teach_rowObject::Teach_rowObject(){
     
     this->errorFlag = 0;
