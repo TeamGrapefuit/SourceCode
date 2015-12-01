@@ -6,6 +6,7 @@
 #include <map> //include for multimap
 #include <list> //include for pair
 #include <algorithm> //include for erase
+#include <queue> //include for stack
 #include "ColIndex.h" //include for the column index
 #include "rowObject.h" //row objects
 #include "GrantRowBuilder.h" //row builders
@@ -35,6 +36,12 @@ multimap<string, Pres_rowObject>* getPresentations();
 
 multimap<string, Pub_rowObject>* getPublications();
 
-pair<int, Grant_rowObject>* getGrantsErrors();
+queue<pair<int,Grant_rowObject>> getGrantsErrors();
+
+queue<pair<int, Teach_rowObject>> getTeachErrors();
+
+queue <pair<int, Pres_rowObject>> getPresErrors();
+
+queue <pair<int, Pub_rowObject>> getPubErrors();
 
 pair<int,int> getDatesGrants();
