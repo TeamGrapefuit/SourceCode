@@ -17,6 +17,7 @@ Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     AttributeRetriever fetch(data);
     bool hasError = 0; //Set this to true if an error is found
     ErrorChecker filter;
+    bool enableErrorChecking (1);
     
     //*** retrieve each attribute - temporarily store them
     
@@ -33,7 +34,7 @@ Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     string author = fetch.getAttribute(index.author_loc);
     int numberOfAuthors = fetch.countStrings(author);
     if (numberOfAuthors == 0){
-        author = "NO_AUTHOR_LISTED"; //to become error message
+        author = "NO_AUTHOR_LISTED";
         hasError = true;
     }
     else{
@@ -43,20 +44,31 @@ Pub_rowObject PublicationRowBuilder::buildRow(string data, ColIndex index){
     int statDate = fetch.getIntAttribute(index.statDate_loc);
 
     //*** Error Checking
-    //strings - check for blanks
-    name = filter.blankCatch(name, hasError);
-    domain = filter.blankCatch(domain, hasError);
-    pubStatus = filter.blankCatch(pubStatus, hasError);
-    type = filter.blankCatch(type, hasError);
-    role = filter.blankCatch(role, hasError);
-    title = filter.blankCatch(title, hasError);
-    jName = filter.blankCatch(jName, hasError);
-    
-    //dates check for zeroes
-    statDate = filter.zeroCatch(statDate, hasError);
-    
-    
-    
+    if(enableErrorChecking){
+        
+        //strings - check for blanks
+        name = filter.blankCatch(name, hasError);
+        domain = filter.blankCatch(domain, hasError);
+        pubStatus = filter.blankCatch(pubStatus, hasError);
+        type = filter.blankCatch(type, hasError);
+        role = filter.blankCatch(role, hasError);
+        title = filter.blankCatch(title, hasError);
+        jName = filter.blankCatch(jName, hasError);
+        
+        //dates check for zeroes
+        statDate = filter.zeroCatch(statDate, hasError);
+        
+        //Assert Publication Statuses
+        string acceptable_PubStatuses [3] = {"Published","In-Press","Accepted"};
+        pubStatus = filter.stringAssert(pubStatus, hasError, 3, acceptable_PubStatuses);
+        
+        //Assert Role
+        string acceptable_roles[6] = {"Principal Author","Co-Author","Collaborator","Senior Responsible Author","Editor","Reviewer"};
+        role = filter.stringAssert(role, hasError, 6, acceptable_roles);
+        
+        //Assert Type
+        // there are 21 possible types of publication. to improve error checking efficiency, we will not be asserting publication type here - if this becomes a problem in future, the code to do so will go here
+    }
     
     Pub_rowObject currentRow (hasError, name, domain, pubStatus, type, role, author, jName, title, statDate);
     

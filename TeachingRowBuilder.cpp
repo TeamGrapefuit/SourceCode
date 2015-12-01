@@ -14,6 +14,7 @@ Teach_rowObject TeachingRowBuilder::buildRow(string data, ColIndex index){
     AttributeRetriever fetch(data);
     bool hasError = 0; //Set this to 1 if an error is found
     ErrorChecker filter;
+    bool enableErrorChecking (1);
     
     //*** retrieve each attribute - temporarily store them
     
@@ -33,22 +34,24 @@ Teach_rowObject TeachingRowBuilder::buildRow(string data, ColIndex index){
     float tHours = fetch.getIntAttribute(index.tHours_loc);
     
     //*** check for errors
-    //strings - check for blank entries
-    name = filter.blankCatch(name, hasError);
-    domain = filter.blankCatch(domain, hasError);
-    program = filter.blankCatch(program, hasError);
-    courseType = filter.blankCatch(courseType, hasError);
-    geoScope = filter.blankCatch(geoScope, hasError);
-    title = filter.blankCatch(title, hasError);
+    if (enableErrorChecking){
     
-    //dates, check for zeroes
-    sDate = filter.zeroCatch(sDate, hasError);
-    eDate = filter.zeroCatch(eDate, hasError);
-    hpTeach = filter.zeroCatch(hpTeach, hasError);
-    nTeach = filter.zeroCatch(nTeach, hasError);
-    tHours = filter.zeroCatch(tHours, hasError);
-    
-
+        //strings - check for blank entries
+        name = filter.blankCatch(name, hasError);
+        domain = filter.blankCatch(domain, hasError);
+        program = filter.blankCatch(program, hasError);
+        courseType = filter.blankCatch(courseType, hasError);
+        geoScope = filter.blankCatch(geoScope, hasError);
+        title = filter.blankCatch(title, hasError);
+        
+        //dates, check for zeroes
+        sDate = filter.zeroCatch(sDate, hasError);
+        eDate = filter.zeroCatch(eDate, hasError);
+        hpTeach = filter.zeroCatch(hpTeach, hasError);
+        nTeach = filter.zeroCatch(nTeach, hasError);
+        tHours = filter.zeroCatch(tHours, hasError);
+        
+    }
     
     
     //*** Build Row
