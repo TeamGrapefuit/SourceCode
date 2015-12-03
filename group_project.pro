@@ -14,7 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 4):
 
 TARGET = test
 TEMPLATE = app
-
+RC_FILE = myapp.rc
 
 SOURCES += main.cpp\
         mainwindow.cpp \
