@@ -43,6 +43,10 @@ private slots:
 
     void showPub();
 
+    void on_actionPrint_triggered();
+
+    void on_actionExit_2_triggered();
+
 private:
     Ui::MainWindow *ui;
 

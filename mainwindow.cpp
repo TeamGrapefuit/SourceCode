@@ -46,6 +46,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowTitle("Grape Fruit Project");
+    //setWindowIcon()
+
+    databaseGrant = NULL;
+    databaseTeach = NULL;
+    databasePub = NULL;
+    databasePres = NULL;
 }
 
 MainWindow::~MainWindow()
@@ -210,6 +216,23 @@ void MainWindow::on_actionOpen_File_triggered()
     filename = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("CSV Files (*.csv)")); // Opens dialog box allowing user to find csv file
     statusBar()->showMessage("File Loaded", 2000);
 
+    if(databaseGrant != NULL)
+    {
+        databaseGrant->clear();
+    }
+    if(databasePres != NULL)
+    {
+        databasePres->clear();
+    }
+    if(databasePub != NULL)
+    {
+        databasePub->clear();
+    }
+    if(databaseTeach != NULL)
+    {
+        databaseTeach->clear();
+    }
+
     csvBuild();
 }
 
@@ -221,8 +244,8 @@ void MainWindow::showGrants()
     databaseGrant = getGrants();
     multimap<string, Grant_rowObject>::iterator i = databaseGrant->begin();
 
+    //This adds a little bit of space between the graphlist and the inputs on top
     QWidget *widget1 = new QWidget();
-
     widget1->setFixedHeight(5);
 
     QHBoxLayout * top = new QHBoxLayout();
@@ -256,6 +279,8 @@ void MainWindow::showGrants()
     mainLayout->addLayout(top);
 
     this->centralWidget()->setLayout(mainLayout);
+
+    mainLayout->deleteLater();
 }
 
 /**
@@ -265,12 +290,6 @@ void MainWindow::showTeach()
 {
     databaseTeach = getTeachings();
     multimap<string, Teach_rowObject>::iterator i = databaseTeach->begin();
-
-    while (i!=databaseTeach->end())
-    {
-        cout << i->second.name << endl;
-        ++i;
-    }
 
     QWidget *widget1 = new QWidget();
 
@@ -302,6 +321,8 @@ void MainWindow::showTeach()
     mainLayout->addLayout(top);
 
     this->centralWidget()->setLayout(mainLayout);
+
+    mainLayout->deleteLater();
 }
 
 /**
@@ -348,6 +369,8 @@ void MainWindow::showPres()
     mainLayout->addLayout(top);
 
     this->centralWidget()->setLayout(mainLayout);
+
+    mainLayout->deleteLater();
 }
 
 /**
@@ -356,7 +379,6 @@ void MainWindow::showPres()
 void MainWindow::showPub()
 {
     databasePub = getPublications();
-
     QWidget *widget1 = new QWidget();
 
     widget1->setFixedHeight(5);
@@ -384,8 +406,9 @@ void MainWindow::showPub()
     mainLayout->addSpacing(20);
     mainLayout->addLayout(top);
 
-
     this->centralWidget()->setLayout(mainLayout);
+
+    mainLayout->deleteLater();
 }
 
 /**
@@ -425,4 +448,33 @@ void MainWindow::csvBuild()
         showPub();
         databaseTest = 4;
     }
+}
+/**
+ * input: The person pressing the print button
+ * output: void
+ * This is the method that lets the user print the current screen
+ */
+void MainWindow::on_actionPrint_triggered()
+{
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    QPixmap pixmap = QPixmap::grabWidget(this, 0, 0, -1, -1);
+    QPainter painter;
+    painter.begin(&printer);
+    painter.drawImage(0, 0, pixmap.toImage());
+    painter.end();
+}
+
+/**
+ * @brief This exits the app
+ */
+void MainWindow::on_actionExit_2_triggered()
+{
+    qApp->quit();
 }
