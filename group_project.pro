@@ -16,6 +16,8 @@ TARGET = test
 TEMPLATE = app
 RC_FILE = myapp.rc
 
+QMAKE_CXXFLAGS += -std=c++0x
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     graphdialog.cpp \

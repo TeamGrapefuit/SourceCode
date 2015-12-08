@@ -36,12 +36,12 @@ multimap<string, Pres_rowObject>* getPresentations();
 
 multimap<string, Pub_rowObject>* getPublications();
 
-queue<pair<int,Grant_rowObject>> getGrantsErrors();
+queue<pair<int,Grant_rowObject > > getGrantsErrors();
 
-queue<pair<int, Teach_rowObject>> getTeachErrors();
+queue<pair<int, Teach_rowObject > > getTeachErrors();
 
-queue <pair<int, Pres_rowObject>> getPresErrors();
+queue <pair<int, Pres_rowObject > > getPresErrors();
 
-queue <pair<int, Pub_rowObject>> getPubErrors();
+queue <pair<int, Pub_rowObject > > getPubErrors();
 
 pair<int,int> getDatesGrants();

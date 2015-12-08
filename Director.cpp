@@ -33,10 +33,10 @@ multimap<string, Pub_rowObject>* publicationsDictionary;
 //ERROR section
 
 //Error Arrays, place where we keep the arrays and counter to keep track of current place in file
-queue<pair<int, Grant_rowObject> > grantsErrorsQueue;
-queue<pair<int, Teach_rowObject>> teachErrorsQueue;
-queue<pair<int, Pres_rowObject>> presErrorsQueue;
-queue<pair<int, Pub_rowObject>> pubErrorsQueue;
+queue<pair<int, Grant_rowObject > > grantsErrorsQueue;
+queue<pair<int, Teach_rowObject > > teachErrorsQueue;
+queue<pair<int, Pres_rowObject > > presErrorsQueue;
+queue<pair<int, Pub_rowObject > > pubErrorsQueue;
 
 //error method adders
 void addGrantsError(int row, Grant_rowObject errorRow)
@@ -888,22 +888,22 @@ pair<int, int> getDatesTeach()
 	}
 }
 
-queue <pair<int,Grant_rowObject>> getGrantsErrors()
+queue <pair<int,Grant_rowObject > > getGrantsErrors()
 {
 	return grantsErrorsQueue;
 }
 
-queue <pair<int, Teach_rowObject>> getTeachErrors()
+queue <pair<int, Teach_rowObject > > getTeachErrors()
 {
 	return teachErrorsQueue;
 }
 
-queue <pair<int, Pres_rowObject>> getPresErrors()
+queue <pair<int, Pres_rowObject > > getPresErrors()
 {
 	return presErrorsQueue;
 }
 
-queue <pair<int, Pub_rowObject>> getPubErrors()
+queue <pair<int, Pub_rowObject > > getPubErrors()
 {
 	return pubErrorsQueue;
 }
