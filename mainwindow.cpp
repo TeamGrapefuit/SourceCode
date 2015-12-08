@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->lineEdit->setPlaceholderText("First Name");
+    ui->lineEdit_2->setPlaceholderText("Last Name");
+
     setWindowTitle("Grape Fruit Project");
 
     databaseGrant = NULL;
@@ -292,15 +295,6 @@ void MainWindow::showGrants()
 
     this->centralWidget()->setLayout(mainLayout);
 
-    queue<pair<int, Grant_rowObject> > granterror = getGrantsErrors();
-
-    for(int j = 0; j < granterror.size(); j++)
-    {
-        QString error = QString::number(granterror.front().first);
-        QMessageBox messageBox;
-        messageBox.information(0,"CSV Errors", error);
-    }
-
     mainLayout->deleteLater();
 }
 
@@ -498,4 +492,20 @@ void MainWindow::on_actionPrint_triggered()
 void MainWindow::on_actionExit_2_triggered()
 {
     qApp->quit();
+}
+
+void MainWindow::on_actionView_Errors_triggered()
+{
+    if(databaseTest == DATABASEGRANT)
+    {
+        queue<pair<int, Grant_rowObject> > granterror = getGrantsErrors();
+        for(int j = 0; j <= 10; j++)
+        {
+            string errorString = granterror.front().second.infoDump();
+            QString qstringError = QString::fromStdString(errorString);
+            QMessageBox messageBox;
+            messageBox.information(0,"CSV Errors", qstringError);
+            granterror.pop();
+        }
+    }
 }

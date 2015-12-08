@@ -87,7 +87,7 @@
      <string notr="true"/>
     </property>
     <property name="text">
-     <string>FirstName</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_2">
@@ -100,7 +100,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>LastName</string>
+     <string/>
     </property>
    </widget>
   </widget>
@@ -119,12 +119,13 @@
     </property>
     <addaction name="actionOpen_File"/>
     <addaction name="actionPrint"/>
+    <addaction name="actionView_Errors"/>
     <addaction name="separator"/>
     <addaction name="actionExit_2"/>
    </widget>
    <widget class="QMenu" name="menuGraping">
     <property name="title">
-     <string>Graping</string>
+     <string>Graph</string>
     </property>
     <addaction name="actionPie_Graph"/>
     <addaction name="actionBar_Graph"/>
@@ -156,6 +157,11 @@
   <action name="actionBar_Graph">
    <property name="text">
     <string>Bar Graph</string>
+   </property>
+  </action>
+  <action name="actionView_Errors">
+   <property name="text">
+    <string>View Errors</string>
    </property>
   </action>
  </widget>

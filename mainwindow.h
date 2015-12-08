@@ -66,6 +66,8 @@ public:
     multimap<string, Pres_rowObject>* databasePres;
     QString filename;
 
+    queue<pair<int, Grant_rowObject> > granterror;
+
     ~MainWindow();
 
 private slots:
@@ -96,6 +98,8 @@ private slots:
     void on_actionPie_Graph_triggered();
 
     void on_actionBar_Graph_triggered();
+
+    void on_actionView_Errors_triggered();
 
 private:
     Ui::MainWindow *ui;
