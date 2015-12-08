@@ -10,8 +10,7 @@ ListBuilder::ListBuilder(int startyear,int endyear,multimap<string,Grant_rowObje
 	year_s = startyear;
 	year_e = endyear;
 	data = somedata;
-//    // create main list head
-//    ListClass m = ListClass();
+
     // create major list heads
     ListClass *g = new ListClass("Grants", 0, 0.00, true);
     ListClass *cf = new ListClass("Clinical Funding", 0, 0.00, true);
@@ -29,12 +28,13 @@ ListBuilder::ListBuilder(int startyear,int endyear,multimap<string,Grant_rowObje
     peerreviewed_cf = *pr_cf;
     industrygrant_cf = *i_cf;
     
-    grants.addChild(&peerreviewed_grants);
+    grants.addChild(&peerreviewed_grants);  // add child lists to parent lists
     grants.addChild(&industrygrant_grants);
     clinicalfunding.addChild(&peerreviewed_cf);
     clinicalfunding.addChild(&industrygrant_cf);
     
 }
+// prints a listclass structure 
 void ListBuilder::printList(ListClass alist){
     list<ListClass *> * temp = alist.getChildren();
     list<ListClass *>::iterator i = temp->begin();
@@ -44,30 +44,10 @@ void ListBuilder::printList(ListClass alist){
         printf("Param2: %0.2d\n", (*i)->getParam2());
         ++ i;
     }
-//    while (alist.getChildren() != NULL) {
-//        printf("Name: %s\n", alist.name.c_str());
-//        printf("Param1: %d\n", alist.getParam1());
-//        printf("Param2: %0.2d\n", alist.getParam2());
-//    }
 }
+// Adds Member to plus/minus list
 void ListBuilder::addMember(Member amember){
-//    printf("add member function\n");
-//    printf("%s\n",amember.grant_pr.name.c_str());
-//    printf("%d\n",amember.grant_pr.param1);
-//    printf("%d\n",amember.grant_pr.param2);
-//    
-//    printf("%s\n",amember.indspr_g.name.c_str());
-//    printf("%d\n",amember.indspr_g.param1);
-//    printf("%d\n",amember.indspr_g.param2);
-//    
-//    printf("%s\n",amember.grant_cf.name.c_str());
-//    printf("%d\n",amember.grant_cf.param1);
-//    printf("%d\n",amember.grant_cf.param2);
-//    
-//    printf("%s\n",amember.indspr_cf.name.c_str());
-//    printf("%d\n",amember.indspr_cf.param1);
-//    printf("%d\n",amember.indspr_cf.param2);
-    
+	
     if (amember.num_pr_g>0){
         if (amember.g_pr_amount>0){
             this->peerreviewed_grants.addChild(new ListClass(amember.grant_pr.getName(), amember.grant_pr.getParam1(), amember.grant_pr.getParam2(), false));
@@ -106,14 +86,9 @@ void ListBuilder::addMember(Member amember){
     this->clinicalfunding.param1 = this->clinicalfunding.param1 + amember.totalcf;
     this->clinicalfunding.param2 = this->clinicalfunding.param2 + amember.cf_pr_amount + amember.cf_is_amount;
 }
+// scans multimap and populates list 
 void ListBuilder::scanMap(){
     
-//    multimap<string, Grant_rowObject>::iterator i = data->begin();
-//    while (i != data->end()){
-//        Member mem = this->tally(i->second.name);
-//        this->addMember(mem);
-//        ++ i;
-//    }
    // create a map to keep track of visited row objects
     map<string, bool> visited;
 
@@ -146,7 +121,7 @@ void ListBuilder::scanMap(){
     }
 
 }
-
+// creates the counts for member with the supplied name in the multimap for the plus/minus list entries 
 Member ListBuilder::tally(string name){
 	
     int numelements = 0;
@@ -244,45 +219,6 @@ Member ListBuilder::tally(string name){
     // total grants = peer reviewed total + industry sponsored total
     totalgrants = g_peertotal + g_istotal;
     totalcf = cf_peertotal + cf_istotal;
-    // debug info
-//    printf("Member Name :%s\n",name.c_str());
-//    
-//    printf("Grants\n");
-//    printf("total grants:%d\n",totalgrants);
-//    printf("peer reviewed:%d\n",g_peertotal);
-//    printf("industry sponsored:%d\n",g_istotal);
-//    printf("g_peertotal: %0.2f\n",g_peeramount);
-//    printf("g_istotal: %0.2f\n",g_isamount);
-//    printf("total amount:%0.2f\n",g_totalamount);
-//    
-//    printf("Clinical funding\n");
-//    printf("total clinical funding:%d\n",totalcf);
-//    printf("peer reviewed:%d\n",cf_peertotal);
-//    printf("industry sponsored:%d\n",cf_istotal);
-//    printf("cf_peertotal: %0.2f\n",cf_peeramount);
-//    printf("cf_istotal: %0.2f\n",cf_isamount);
-//    printf("total amount:%0.2f\n",cf_totalamount);
-    
-    // debug check listclass structures for correctness
-//    printf("peer reviewed grants\n");
-//    printf("%s\n",peerentry_g.getName().c_str());
-//    printf("%d\n",peerentry_g.getParam1());
-//    printf("%d\n",peerentry_g.getParam2());
-//    
-//    printf("peer reviewed clinical funding\n");
-//    printf("%s\n",peerentry_cf.getName().c_str());
-//    printf("%d\n",peerentry_cf.getParam1());
-//    printf("%d\n",peerentry_cf.getParam2());
-//    
-//    printf("Industry Sponsored grants\n");
-//    printf("%s\n",isentry_g.getName().c_str());
-//    printf("%d\n",isentry_g.getParam1());
-//    printf("%d\n",isentry_g.getParam2());
-//    
-//    printf("Industry Sponsored clinical funding\n");
-//    printf("%s\n",isentry_cf.getName().c_str());
-//    printf("%d\n",isentry_cf.getParam1());
-//    printf("%d\n",isentry_cf.getParam2());
     
     // pack result into member structure
     Member result;
@@ -303,22 +239,6 @@ Member ListBuilder::tally(string name){
     result.num_is_cf = cf_istotal;
     result.cf_is_amount = cf_isamount;
     result.cf_pr_amount = cf_peeramount;
-//    printf("tally function\n");
-//    printf("%s\n",result.grant_pr.name.c_str());
-//    printf("%d\n",result.grant_pr.param1);
-//    printf("%d\n",result.grant_pr.param2);
-//    
-//    printf("%s\n",result.indspr_g.name.c_str());
-//    printf("%d\n",result.indspr_g.param1);
-//    printf("%d\n",result.indspr_g.param2);
-//    
-//    printf("%s\n",result.grant_cf.name.c_str());
-//    printf("%d\n",result.grant_cf.param1);
-//    printf("%d\n",result.grant_cf.param2);
-//    
-//    printf("%s\n",result.indspr_cf.name.c_str());
-//    printf("%d\n",result.indspr_cf.param1);
-//    printf("%d\n",result.indspr_cf.param2);
 
     // return the result
     return result;
