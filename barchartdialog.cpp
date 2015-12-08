@@ -91,14 +91,12 @@ void barchartdialog::setData(GraphClass *graph,int start,int end)
         }
         ++ i1;
     }
-
     this->barValue1=value1;
     this->barValue2=value2;
     this->barTitle=title;
     this->startYear=start;
     this->endYear=end;
     barValue=barValue1;
-
     //set up the text on buttons and colors that are used to display the bars//
     if(barTitle.at(0)=="Grant - PR"){
         barButton1->setText("Total Number");
@@ -139,7 +137,7 @@ void barchartdialog::setData(GraphClass *graph,int start,int end)
     }
 
     this->barColor=color;
-    repaint();
+    update();
 }
 
 /*
@@ -203,7 +201,7 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
     painter.setPen(QPen(Qt::black,1));
 
     int count = barValue.size();
-    int space = 50;//space between bars//
+    int space = 20;//space between bars//
     int barWidth = 40;
     int barHeight = 0;
     int yOrigin = 600;
@@ -243,42 +241,40 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
     }
 
     //draw the x,y-axis, the year on x-axis and the bar//
+
+
     int i = 0;
     int start=startYear;
+    painter.drawLine(xCordinate,yOrigin,xCordinate+space,yOrigin);
+    xCordinate +=space;
 
-      while(i<count)
-      {
-          painter.drawLine(xCordinate,yOrigin,xCordinate+space,yOrigin);
-          xCordinate += space;
-
-          int sum =0;
-
-          for(int p=0;p<typeNum;p++){
-              percent = barValue[i]/yMaxScale;
-              barHeight = percent*500;
-              painter.drawLine(xCordinate,yOrigin,xCordinate+barWidth,yOrigin);
-              QRect barRect(xCordinate,yOrigin-barHeight,barWidth,barHeight);
-              painter.setBrush(barColor[i%typeNum]);
-              painter.drawRect(barRect);
-              sum+=barValue[i];
-
-              if(barValue[i]!=0)
-              {
-                  painter.drawText(QPoint(xCordinate+5,yOrigin-barHeight-10),QString::number(barValue[i]));
-              }
-              xCordinate+=barWidth;
-              i++;
-          }
-
-          if(sum==0){
-              xCordinate = xCordinate-space-barWidth*typeNum;
-          }
-          else{
-              painter.drawText(QPoint(xCordinate-typeNum*barWidth/4*3,yOrigin+40),QString::number(start)+"-");
-              painter.drawText(QPoint(xCordinate-typeNum*barWidth/4*3+30,yOrigin+40),QString::number(start+1));
-          }
-          start++;
-      }
+    while(i<count)
+    {
+        int previousX = xCordinate;
+        int sum=0;
+        for(int p=0;p<typeNum;p++)
+        {
+            if(barValue[i]!=0)
+            {
+                percent = barValue[i]/yMaxScale;
+                barHeight = percent*500;
+                QRect barRect(xCordinate,yOrigin-barHeight,barWidth,barHeight);
+                painter.setBrush(barColor[i%typeNum]);
+                painter.drawRect(barRect);
+                painter.drawText(QPoint(xCordinate+10,yOrigin-barHeight-10),QString::number(barValue[i]));
+                xCordinate+=barWidth;
+                sum+=barValue[i];
+            }
+                i++;
+        }
+        if(sum!=0){
+            painter.drawText(QPoint((xCordinate-previousX)/2+previousX-28,yOrigin+40),QString::number(start)+"-");
+            painter.drawText(QPoint((xCordinate-previousX)/2+previousX,yOrigin+40),QString::number(start+1));
+            painter.drawLine(xCordinate,yOrigin,xCordinate+space,yOrigin);
+            xCordinate+=space;
+        }
+        start++;
+        }
 
     //draw y-axis//
     painter.drawLine(xOrigin,yOrigin,xOrigin,100);//draw y-axis//
@@ -290,8 +286,3 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
     }
     painter.drawText(QPoint(xOrigin-30,100),QString::number(yMaxScale));
 }
-
-
-
-
-

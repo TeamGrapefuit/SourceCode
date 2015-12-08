@@ -508,4 +508,40 @@ void MainWindow::on_actionView_Errors_triggered()
             granterror.pop();
         }
     }
+    if(databaseTest == DATABASETEACH)
+    {
+        queue<pair<int, Teach_rowObject> > teacherror = getTeachErrors();
+        for(int j = 0; j <= 10; j++)
+        {
+            string errorString = teacherror.front().second.infoDump();
+            QString qstringError = QString::fromStdString(errorString);
+            QMessageBox messageBox;
+            messageBox.information(0,"CSV Errors", qstringError);
+            teacherror.pop();
+        }
+    }
+    if(databaseTest == DATABASEPRES)
+    {
+        queue<pair<int, Pres_rowObject> > preserror = getPresErrors();
+        for(int j = 0; j <= 10; j++)
+        {
+            string errorString = preserror.front().second.infoDump();
+            QString qstringError = QString::fromStdString(errorString);
+            QMessageBox messageBox;
+            messageBox.information(0,"CSV Errors", qstringError);
+            preserror.pop();
+        }
+    }
+    if(databaseTest == DATABASEPUB)
+    {
+        queue<pair<int, Pub_rowObject> > puberror = getPubErrors();
+        for(int j = 0; j <= 10; j++)
+        {
+            string errorString = puberror.front().second.infoDump();
+            QString qstringError = QString::fromStdString(errorString);
+            QMessageBox messageBox;
+            messageBox.information(0,"CSV Errors", qstringError);
+            puberror.pop();
+        }
+    }
 }
