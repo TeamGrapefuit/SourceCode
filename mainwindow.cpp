@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 
+/**
+ * @brief Constructor
+ */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,14 +19,16 @@ MainWindow::MainWindow(QWidget *parent) :
     databasePub = NULL;
     databasePres = NULL;
 }
-
+/**
+ * @brief Deconstructor
+ */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
 /**
- * input:
+ * input : void
  * output: void
  * This creates the barchart dialog when button is pressed on main window
  */
@@ -104,8 +109,8 @@ void MainWindow::on_actionBar_Graph_triggered()
 }
 
 /**
- * input:
- * output: void
+ * Input : void
+ * Output: void
  * This creates the piechart dialog when button pressed on main window
  */
 void MainWindow::on_actionPie_Graph_triggered()
@@ -224,6 +229,8 @@ void MainWindow::on_lineEdit_2_textChanged(const QString &arg1)
 }
 
 /**
+ * Input : Void
+ * Output: Void
  * Opens file using menubar->open file and then runs csvBuild() method.
  */
 void MainWindow::on_actionOpen_File_triggered()
@@ -252,7 +259,10 @@ void MainWindow::on_actionOpen_File_triggered()
 }
 
 /**
- * Creates grants plusminus list
+ * Input : Void
+ * Output: Void
+ *
+ * Creates grants plusminus list which is shown on the main window of the app
  */
 void MainWindow::showGrants()
 {
@@ -299,7 +309,10 @@ void MainWindow::showGrants()
 }
 
 /**
- * Creates teaching plusminus list
+ * Input : Void
+ * Output: Void
+ *
+ * Creates teaching plusminus list which is shown on the main window of the app
  */
 void MainWindow::showTeach()
 {
@@ -341,7 +354,10 @@ void MainWindow::showTeach()
 }
 
 /**
- * Creates presentations plusminus list
+ * Input : Void
+ * Output: Void
+ *
+ * Creates presentations plusminus list which is shown on the main window of the app
  */
 void MainWindow::showPres()
 {
@@ -389,7 +405,10 @@ void MainWindow::showPres()
 }
 
 /**
- * Creates publications plusminus list
+ * Input : Void
+ * Output: Void
+ *
+ * Creates publication plusminus list which is shown on the main window of the app
  */
 void MainWindow::showPub()
 {
@@ -429,7 +448,7 @@ void MainWindow::showPub()
 /**
  * input:
  * output: void
- * This creates the grants plus minus list using the file the user points to in his/her computer by the file>newfile button
+ * Calls the correct method to build plus minus list depending on type of csv file user has picked
  */
 void MainWindow::csvBuild()
 {
@@ -494,6 +513,12 @@ void MainWindow::on_actionExit_2_triggered()
     qApp->quit();
 }
 
+/**
+ * Input : Void
+ * Output: Void
+ *
+ * This grabs error list and displays the errors on screen when user clicks File->View Errors
+ */
 void MainWindow::on_actionView_Errors_triggered()
 {
     if(databaseTest == DATABASEGRANT)
