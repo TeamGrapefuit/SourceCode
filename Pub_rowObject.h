@@ -39,6 +39,10 @@ public:
     
     //Default Constructor - required by director
     Pub_rowObject();
+    
+    // this is sort of like a ToString Function - used for dumping errors
+    string infoDump();
+
 };
 
 

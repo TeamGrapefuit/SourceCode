@@ -43,5 +43,7 @@ public:
     //default constructor - required by director
     Teach_rowObject();
 
+    // this is sort of like a ToString Function - used for dumping errors
+    string infoDump();
 };
 
