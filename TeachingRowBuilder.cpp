@@ -43,7 +43,6 @@ Teach_rowObject TeachingRowBuilder::buildRow(string data, ColIndex index){
         domain = filter.blankCatch(domain, hasError);
         program = filter.blankCatch(program, hasError);
         courseType = filter.blankCatch(courseType, hasError);
-        geoScope = filter.blankCatch(geoScope, hasError);
         
         //dates, check for zeroes
         sDate = filter.zeroCatch(sDate, hasError);
