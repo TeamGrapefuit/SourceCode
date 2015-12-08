@@ -32,7 +32,7 @@ int ErrorChecker::zeroCatch(int attribute, bool &flag){
     
     if (attribute==0) {
         flag = true;
-        return -666;
+        return -999999999;
     }
     else{
         return attribute;

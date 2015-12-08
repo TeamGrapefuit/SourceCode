@@ -45,3 +45,59 @@ Pres_rowObject::Pres_rowObject(){
     date = 0;
     numPresent = 0;
 }
+
+//infoDump
+//input: nope
+//output: a string describing each member of this object
+string Pres_rowObject::infoDump(){
+    string rowObject = "";
+    
+    //error flag
+    rowObject.append("Error in Row: ");
+    if (errorFlag) {
+        rowObject.append("true\n");
+    }
+    else{
+        rowObject.append("false\n");
+    }
+    
+    
+    //Member Name
+    rowObject.append("Member Name: ");
+    rowObject.append(name);
+    rowObject.append("\n");
+    
+    //Primary Domain
+    rowObject.append("Primary Domain: ");
+    rowObject.append(domain);
+    rowObject.append("\n");
+    
+    //fundtype
+    rowObject.append("Presentation Type: ");
+    rowObject.append(type);
+    rowObject.append("\n");
+    
+    
+    //role
+    rowObject.append("Role: ");
+    rowObject.append(role);
+    rowObject.append("\n");
+    
+    //pinvestigator
+    rowObject.append("Title: ");
+    rowObject.append(title);
+    rowObject.append("\n");
+    
+    
+    // date
+    rowObject.append("Date: ");
+    rowObject.append(to_string(date));
+    rowObject.append("\n");
+    
+    //number of presentations
+    rowObject.append("Number of Presentations: ");
+    rowObject.append(to_string(numPresent));
+    rowObject.append("\n");
+    
+    return rowObject;
+}
