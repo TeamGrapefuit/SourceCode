@@ -69,8 +69,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
-
     void on_spinBox_valueChanged(int arg1);
 
     void on_spinBox_2_valueChanged(int arg1);
@@ -78,8 +76,6 @@ private slots:
     void on_lineEdit_textChanged(const QString &arg1);
 
     void on_lineEdit_2_textChanged(const QString &arg1);
-
-    void on_pushButton_2_clicked();
 
     void on_actionOpen_File_triggered();
 
@@ -96,6 +92,10 @@ private slots:
     void on_actionPrint_triggered();
 
     void on_actionExit_2_triggered();
+
+    void on_actionPie_Graph_triggered();
+
+    void on_actionBar_Graph_triggered();
 
 private:
     Ui::MainWindow *ui;

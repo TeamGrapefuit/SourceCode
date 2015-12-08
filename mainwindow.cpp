@@ -24,7 +24,7 @@ MainWindow::~MainWindow()
  * output: void
  * This creates the barchart dialog when button is pressed on main window
  */
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_actionBar_Graph_triggered()
 {    
     if(nameFirst == "")
     {
@@ -105,7 +105,7 @@ void MainWindow::on_pushButton_clicked()
  * output: void
  * This creates the piechart dialog when button pressed on main window
  */
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_actionPie_Graph_triggered()
 {
     if(nameFirst == "")
     {
