@@ -34,44 +34,29 @@ multimap<string, Pub_rowObject>* publicationsDictionary;
 
 //Error Arrays, place where we keep the arrays and counter to keep track of current place in file
 queue<pair<int, Grant_rowObject> > grantsErrorsQueue;
-int grantsErrorCounter = 0;
 queue<pair<int, Teach_rowObject>> teachErrorsQueue;
-int teachErrorCounter = 0;
 queue<pair<int, Pres_rowObject>> presErrorsQueue;
-int presErrorCounter = 0;
 queue<pair<int, Pub_rowObject>> pubErrorsQueue;
-int pubErrorCounter = 0;
 
 //error method adders
 void addGrantsError(int row, Grant_rowObject errorRow)
-{
-	if(grantsErrorCounter >= 50)
-	{
-		cout << "Too many errors" << endl;
-	}
-	else
-	{	
-		grantsErrorsQueue.push (pair<int, Grant_rowObject>(row,errorRow));
-		grantsErrorCounter++;
-	}
+{	
+	grantsErrorsQueue.push (pair<int, Grant_rowObject>(row,errorRow));
 }
 
 void addTeachError(int row, Teach_rowObject errorRow)
 {
 	teachErrorsQueue.push (pair<int, Teach_rowObject>(row, errorRow));
-	teachErrorCounter++;
 }
 
 void addPresError(int row, Pres_rowObject errorRow)
 {
 	presErrorsQueue.push(pair<int, Pres_rowObject>(row, errorRow));
-	presErrorCounter++;
 }
 
 void addPubError(int row, Pub_rowObject errorRow)
 {
 	pubErrorsQueue.push(pair<int, Pub_rowObject>(row, errorRow));
-	pubErrorCounter++;
 }
 
 //File Detective
@@ -277,11 +262,6 @@ void BuildGrants(string input)
 		columnNumber++;
 	}
 
-	//couts to check if right the right index number is being given
-	//disregard
-	//cout << colIndex.sDate_loc << endl;
-	//cout << colIndex.eDate_loc << endl;
-
 
 
 	//SEND RAW ROW AND STRUCT collndex TO rowObject TO MAKE ROW THAT WILL BE PUT IN DICTIONARY
@@ -291,6 +271,7 @@ void BuildGrants(string input)
 	//Builder object
 	GrantRowBuilder Builder;
 	grantsDictionary = new multimap<string, Grant_rowObject>();
+	//attributes for checking for duplicates
 	multimap<string, Grant_rowObject>::iterator check;
 	bool existAlready = false;
 
@@ -377,7 +358,6 @@ void BuildGrants(string input)
 }
 
 //build Teacher
-//status: unfinished, waiting on row builder
 void BuildTeacher(string input)
 {
 	//get the name of the file
@@ -396,7 +376,6 @@ void BuildTeacher(string input)
 	//start keeping track of column
 	ColIndex colIndex;
 	columnNumber = 0;
-
 
 
 	//FIRST ROW FOR COLUMNS
@@ -448,7 +427,7 @@ void BuildTeacher(string input)
 			colIndex.geoScope_loc = columnNumber;
 		}
 		//# of Lessons
-		else if (columnName == "Number of Teching Sessions or Weeks")
+		else if (columnName == "Number of Teaching Sessions or Weeks")
 		{
 			colIndex.nTeach_loc = columnNumber;
 		}
@@ -462,6 +441,7 @@ void BuildTeacher(string input)
 		{
 			colIndex.tHours_loc = columnNumber;
 		}
+		//Number of Trainees
 		else if (columnName == "Number Of Trainees")
 		{
 			colIndex.tStudents_loc = columnNumber;
@@ -483,6 +463,10 @@ void BuildTeacher(string input)
 	TeachingRowBuilder Builder;
 	int count = 0;
 
+	//attributes for checking for duplicates
+	multimap<string, Teach_rowObject>::iterator check;
+	bool existAlready = false;
+
 	//get raw row and put into temp 
 	// go until carriage return
 	while (getline(fileStream, temp, '\r'))
@@ -493,16 +477,40 @@ void BuildTeacher(string input)
 		//remember to change holder to right object type
 		Teach_rowObject holder = Builder.buildRow(temp, colIndex);
 		//Error Check
-		//if (holder.errorFlag == false)
-		//{
-			teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
+		if (holder.errorFlag == false)
+		{
+			existAlready = false;
+			check = teachDictionary->find(holder.name);
+			while (check != teachDictionary->end())
+			{
+				//check if holder already exists
+				//check by type, dates, and program
+				if (check->second.name == holder.name && check->second.courseType == holder.courseType && check->second.sDate == holder.sDate && check->second.eDate == holder.eDate && check->second.program == holder.program)
+				{
+					//if it does, add the total amount to the one that already exists
+					check->second.tHours = check->second.tHours + holder.tHours;
+					check->second.totalStudents = check->second.totalStudents + holder.totalStudents;
+					//confirm that this is a duplicate
+					existAlready = true;
+					count++;
+
+				}
+				check++;
+			}
+			//if there is no duplicate, add it in to the map
+			if (existAlready == false)
+			{
+				teachDictionary->insert(pair<string, Teach_rowObject>(holder.name, holder));
+				count++;
+				existAlready = false;
+			}
+
+		}
+		else if(holder.errorFlag == true)
+		{
+			addTeachError(count, holder); 
 			count++;
-		//}
-		//else if(holder.errorFlag == true)
-		//{
-			//addTeachError(count, holder);
-			//count++;
-		//}
+		}
 	}
 
 	fileStream.close();
@@ -529,7 +537,6 @@ void BuildTeacher(string input)
 }
 
 //build Presentations
-//status: unfinished, needs right objects
 void BuildPresentation(string input)
 {
 	//get the name of the file
@@ -587,7 +594,7 @@ void BuildPresentation(string input)
 		}
 
 
-		//take note of column number, starts at 1
+		//take note of column number, starts at 0
 		columnNumber++;
 	}
 
@@ -602,6 +609,11 @@ void BuildPresentation(string input)
 	PresentationRowBuilder Builder;
 	presentationsDictionary = new multimap<string, Pres_rowObject>();
 	int count = 0;
+
+	//attributes for checking for duplicates
+	multimap<string, Pres_rowObject>::iterator check;
+	bool existAlready = false;
+
 	//get raw row and put into temp 
 	// go until carriage return
 	while (getline(fileStream, temp, '\r'))
@@ -612,8 +624,31 @@ void BuildPresentation(string input)
 		Pres_rowObject holder = Builder.buildRow(temp, colIndex);
 		if (holder.errorFlag == false)
 		{
-			presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
-			count++;
+			existAlready = false;
+			//find if holder has already entry
+			//duplicate check
+
+			check = presentationsDictionary->find(holder.name);
+			while (check != presentationsDictionary->end())
+			{
+				//check if holder already exists
+				//by type, role, title, and date
+				if (check->second.name == holder.name && check->second.type == holder.type && check->second.role == holder.role && check->second.title == holder.title && check->second.date == holder.date)
+				{
+					//confirm that this is a duplicate
+					existAlready = true;
+					count++;
+
+				}
+				check++;
+			}
+			//if there is no duplicate, add it in to the map
+			if (existAlready == false)
+			{
+				presentationsDictionary->insert(pair<string, Pres_rowObject>(holder.name, holder));
+				count++;
+				existAlready = false;
+			}
 		}
 		else if (holder.errorFlag == true)
 		{
@@ -625,7 +660,6 @@ void BuildPresentation(string input)
 }
 
 //build Publications
-//status: unfinished, needs right objects
 void BuildPublications(string input)
 {
 	//get the name of the file
@@ -716,6 +750,11 @@ void BuildPublications(string input)
 	//Builder object
 	PublicationRowBuilder Builder;
 	publicationsDictionary = new multimap<string, Pub_rowObject>();
+
+	//attributes for checking for duplicates
+	multimap<string, Pub_rowObject>::iterator check;
+	bool existAlready = false;
+
 	//get raw row and put into temp 
 	// go until carriage return
 	while (getline(fileStream, temp, '\r'))
@@ -727,8 +766,31 @@ void BuildPublications(string input)
 		Pub_rowObject holder = Builder.buildRow(temp, colIndex);
 		if (holder.errorFlag == false)
 		{
-			publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
-			count++;
+			existAlready = false;
+			//find if holder has already entry
+			//duplicate check
+
+			check = publicationsDictionary->find(holder.name);
+			while (check != publicationsDictionary->end())
+			{
+				//check if holder already exists
+				//by categories of name, date, role, title, and journal name
+				if (check->second.name == holder.name && check->second.statDate == holder.statDate && check->second.role == holder.role && check->second.title == holder.title && check->second.jName == holder.jName)
+				{
+					//confirm that this is a duplicate
+					existAlready = true;
+					count++;
+
+				}
+				check++;
+			}
+			//if there is no duplicate, add it in to the map
+			if (existAlready == false)
+			{
+				publicationsDictionary->insert(pair<string, Pub_rowObject>(holder.name, holder));
+				count++;
+				existAlready = false;
+			}
 		}
 		else if (holder.errorFlag == true)
 		{
@@ -805,6 +867,7 @@ pair<int,int> getDatesGrants()
 	if (firstDateGrants == 0 && lastDateGrants == 0)
 	{
 		cout << endl << "No Grants File given in" << endl; 
+		return pair<int, int>(0, 0);
 	}
 	else
 	{
@@ -817,6 +880,7 @@ pair<int, int> getDatesTeach()
 	if (firstDateTeach == 0 && lastDateTeach == 0)
 	{
 		cout << endl << "No Grants File given in" << endl;
+		return pair<int, int>(0, 0);
 	}
 	else
 	{
