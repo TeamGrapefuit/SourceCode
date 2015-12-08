@@ -17,7 +17,7 @@ int yEnd;
 piechart::piechart(QWidget *parent) : QWidget(parent)
 {
  setWindowTitle("Pie Chart");
- setFixedSize(600,600);
+ setFixedSize(650,600);
 
  yOrigin=10;
  temp=0;
@@ -210,10 +210,10 @@ void piechart::paintEvent(QPaintEvent *event)
             }
             if(graphValue[i]!=0){
             painter.setBrush(graphColor[i]);
-            painter.drawRect(320,yCordinate,30,20);
-            painter.drawText(QPoint(360,yCordinate+12),QString::number(start)+"-");
-            painter.drawText(QPoint(390,yCordinate+12),QString::number(start+1));
-            painter.drawText(QPoint(430,yCordinate+12),QString::fromStdString(graphTitle[i]));
+            painter.drawRect(350,yCordinate,30,20);
+            painter.drawText(QPoint(390,yCordinate+12),QString::number(start)+"-");
+            painter.drawText(QPoint(420,yCordinate+12),QString::number(start+1));
+            painter.drawText(QPoint(460,yCordinate+12),QString::fromStdString(graphTitle[i]));
             yCordinate+=30;
             }
             else{

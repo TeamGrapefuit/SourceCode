@@ -1,8 +1,42 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#ifndef GRAPHCLASS_H
+#define GRAPHCLASS_H
+#include "graphclass.h"
+#endif
+
 #include <QMainWindow>
 #include "graphdialog.h"
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "plusminuslist.h"
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <list>
+#include <string>
+#include <QMenuBar>
+#include "graphdialog.h"
+#include <QApplication>
+#include <iostream>
+#include <iterator>
+#include "Director.h"
+#include "ListBuilder.h"
+#include "Pub_ListBuilder.h"
+#include "Pres_ListBuilder.h"
+#include "Teach_ListBuilder.h"
+#include "barchartdialog.h"
+#include "piechartdialog.h"
+#include "QFileDialog"
+#include "QMessageBox"
+#include <queue>
+
+#define DATABASEGRANT 1
+#define DATABASETEACH 2
+#define DATABASEPRES 3
+#define DATABASEPUB 4
+
+using namespace std;
 
 namespace Ui
 {
@@ -15,6 +49,22 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
+    int date1 = 2013;
+    int date2 = 2015;
+    int databaseTest = 0;
+
+    GraphClass * test;
+
+    string nameFirst = "";
+    string nameLast = "";
+    string nameFull = "";
+
+    multimap<string, Grant_rowObject>* databaseGrant;
+    multimap<string, Teach_rowObject>* databaseTeach;
+    multimap<string, Pub_rowObject>* databasePub;
+    multimap<string, Pres_rowObject>* databasePres;
+    QString filename;
 
     ~MainWindow();
 

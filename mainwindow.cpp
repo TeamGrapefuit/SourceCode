@@ -1,43 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "plusminuslist.h"
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <list>
-#include <string>
-#include <QMenuBar>
-#include "graphdialog.h"
-#include <QApplication>
-#include <iostream>
-#include <iterator>
-#include "Director.h"
-#include "ListBuilder.h"
-#include "Pub_ListBuilder.h"
-#include "Pres_ListBuilder.h"
-#include "Teach_ListBuilder.h"
-#include "barchartdialog.h"
-#include "piechartdialog.h"
-#include "QFileDialog"
-
-#ifndef GRAPHCLASS_H
-#define GRAPHCLASS_H
-#include "graphclass.h"
-#endif
-
-//Method declaration
-using namespace std;
-
-//The int value from date scroll box 1 and 2
-int date1 = 2013, date2 = 2015, databaseTest = 0;
-GraphClass * test;
-//The string value from the name box
-string nameFirst = "temp", nameLast = "temp", nameFull = "temp";
-
-multimap<string, Grant_rowObject>* databaseGrant;
-multimap<string, Teach_rowObject>* databaseTeach;
-multimap<string, Pub_rowObject>* databasePub;
-multimap<string, Pres_rowObject>* databasePres;
-QString filename;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowTitle("Grape Fruit Project");
-    //setWindowIcon()
 
     databaseGrant = NULL;
     databaseTeach = NULL;
@@ -59,7 +19,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 /**
  * input:
  * output: void
@@ -67,53 +26,77 @@ MainWindow::~MainWindow()
  */
 void MainWindow::on_pushButton_clicked()
 {    
-    if(nameFirst == "temp")
+    if(nameFirst == "")
     {
         statusBar()->showMessage("No First Name", 2000);
     }
-    else if(nameLast == "temp")
+    else if(nameLast == "")
     {
         statusBar()->showMessage("No Last Name", 2000);
     }
-    else if(databaseTest == 1)
+    else if(databaseTest == DATABASEGRANT)
     {
         nameFull = nameLast + ", " + nameFirst;
-        cout << nameFull << endl;
-        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
-        barchartdialog *chart = new barchartdialog();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databaseGrant->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
+            barchartdialog *chart = new barchartdialog();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
-    else if(databaseTest == 2)
+    else if(databaseTest == DATABASETEACH)
     {
         nameFull = nameLast + ", " + nameFirst;
-        cout << nameFull << endl;
-        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseTeach);
-        barchartdialog *chart = new barchartdialog();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databaseTeach->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databaseTeach);
+            barchartdialog *chart = new barchartdialog();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
-    else if(databaseTest == 3)
+    else if(databaseTest == DATABASEPRES)
     {
         nameFull = nameLast + ", " + nameFirst;
-        cout << nameFull << endl;
-        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePres);
-        barchartdialog *chart = new barchartdialog();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databasePres->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databasePres);
+            barchartdialog *chart = new barchartdialog();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
-    else if(databaseTest == 4)
+    else if(databaseTest == DATABASEPUB)
     {
         nameFull = nameLast + ", " + nameFirst;
-        cout << nameFull << endl;
-        //GraphClass * test = new GraphClass(date1, date2, "Strangelove, Dr.", database);
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePub);
-        barchartdialog *chart = new barchartdialog();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databasePub->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databasePub);
+            barchartdialog *chart = new barchartdialog();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
 }
 
@@ -124,48 +107,77 @@ void MainWindow::on_pushButton_clicked()
  */
 void MainWindow::on_pushButton_2_clicked()
 {
-    cout << databaseTest << endl;
-
-    if(nameFirst == "temp")
+    if(nameFirst == "")
     {
         statusBar()->showMessage("No First Name", 2000);
     }
-    else if(nameLast == "temp")
+    else if(nameLast == "")
     {
         statusBar()->showMessage("No Last Name", 2000);
     }
-    else if(databaseTest == 1)
+    else if(databaseTest == DATABASEGRANT)
     {
         nameFull = nameLast + ", " + nameFirst;
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
-        piechart *chart = new piechart();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databaseGrant->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databaseGrant);
+            piechart *chart = new piechart();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
-    else if(databaseTest == 2)
+    else if(databaseTest == DATABASETEACH)
     {
         nameFull = nameLast + ", " + nameFirst;
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databaseTeach);
-        piechart *chart = new piechart();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databaseTeach->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databaseTeach);
+            piechart *chart = new piechart();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
-    else if(databaseTest == 3)
+    else if(databaseTest == DATABASEPRES)
     {
-        cout << "pietest" << endl;
         nameFull = nameLast + ", " + nameFirst;
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePres);
-        piechart *chart = new piechart();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databasePres->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databasePres);
+            piechart *chart = new piechart();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
-    else if(databaseTest == 4)
+    else if(databaseTest == DATABASEPUB)
     {
         nameFull = nameLast + ", " + nameFirst;
-        GraphClass * test = new GraphClass(date1, date2, nameFull, databasePub);
-        piechart *chart = new piechart();
-        chart->setData(test,date1,date2);
-        chart->show();
+        if(databasePub->count(nameFull)<=0)
+        {
+            QMessageBox messageBox;
+            messageBox.information(0,"Invalid Name Error", "Name not in csv, unable to graph.");
+        }
+        else
+        {
+            GraphClass * test = new GraphClass(date1, date2, nameFull, databasePub);
+            piechart *chart = new piechart();
+            chart->setData(test,date1,date2);
+            chart->show();
+        }
     }
 }
 
@@ -279,6 +291,15 @@ void MainWindow::showGrants()
     mainLayout->addLayout(top);
 
     this->centralWidget()->setLayout(mainLayout);
+
+    queue<pair<int, Grant_rowObject> > granterror = getGrantsErrors();
+
+    for(int j = 0; j < granterror.size(); j++)
+    {
+        QString error = QString::number(granterror.front().first);
+        QMessageBox messageBox;
+        messageBox.information(0,"CSV Errors", error);
+    }
 
     mainLayout->deleteLater();
 }
@@ -428,25 +449,25 @@ void MainWindow::csvBuild()
         cout << "Incorrect file type" << endl;
         databaseTest = 0;
     }
-    else if (testBuild == 1)
+    else if (testBuild == DATABASEGRANT)
     {
         showGrants();
-        databaseTest = 1;
+        databaseTest = DATABASEGRANT;
     }
-    else if (testBuild == 2)
+    else if (testBuild == DATABASETEACH)
     {
        showTeach();
-       databaseTest = 2;
+       databaseTest = DATABASETEACH;
     }
-    else if (testBuild == 3)
+    else if (testBuild == DATABASEPRES)
     {
         showPres();
-        databaseTest = 3;
+        databaseTest = DATABASEPRES;
     }
-    else if (testBuild == 4)
+    else if (testBuild == DATABASEPUB)
     {
         showPub();
-        databaseTest = 4;
+        databaseTest = DATABASEPUB;
     }
 }
 /**

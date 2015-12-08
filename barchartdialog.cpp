@@ -204,7 +204,7 @@ void barchartdialog::paintEvent(QPaintEvent *parent)
 
     int count = barValue.size();
     int space = 50;//space between bars//
-    int barWidth = 20;
+    int barWidth = 40;
     int barHeight = 0;
     int yOrigin = 600;
     int yAxisLength = yOrigin - 100;
