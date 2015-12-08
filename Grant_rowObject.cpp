@@ -58,3 +58,85 @@ Grant_rowObject::Grant_rowObject(){
     
     count = 0;
 }
+
+//infoDump
+//input: nope
+//output: a string describing each member of this object
+string Grant_rowObject::infoDump(){
+    string rowObject = "";
+    
+    //error flag
+    rowObject.append("Error in Row: ");
+    if (errorFlag) {
+        rowObject.append("true\n");
+    }
+    else{
+        rowObject.append("false\n");
+    }
+    
+    
+    //Member Name
+    rowObject.append("Member Name: ");
+    rowObject.append(name);
+    rowObject.append("\n");
+
+    //Primary Domain
+    rowObject.append("Primary Domain: ");
+    rowObject.append(domain);
+    rowObject.append("\n");
+    
+    //fundtype
+    rowObject.append("Funding Type: ");
+    rowObject.append(fundType);
+    rowObject.append("\n");
+    
+    //stat
+    rowObject.append("Status: ");
+    rowObject.append(stat);
+    rowObject.append("\n");
+    
+    //role
+    rowObject.append("Research Role: ");
+    rowObject.append(role);
+    rowObject.append("\n");
+    
+    //pinvestigator
+    rowObject.append("Principal Investigator: ");
+    rowObject.append(pInvestigator);
+    rowObject.append("\n");
+    
+    //coinvestigator
+    rowObject.append("CoInvestigator: ");
+    rowObject.append(cpInvestigator);
+    rowObject.append("\n");
+    
+    //Peer Reviewed
+    if (peerReviewed) {
+        rowObject.append("Paper is Peer Reviewed\n");
+    }
+    else{
+        rowObject.append("Paper is not Peer Reviewed\n");
+    }
+    
+    //industry grant
+    if(indGrant) {
+        rowObject.append("Industry Grant Received\n");
+    }
+    else{
+        rowObject.append("industry Grant not Received\n");
+    }
+    
+    
+    //start date
+    rowObject.append("Start Date: ");
+    rowObject.append(to_string(sDate));
+    rowObject.append("\n");
+    
+    //end date
+    rowObject.append("End Date: ");
+    rowObject.append(to_string(edate));
+    rowObject.append("\n");
+    
+    return rowObject;
+       
+}
