@@ -49,7 +49,6 @@ Teach_rowObject TeachingRowBuilder::buildRow(string data, ColIndex index){
         sDate = filter.zeroCatch(sDate, hasError);
         eDate = filter.zeroCatch(eDate, hasError);
         hpTeach = filter.zeroCatch(hpTeach, hasError);
-        nTeach = filter.zeroCatch(nTeach, hasError);
         tHours = filter.zeroCatch(tHours, hasError);
         
     }
